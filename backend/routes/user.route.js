@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 })
 
-// reset passwordd
+// reset password *
 userRoute.post('/reset-password', async (req, res, next) => {
     try {
       const token = req.body.token;
