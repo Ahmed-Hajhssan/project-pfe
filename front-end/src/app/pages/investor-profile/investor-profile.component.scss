@@ -433,3 +433,23 @@ label.check {
     color: #545454;
   }
   
+  .card1 {
+    width: 400px;
+    margin-left: 70%;
+    margin-bottom: -3%;
+  }
+  .card1 img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+  }
+
+  .image-frame img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+   // border: 1px solid #bbbbbb;
+   // border-style: dashed;
+  }

@@ -48,6 +48,32 @@ export class InvestorService {
       .pipe(catchError(this.handleError));
   }
 
+
+  createCompany(userId: any, companyData: any): Observable<any> {
+    const url = `${this.baseUrl}/investor/createCompany/${userId}`;
+    return this.http.post(url, companyData);
+  }
+
+  getCompanies(userId: any): Observable<any> {
+    const url = `${this.baseUrl}/investor/getCompanies/${userId}`;
+    return this.http.get(url);
+  }
+
+  getCompany(companyId: any): Observable<any> {
+    const url = `${this.baseUrl}/investor/getCompany/${companyId}`;
+    return this.http.get<any>(url);
+  }
+
+  updateCompany(companyId: any, companyData: any): Observable<any> {
+    const url = `${this.baseUrl}/investor/updateCompany/${companyId}`;
+    return this.http.put<any>(url, companyData);
+  }
+
+  deleteCompany(userId: any, companyId: any): Observable<any> {
+    const url = `${this.baseUrl}/investor/deleteCompany/${userId}/${companyId}`;
+    return this.http.delete<any>(url);
+  }
+
   handleError(error: HttpErrorResponse) {
     let msg = '';
     if (error.error instanceof ErrorEvent) {

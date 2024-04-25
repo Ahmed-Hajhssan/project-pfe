@@ -176,58 +176,131 @@
             </div>
           </div>
           <div class="content content-2">
-            <div class="title"></div>
+            <div class="title">INVESTED COMPANIES</div>
+            <div class="text-center">
+              <button type="button" class="custom-button mt-5" data-bs-toggle="modal" data-bs-target="#add-company">
+                <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add
+                  Company</small></button><br>
+            </div>
           </div>
 
         </section>
       </div>
     </form>
-  </div>
 
-  <!-- updated user modal -->
-  <div class="modal fade" id="updated-user-modal" tabindex="-1" aria-labelledby="updated-user-modal-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="updated-user-modal-label">User Updated</h4>
-          <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          User updated successfully.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Modal Sector-->
-  <div class="modal fade custom-modal" id="modal-sector" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog custom-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Select Sectors</h1>
-          <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body custom-body">
-          <div class="mb-3">
-            Selected {{ selectedCount }} of 5 sectors
-            <button class="btn btn-light btn-sm ml-5" (click)="resetSelection()">Reset Selection</button><br>
+    <!-- updated user modal -->
+    <div class="modal fade" id="updated-user-modal" tabindex="-1" aria-labelledby="updated-user-modal-label"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="updated-user-modal-label">User Updated</h4>
+            <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <label *ngFor="let sector of sectors" class="check">
-            <input id="sector-id" type="checkbox" [(ngModel)]="sector.checked"
-              [disabled]="sector.disabled ? 'disabled' : false" (change)="updateSelectedLabels()">
-            <span>{{ sector.name }}</span>
-          </label>
+          <div class="modal-body">
+            User updated successfully.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">OK</button>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-          <button (click)="updateSector()" type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
-            Save</button>
+      </div>
+    </div>
+
+    <!-- Modal Sector-->
+    <div class="modal fade custom-modal" id="modal-sector" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog custom-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Select Sectors</h1>
+            <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body custom-body">
+            <div class="mb-3">
+              Selected {{ selectedCount }} of 5 sectors
+              <button class="btn btn-light btn-sm ml-5" (click)="resetSelection()">Reset Selection</button><br>
+            </div>
+            <label *ngFor="let sector of sectors" class="check">
+              <input id="sector-id" type="checkbox" [(ngModel)]="sector.checked"
+                [disabled]="sector.disabled ? 'disabled' : false" (change)="updateSelectedLabels()">
+              <span>{{ sector.name }}</span>
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+            <button (click)="updateSector()" type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
+              Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Add Company -->
+    <div class="modal fade custom-modal3" id="add-company" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog custom-dialog3">
+        <div class="modal-content">
+          <form [formGroup]="companyForm" (ngSubmit)="companyFormSubmit()">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add company</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body custom-body3">
+              <div class="card1">
+                <div class="image-frame">
+                  <img [src]="photoSrc" alt="Profile Picture" id="pro" (click)="selectFile()">
+                  <input #companyInput type="file" id="input-file" (change)="onFileSelected($event)"
+                    style="display: none;">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <label for="name"></label>
+                  <input formControlName="name" type="text" class="form-control custom-input"
+                    placeholder="company name">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <label for="amount">Investment amount</label>
+                  <select formControlName="amount" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Investment amount</option>
+                    <option value="&lt; US$10k">&lt; US$10k</option>
+                    <option value="US$10k - 100k">US$10k - 100k</option>
+                    <option value="US$100k - 1mm">US$100k - 1mm</option>
+                    <option value="US$1mm - 2mm">US$1mm - 2mm</option>
+                    <option value="US$2mm - 5mm">US$2mm - 5mm</option>
+                    <option value="&gt; US$5mm;">&gt; US$5mm</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <label for="type">Investment type</label>
+                  <select formControlName="type" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Investment type</option>
+                    <option value="Idea">Idea</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Early Growth">Early Growth</option>
+                    <option value="Growth">Growth</option>
+                    <option value="Maturity">Maturity</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-outline-warning" data-bs-dismiss="modal">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>

@@ -5,6 +5,7 @@ const multer = require('multer');
 
 
 let Investor = require('../models/Investor');
+let Company = require('../models/Company');
 
 
 app.use((req, res, next) => {
@@ -105,5 +106,110 @@ investorRoute.route('/update/:id').put(async (req, res, next) => {
     next(error);
   }
 });
+
+// Add Company
+investorRoute.route('/createCompany/:id').post(async (req, res, next) => {
+  try {
+    // Create a new company
+    const newcompany = await Company.create(req.body);
+    // Find the investor by ID
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'Investor not found' });
+    }
+    // Add the new company to the investor's company array
+    investor.companies.push(newcompany._id);
+
+    await investor.save();
+
+    res.json(newcompany);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get all Companies
+investorRoute.route('/getCompanies/:id').get(async (req, res, next) => {
+  try {
+
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'Investor not found' });
+    }
+
+    const companies = await Company.find({ _id: { $in: investor.companies } });
+
+    res.json(companies);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get a single company
+investorRoute.route('/getCompany/:companyId').get(async (req, res, next) => {
+  try {
+    const companyId = req.params.companyId;
+
+    const company = await Company.findOne({ _id: companyId });
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    res.json(company);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update a company
+investorRoute.route('/updateCompany/:companyId').put(async (req, res, next) => {
+  try {
+    const companyId = req.params.companyId;
+    const updatedData = req.body;
+
+    const company = await Company.findByIdAndUpdate(companyId, updatedData, { new: true });
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    res.json(company);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Delete a company
+investorRoute.route('/deleteCompany/:id/:companyId').delete(async (req, res, next) => {
+  try {
+    const investorId = req.params.id;
+    const companyId = req.params.companyId;
+
+    // Remove the company from the investor's company array
+    const investor = await Investor.findByIdAndUpdate(
+      investorId,
+      { $pull: { companies: companyId } },
+      { new: true }
+    );
+
+    if (!investor) {
+      return res.status(404).json({ error: 'Investor not found' });
+    }
+    
+    // Delete the company
+    const company = await Company.findByIdAndDelete(companyId);
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    res.json({ message: 'Company deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = investorRoute;

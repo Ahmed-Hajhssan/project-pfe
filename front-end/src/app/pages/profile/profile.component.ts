@@ -1132,7 +1132,7 @@ export class ProfileComponent implements OnInit {
         console.log(this.previous_rounds)
       },
       (error) => {
-        console.log('Error retrieving members:', error);
+        console.log('Error retrieving rounds:', error);
       }
     );
   }
