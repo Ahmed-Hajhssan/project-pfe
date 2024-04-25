@@ -1,0 +1,1161 @@
+<div style="display: flex;">
+  <app-sidebar></app-sidebar>
+  <div style="flex: 1"><app-navbar></app-navbar>
+    <div class="page">
+
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="p-container">
+          <div class="profile">
+
+            <div class="mb-4 d-flex">
+              <img id="selectedImage" [src]="imageUrl" alt="example placeholder" (click)=" openFileInput('customFile1')"
+                class="clickable-image" />
+            </div>
+
+            <input #fileInput type="file" [accept]="'image/*'" class="form-control d-none" id="customFile1"
+              (change)="displaySelectedImage($event, 'selectedImage')" />
+            <div class="container">
+              <div class="container">
+                <div class="field">
+                  <input type="text" formControlName="name" placeholder="What's your name?" class="input1"
+                    [(ngModel)]="company_name">
+                  <div class="line"></div>
+                </div>
+                <div class="field">
+                  <textarea formControlName="description"
+                    placeholder="Add 1-2 sentences of description for the project that will be displayed to investors as a sneak peak on the platform, our newsletters etc."></textarea>
+                  <div class="line"></div>
+                </div>
+                <div class="field-container">
+                  <div class="field3">
+                    <input formControlName="website_url" type="text" class="input3" placeholder="website url"
+                      [(ngModel)]="url">
+                    <div class="line3"></div>
+                  </div>
+                  <div class="field2">
+                    <input formControlName="country" type="text" class="input2" placeholder="Country"
+                      [(ngModel)]="country">
+                    <div class="line2"></div>
+                  </div>
+                  <div class="field2">
+                    <input formControlName="city" type="text" class="input2" placeholder="City" [(ngModel)]="city">
+                    <div class="line2"></div>
+                  </div><br>
+                  <div class="d-flex">
+                    <div *ngIf="userSectors">
+                      <label *ngFor="let sector of userSectors" class="check">
+                        <span>
+                          {{ sector }}
+                          <button type="button" class="btn-close custom-small-btn"
+                            (click)="deleteSector(sector)"></button>
+                        </span>
+                      </label>
+                    </div>
+                    <button data-bs-toggle="modal" data-bs-target="#modal-sector" class="sector-button">
+                      <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><b>Add sector</b>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="container2">
+          <input type="radio" name="slider" id="home" checked>
+          <input type="radio" name="slider" id="blog">
+          <input type="radio" name="slider" id="code">
+          <input type="radio" name="slider" id="help">
+          <input type="radio" name="slider" id="about">
+          <nav>
+            <label for="home" class="home">Overview</label>
+            <label for="blog" class="blog">Team</label>
+            <label for="code" class="code">Documents</label>
+            <label for="help" class="help">Video Pitch</label>
+            <label for="about" class="about">Questions & Answers</label>
+            <div class="slider"></div>
+          </nav>
+          <section>
+            <div class="content content-1">
+              <div class="title">COMPANY OVERVIEW</div>
+              <div class="row">
+                <div class="col-4">
+                  <label for="name mt-2">Title</label>
+                  <input class="form-control custom-input" formControlName="name" type="text" placeholder="Name"
+                    [(ngModel)]="company_name">
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="country">Country</label>
+                  <input class="form-control custom-input" formControlName="country" type="text" placeholder="Country"
+                    [(ngModel)]="country">
+                </div>
+                <div class="col-4">
+                  <label for="city">City</label>
+                  <input class="form-control custom-input" formControlName="city" type="text" placeholder="City"
+                    [(ngModel)]="city">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <label for="website_url" class="mt-2">Website URL</label>
+                  <input formControlName="website_url" type="text" class="form-control custom-input"
+                    placeholder="Website URL" [(ngModel)]="url">
+                </div>
+              </div>
+              <div class="title">DETAILS</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="business_type">Business Type</label>
+                  <select formControlName="business_type" class="form-select custom-input" id="business-type">
+                    <option value="" disabled selected hidden>Business Type</option>
+                    <option value="B2B">B2B</option>
+                    <option value="B2C">B2C</option>
+                    <option value="B2B2C">B2B2C</option>
+                    <option value="B2G">B2G</option>
+                    <option value="C2C">C2C</option>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <label for="product_type">Product type</label>
+                  <select formControlName="product_type" class="form-select custom-input" id="Product-type">
+                    <option value="" disabled selected hidden>Product type</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Software">Software</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <label for="company_stage">Company stage</label>
+                  <select formControlName="company_stage" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Company stage</option>
+                    <option value="Idea">Idea</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Early Growth">Early Growth</option>
+                    <option value="Growth">Growth</option>
+                    <option value="Maturity">Maturity</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="annual_revenue">Annual revenue</label>
+                  <input formControlName="annual_revenue" type="text" class="form-control custom-input"
+                    placeholder="Annual revenue">
+                </div>
+                <div class="col-4">
+                  <label for="mrr">MRR</label>
+                  <input formControlName="mrr" type="text" class="form-control custom-input" placeholder="MRR">
+                </div>
+                <div class="col-4">
+                  <label for="employee_count">Employees count</label>
+                  <input formControlName="employee_count" type="text" class="form-control custom-input"
+                    placeholder="Employees count">
+                </div>
+              </div>
+              <div class="title">SOCIAL MEDIA LINKS</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="linkedin_url">LinkedIn URL</label>
+                  <input formControlName="linkedin_url" type="text" class="form-control custom-input"
+                    placeholder="LinkedIn URL">
+                </div>
+                <div class="col-4">
+                  <label for="facebook_url">Facebook URL</label>
+                  <input formControlName="facebook_url" type="text" class="form-control custom-input"
+                    placeholder="Facebook URL">
+                </div>
+                <div class="col-4">
+                  <label for="twitter_url">Twitter URL</label>
+                  <input formControlName="twitter_url" type="text" class="text" class="form-control custom-input"
+                    placeholder="Twitter URL">
+                </div>
+              </div>
+              <div class="center-button">
+                <button class="custom-button" type="submit" data-bs-toggle="modal" data-bs-target="#updated-user-modal">
+                  <fa-icon [icon]="faAngleRight" class="custom-yellow-small-icon"></fa-icon>
+                  <small>Submit</small></button>
+              </div>
+              <hr class="text-gray">
+ 
+              <div *ngIf="this.raising" class="campaign-container">
+                <div class="header">Currently raising - <span class="currently_raising">{{raising.size}} €</span></div>
+                <div class="row">
+                  <div class="category">Type</div>
+                  <div class="details">{{raising.type}}</div>
+                </div>
+                <div class="row">
+                  <div class="category">Round size</div>
+                  <div class="details">{{raising.size}}</div>
+                </div>
+                <div class="row">
+                  <div class="category">Already commited</div>
+                  <div class="details">{{raising.commited}}</div>
+                </div>
+                <div class="row">
+                  <div class="category">Security</div>
+                  <div class="details">{{formatSecurities(raising)}}</div>
+                </div>
+                <div class="row">
+                  <div class="category">Source</div>
+                  <div class="details">{{formatSources(raising)}}</div>
+                </div>
+                <div class="row">
+                  <div class="category">Investors</div>
+                  <div class="details">{{raising.investors}}</div>
+                </div>
+                <div class="buttons">
+                  <div class="details">
+                    <button class="custom-button" style="margin-bottom: 5px; margin-right: 10px;" (click)="deleteRaising()"><fa-icon
+                        [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                    <button class="custom-button" style=" margin-bottom: 5px;" data-bs-toggle="modal"
+                      data-bs-target="#current-round2" (click)="getRaising()"><fa-icon
+                        [icon]="faPenToSquare"></fa-icon></button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="previous_rounds &&  previous_rounds.length>0">
+                <div class="header" style="margin-top: 50px;">Funding rounds</div>
+                <hr style="color: #d3d3d3;">
+                <div *ngFor="let round of previous_rounds" class="campaign-container">
+                  <div class="header"> {{round.year}} - <span class="currently_raising">{{round.size}} €</span></div>
+                  <div class="row">
+                    <div class="category">Type</div>
+                    <div class="details">{{round.type}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Round size</div>
+                    <div class="details">{{round.size}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Already commited</div>
+                    <div class="details">{{round.commited}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Security</div>
+                    <div class="details">{{formatSecurities(round)}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Source</div>
+                    <div class="details">{{formatSources(round)}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Investors</div>
+                    <div class="details">{{round.investors}}</div>
+                  </div>
+                  <div class="buttons">
+                    <div class="details">
+                      <button class="custom-button" style="margin-bottom: 5px;margin-right: 10px;"
+                        (click)="deleteRound(round._id)"><fa-icon
+                        [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                      <button class="custom-button"
+                        style=" margin-bottom: 5px;" data-bs-toggle="modal"
+                        data-bs-target="#previous-round2" (click)="getRound(round._id)"><fa-icon
+                        [icon]="faPenToSquare"></fa-icon></button>
+                      
+                    </div>
+                  </div>
+                  <hr style="color: #d3d3d3;width: 305%;">
+                </div>
+                <div class="text-center" style="margin-top: -40px;">
+                  <button type="button" class="custom-button mb-3" data-bs-toggle="modal"
+                    data-bs-target="#previous-round" (click)="initializePreviousRound()">
+                    <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add another previous round
+                    </small></button>
+                </div>
+              </div>
+
+              <div class="title" *ngIf="!raising && !(previous_rounds.length>0)">FUNDING ROUNDS</div>
+              <div class="form-row mt-2 mb-5">
+                <div *ngIf="!this.raising" class="form-group">
+                  <div class="alert alert-warning" role="alert">
+                    <h3 class="alert-heading">CURRENTLY </h3>
+                    <p>The external funding the project needs now.</p>
+                    <button type="button" class="btn btn-outline-warning small-button" data-bs-toggle="modal"
+                      data-bs-target="#current-round">
+                      Set current round
+                    </button>
+                  </div>
+                </div>
+                <div class="form-group" *ngIf=" !(previous_rounds.length>0)">
+                  <div class="alert alert-primary" role="alert">
+                    <h3 class="alert-heading">PREVIOUS FINANCING</h3>
+                    <p>Preverious external or internal financing of the project.</p>
+                    <button type="button" class="btn btn-outline-primary small-button" data-bs-toggle="modal"
+                      data-bs-target="#previous-round" (click)="initializePreviousRound()">
+                      Add previous round
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="content content-2">
+              <div class="title"></div>
+
+
+              <div *ngIf="members">
+                <div *ngFor="let member of members" class="card mb-2">
+                  <div class="card-content">
+                    <div class="card">
+                      <div class="image-frame">
+                        <img [src]="getmemberImageUrl(member._id)" alt="Profile Picture">
+                      </div>
+                    </div>
+                    <span>
+                      <small class="text-gray">Name :</small>
+                      <div class="mb-2"><b>{{ member.name }} </b></div>
+                      <small class="text-gray">Job description :</small>
+                      <div>{{ member.job }}</div>
+                    </span>
+                    <span>
+                      <small class="text-gray">Bio :</small>
+                      <div class="fixed-width mb-2">{{ member.bio }}</div>
+
+                      <small class="text-gray">Social media :</small><br>
+                      <div class="mt-1">
+                        <ng-container *ngIf="member.facebook_url">
+                          <a href="{{ member.facebook_url }}" class="social-link" target="_blank"><fa-icon
+                              [icon]="faFacebookF" class="social-icons"></fa-icon></a>
+                        </ng-container>
+                        <ng-container *ngIf="member.linkedin_url">
+                          <a href="{{ member.linkedin_url }}" class="social-link" target="_blank"><fa-icon
+                              [icon]="faLinkedin" class="social-icons"></fa-icon></a>
+                        </ng-container>
+                        <ng-container *ngIf="member.twitter_url">
+                          <a href="{{ member.twitter_url }}" target="_blank"><fa-icon [icon]="faTwitter"
+                              class="social-icons"></fa-icon></a>
+                        </ng-container>
+                      </div>
+                    </span>
+                    <div class="card-buttons">
+                      <button type="button" class="custom-button" (click)="deleteMember(member._id)"><fa-icon
+                          [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                      <button type="button" class="custom-button" data-bs-toggle="modal" data-bs-target="#edit-member"
+                        (click)="updateMember(member._id)"><fa-icon [icon]="faPenToSquare"></fa-icon></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="right-button-container" *ngIf="membersExist">
+                <button class="custom-button" data-bs-toggle="modal" data-bs-target="#add-member">
+                  <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add
+                    member</small></button>
+              </div>
+              <div *ngIf="!membersExist" class="container-3 mt-5">
+                <fa-icon [icon]="faUser" class="user-icon"></fa-icon>
+                <button class="custom-button" data-bs-toggle="modal" data-bs-target="#add-member">
+                  <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add member</small>
+                </button>
+              </div>
+
+            </div>
+
+            <div class="content content-3">
+              <div class="title">PITCH DECK</div>
+              <hr>
+
+              <div *ngIf="!fileExists">Upload pitch deck.</div>
+              <div class="card" *ngIf="fileExists">
+                <div class="card-content">
+                  <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{ currentUser.name
+                    }}_Deck</span>
+                  <div class="card-buttons">
+                    <button type="button" class="custom-button" (click)="deleteFile()">
+                      <fa-icon [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                    <a class="custom-button" [href]="pitchDeckUrl" target="_blank" download><small>Download</small></a>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="title">OTHER DOCUMENTS</div>
+              <hr>
+              <div *ngIf="!filesExist" class="mb-3">Upload your first document.</div>
+              <div *ngIf="filesExist">
+                <div *ngFor="let fileUrl of fileUrls" class="card">
+                  <div class="card-content">
+                    <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{
+                      getFileNameFromUrl(fileUrl) }}</span>
+                    <div class="card-buttons">
+                      <button type="button" class="custom-button" (click)="deleteOtherDoc(fileUrl)">
+                        <fa-icon [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                      <a class="custom-button" [href]="fileUrl" target="_blank" download><small>Download</small></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <input type="file" id="input-pitchdeck" [accept]="'application/pdf'" (change)="uploadPitchDeck($event)"
+                  style="display: none;" />
+                <label *ngIf="!fileExists" for="input-pitchdeck" class="custom-button mb-3">
+                  <fa-icon [icon]="faArrowUpFromBracket" class="custom-yellow-small-icon"></fa-icon><small>Upload pitch
+                    deck</small></label>
+
+              </div>
+              <!-- Drop zone -->
+              <ngx-dropzone *ngIf="!filesExist" (change)="onSelect($event)" [accept]="'application/pdf'">
+                <ngx-dropzone-label>Upload other documents</ngx-dropzone-label>
+                <ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                  <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-preview>
+              </ngx-dropzone>
+              <div *ngIf="!filesExist" class="right-button-container">
+                <button *ngIf="files && files.length > 0" class="custom-button mt-2" (click)="uploadOtherDoc()">
+                  <fa-icon [icon]="faArrowUpFromBracket"
+                    class="custom-yellow-small-icon"></fa-icon><small>Upload</small></button>
+              </div>
+            </div>
+            <div class="content content-4">
+              <div class="title">VIDEO PITCH</div>
+              <div class="custom-green-alert">
+                The video is optional, but investors love it! We encourage you to upload a brief (3-5 minutes) live
+                pitch.
+              </div>
+              <hr>
+              <div class="card" *ngIf="videoExist">
+                <div class="card-content">
+                  <span>
+                    <video class="custom-video" [src]="videoUrl" type="video/mp4" controls></video>
+                  </span>
+                  <div class="card-buttons">
+                    <label type="button" class="custom-button" (click)="deleteVideo()"><fa-icon [icon]="faTrashCan"
+                        class="custom-red-icon"></fa-icon></label>
+                    <input type="file" accept="video/*" id="input-videopitch1" (change)="uploadVideoPitch($event)"
+                      style="display: none;" />
+                    <label for="input-videopitch1" class="custom-button"><fa-icon
+                        [icon]="faPenToSquare"></fa-icon></label>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="card" *ngIf="videoUrlExist">
+                <div class="card-content">
+                  <span class="card-content" (click)="openLink(videoPitchUrl)"><fa-icon [icon]="faFilm"
+                      class="custom-yellow-icon"></fa-icon> {{videoPitchUrl}}</span>
+                  <div class="card-buttons">
+                    <button type="button" class="custom-button" (click)="deleteVideoPitchUrl()">
+                      <fa-icon [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!videoExist && !videoUrlExist">
+                <div class="text-center mt-5">
+                  <input type="file" accept="video/*" id="input-videopitch" (change)=" uploadVideoPitch($event)"
+                    style="display: none;" />
+                  <label for="input-videopitch" class="custom-button"><fa-icon [icon]="faArrowUpFromBracket"
+                      class="custom-yellow-small-icon">
+                    </fa-icon><small>Upload video</small></label>
+                </div>
+                <div class="text-gray text-center mt-3 mb-3">Or</div>
+                <div class="text-center row">
+                  <div class="col-md-7">
+                    <input type="text" id="videoUrlInput" class="form-control custom-input"
+                      placeholder="Use video URL (eg. YouTube or Vimeo)">
+                  </div>
+                  <div class="col-md-3">
+                    <button type="button" class="custom-button mt-1" (click)="updateVideoPitchUrl()">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="content content-5">
+              <div class="title"></div>
+              <div class="custom-green-alert">
+                This section is optional, but as investors love to dive deeper into your business, we recommend filling
+                it.
+              </div>
+              <h4>QUESTIONS & ANSWERS</h4>
+              <form [formGroup]="questionForm" (ngSubmit)="editQuestion()">
+                <div formArrayName="questions">
+                  <div *ngFor="let questionGroup of getControls(); let i = index" [formGroupName]="i">
+                    <div class="card" style="width: 700px;margin-bottom: 50px;">
+                      <label>
+                        Question:
+                      </label>
+                      <input type="text" formControlName="Question" class="form-control custom-input" />
+
+                      <label>
+                        Answer:
+                      </label>
+                      <input type="text" formControlName="Answer" class="form-control custom-input" />
+
+                      <button (click)="delQuestion(i)" class="custom-button"
+                        style="margin-left: 645px;margin-top: 10px;"><fa-icon
+                        [icon]="faTrashCan" class="custom-red-icon"></fa-icon></button>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="custom-button mb-4" style="width: 100px;"
+                  *ngIf="squestions.length>0"><small>Submit</small></button>
+              </form>
+
+
+              <div id="formContainer" *ngFor="let question of questions" style="width: 700px;margin-bottom: 50px;">
+                <form [formGroup]="addQuestionForm" (ngSubmit)="submitQuestion(questions.indexOf(question))">
+                  <label> Question: </label>
+                  <input type="text" formControlName="Question" class="form-control custom-input" />
+
+                  <label>
+                    Answer:</label>
+                  <input type="text" formControlName="Answer" class="form-control custom-input" />
+                  <div class="mt-2">
+                  <button type="submit" class="custom-button"><small>save</small></button>
+                  <button type="button" class="custom-button" style="margin-left:7px;"
+                    (click)="deleteQuestion(questions.indexOf(question))"><fa-icon [icon]="faTrashCan"
+                    class="custom-red-icon"></fa-icon></button>
+                  </div>
+                </form>
+              </div>
+              <div class="text-center">
+              <button type="button" class="custom-button mb-3" (click)="addQuestion()">
+                <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add question</small></button><br>
+              </div>
+            </div>
+          </section>
+        </div>
+      </form>
+
+      <!-- updated user modal -->
+      <div class="modal fade" id="updated-user-modal" tabindex="-1" aria-labelledby="updated-user-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="updated-user-modal-label">User Updated</h4>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              User updated successfully.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Sector-->
+      <div class="modal fade custom-modal" id="modal-sector" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Select Sectors</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body custom-body">
+              <div class="mb-3">
+                Selected {{ selectedCount }} of 5 sectors
+                <button class="btn btn-light btn-sm ml-5" (click)="resetSelection()">Reset Selection</button><br>
+              </div>
+              <label *ngFor="let sector of sectors" class="check">
+                <input id="sector-id" type="checkbox" [(ngModel)]="sector.checked"
+                  [disabled]="sector.disabled ? 'disabled' : false" (change)="updateSelectedLabels()">
+                <span>{{ sector.name }}</span>
+              </label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+              <button (click)="updateSector()" type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
+                Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal current round -->
+      <div class="modal fade custom-modal2" id="current-round" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-dialog2">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Currently Raising</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="raisingForm" (ngSubmit)="raisingSubmit()">
+              <div class="modal-body custom-body2">
+                <label for="Type">Type</label>
+                <select class="form-select custom-input mb-3" formControlName="type" id="Type">
+                  <option value="Founders">Founders</option>
+                  <option value="Family & Friends">Family & Friends</option>
+                  <option value="Pre-seed">Pre-seed</option>
+                  <option value="Seed">Seed</option>
+                  <option value="Pre-series A">Pre-series A</option>
+                  <option value="Series A">Series A</option>
+                  <option value="Pre-series B">Pre-series B</option>
+                  <option value="Series B">Series B</option>
+                  <option value="Series C+">Series C+</option>
+                </select>
+                <label for="Size">Size</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="size" placeholder="0">
+                <label for="Already commited">Already commited</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="commited" placeholder="0">
+                <label for="Commited investors">Commited investors</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="investors"
+                  placeholder="Separate with comma">
+
+                <div class="form-row mt-4">
+                  <div class="form-group">
+                    <div class="title mb-2">Security</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="common_shares"
+                        id="Common-shares" />
+                      <label class="form-check-label" for="Common-shares">Common shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="preferred_shares"
+                        id="Preferred-shares" />
+                      <label class="form-check-label" for="Preferred-shares">Preferred shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="convertible_debt"
+                        id="Convertible-debtd" />
+                      <label class="form-check-label" for="Convertible-debt">Convertible debt</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="loan" id="Loan" />
+                      <label class="form-check-label" for="Loan">Loan</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="other" id="Other" />
+                      <label class="form-check-label" for="Other">Other</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="title mb-2">Source</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="business_angel"
+                        id="Business-Angel" />
+                      <label class="form-check-label" for="Business-Angel">Business Angel</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="accelerator_incubator"
+                        id="Accelerator-Incubator" />
+                      <label class="form-check-label" for="Accelerator-Incubator">Accelerator / Incubator</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="vc_fund" id="VC-Fund" />
+                      <label class="form-check-label" for="VC-Fund">VC Fund</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="corporate" id="Corporate" />
+                      <label class="form-check-label" for="Corporate">Corporate</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="public_grant"
+                        id="Public-grant" />
+                      <label class="form-check-label" for="Public-grant">Public grant</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="crowd" id="Crowd" />
+                      <label class="form-check-label" for="Crowd">Crowd</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="submit" data-bs-dismiss="modal" class="btn btn-outline-warning">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal edit current round -->
+      <div class="modal fade custom-modal2" id="current-round2" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-dialog2">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Currently Raising</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="raisingForm" (ngSubmit)="raisingEdit()">
+              <div class="modal-body custom-body2">
+                <label for="Type">Type</label>
+                <select class="form-select custom-input mb-3" formControlName="type" id="Type">
+                  <option value="Founders">Founders</option>
+                  <option value="Family & Friends">Family & Friends</option>
+                  <option value="Pre-seed">Pre-seed</option>
+                  <option value="Seed">Seed</option>
+                  <option value="Pre-series A">Pre-series A</option>
+                  <option value="Series A">Series A</option>
+                  <option value="Pre-series B">Pre-series B</option>
+                  <option value="Series B">Series B</option>
+                  <option value="Series C+">Series C+</option>
+                </select>
+                <label for="Size">Size</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="size" placeholder="0">
+                <label for="Already commited">Already commited</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="commited" placeholder="0">
+                <label for="Commited investors">Commited investors</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="investors"
+                  placeholder="Separate with comma">
+
+                <div class="form-row mt-4">
+                  <div class="form-group">
+                    <div class="title mb-2">Security</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="common_shares"
+                        id="Common-shares" />
+                      <label class="form-check-label" for="Common-shares">Common shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="preferred_shares"
+                        id="Preferred-shares" />
+                      <label class="form-check-label" for="Preferred-shares">Preferred shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="convertible_debt"
+                        id="Convertible-debtd" />
+                      <label class="form-check-label" for="Convertible-debt">Convertible debt</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="loan" id="Loan" />
+                      <label class="form-check-label" for="Loan">Loan</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="other" id="Other" />
+                      <label class="form-check-label" for="Other">Other</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="title mb-2">Source</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="business_angel"
+                        id="Business-Angel" />
+                      <label class="form-check-label" for="Business-Angel">Business Angel</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="accelerator_incubator"
+                        id="Accelerator-Incubator" />
+                      <label class="form-check-label" for="Accelerator-Incubator">Accelerator / Incubator</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="vc_fund" id="VC-Fund" />
+                      <label class="form-check-label" for="VC-Fund">VC Fund</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="corporate" id="Corporate" />
+                      <label class="form-check-label" for="Corporate">Corporate</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="public_grant"
+                        id="Public-grant" />
+                      <label class="form-check-label" for="Public-grant">Public grant</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="crowd" id="Crowd" />
+                      <label class="form-check-label" for="Crowd">Crowd</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="submit" data-bs-dismiss="modal" class="btn btn-outline-warning">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal previous round -->
+      <div class="modal fade custom-modal2" id="previous-round" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-dialog2">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Previous Round</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="previousRoundForm" (ngSubmit)="previousRoundSubmit()">
+              <div class="modal-body custom-body2">
+                <label for="Year">Year</label>
+                <select class="form-select custom-input mb-3" formControlName="year" name="Type" id="Type">
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
+                  <option value="2015">2015</option>
+                  <option value="2014">2014</option>
+                  <option value="2013">2013</option>
+                  <option value="2012">2012</option>
+                  <option value="2011">2011</option>
+                  <option value="2010">2010</option>
+                  <option value="2009">2009</option>
+                  <option value="2008">2008</option>
+                  <option value="2007">2007</option>
+                  <option value="2006">2006</option>
+                  <option value="2005">2005</option>
+                  <option value="2004">2004</option>
+                  <option value="2003">2003</option>
+                  <option value="2002">2002</option>
+                  <option value="2001">2001</option>
+                  <option value="2000">2000</option>
+                </select>
+                <label for="Type">Type</label>
+                <select class="form-select custom-input mb-3" formControlName="type" id="Type">
+                  <option value="Founders" selected>Founders</option>
+                  <option value="Family & Friends">Family & Friends</option>
+                  <option value="Pre-seed">Pre-seed</option>
+                  <option value="Seed">Seed</option>
+                  <option value="Pre-series A">Pre-series A</option>
+                  <option value="Series A">Series A</option>
+                  <option value="Pre-series B">Pre-series B</option>
+                  <option value="Series B">Series B</option>
+                  <option value="Series C+">Series C+</option>
+                </select>
+                <label for="Size">Size</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="size" placeholder="0">
+                <label for="Already commited">Already commited</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="commited" placeholder="0">
+                <label for="Commited investors">Commited investors</label>
+                <input type="text" class="form-control custom-input mb-3" formControlName="investors"
+                  placeholder="Separate with comma">
+
+                <div class="form-row mt-4">
+                  <div class="form-group">
+                    <div class="title mb-2">Security</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="common_shares"
+                        id="Common-shares" />
+                      <label class="form-check-label" for="Common-shares">Common shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="preferred_shares"
+                        id="Preferred-shares" />
+                      <label class="form-check-label" for="Preferred-shares">Preferred shares</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="convertible_debt"
+                        id="Convertible-debtd" />
+                      <label class="form-check-label" for="Convertible-debt">Convertible debt</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="loan" id="Loan" />
+                      <label class="form-check-label" for="Loan">Loan</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="other" id="Other" />
+                      <label class="form-check-label" for="Other">Other</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="title mb-2">Source</div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="business_angel"
+                        id="Business-Angel" />
+                      <label class="form-check-label" for="Business-Angel">Business Angel</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="accelerator_incubator"
+                        id="Accelerator-Incubator" />
+                      <label class="form-check-label" for="Accelerator-Incubator">Accelerator / Incubator</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="vc_fund" id="VC-Fund" />
+                      <label class="form-check-label" for="VC-Fund">VC Fund</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="corporate" id="Corporate" />
+                      <label class="form-check-label" for="Corporate">Corporate</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="public_grant"
+                        id="Public-grant" />
+                      <label class="form-check-label" for="Public-grant">Public grant</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" formControlName="crowd" id="Crowd" />
+                      <label class="form-check-label" for="Crowd">Crowd</label>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="submit" data-bs-dismiss="modal" class="btn btn-outline-warning">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal edit previous round -->
+    <div class="modal fade custom-modal2" id="previous-round2" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog custom-dialog2">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Previous Round</h1>
+            <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form [formGroup]="previousRoundForm" (ngSubmit)="previousRoundEdit()">
+            <div class="modal-body custom-body2">
+              <label for="Year">Year</label>
+              <select class="form-select custom-input mb-3" formControlName="year" name="Type" id="Type">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+                <option value="2012">2012</option>
+                <option value="2011">2011</option>
+                <option value="2010">2010</option>
+                <option value="2009">2009</option>
+                <option value="2008">2008</option>
+                <option value="2007">2007</option>
+                <option value="2006">2006</option>
+                <option value="2005">2005</option>
+                <option value="2004">2004</option>
+                <option value="2003">2003</option>
+                <option value="2002">2002</option>
+                <option value="2001">2001</option>
+                <option value="2000">2000</option>
+              </select>
+              <label for="Type">Type</label>
+              <select class="form-select custom-input mb-3" formControlName="type" id="Type">
+                <option value="Founders" selected>Founders</option>
+                <option value="Family & Friends">Family & Friends</option>
+                <option value="Pre-seed">Pre-seed</option>
+                <option value="Seed">Seed</option>
+                <option value="Pre-series A">Pre-series A</option>
+                <option value="Series A">Series A</option>
+                <option value="Pre-series B">Pre-series B</option>
+                <option value="Series B">Series B</option>
+                <option value="Series C+">Series C+</option>
+              </select>
+              <label for="Size">Size</label>
+              <input type="text" class="form-control custom-input mb-3" formControlName="size" placeholder="0">
+              <label for="Already commited">Already commited</label>
+              <input type="text" class="form-control custom-input mb-3" formControlName="commited" placeholder="0">
+              <label for="Commited investors">Commited investors</label>
+              <input type="text" class="form-control custom-input mb-3" formControlName="investors"
+                placeholder="Separate with comma">
+
+              <div class="form-row mt-4">
+                <div class="form-group">
+                  <div class="title mb-2">Security</div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="common_shares"
+                      id="Common-shares" />
+                    <label class="form-check-label" for="Common-shares">Common shares</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="preferred_shares"
+                      id="Preferred-shares" />
+                    <label class="form-check-label" for="Preferred-shares">Preferred shares</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="convertible_debt"
+                      id="Convertible-debtd" />
+                    <label class="form-check-label" for="Convertible-debt">Convertible debt</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="loan" id="Loan" />
+                    <label class="form-check-label" for="Loan">Loan</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="other" id="Other" />
+                    <label class="form-check-label" for="Other">Other</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="title mb-2">Source</div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="business_angel"
+                      id="Business-Angel" />
+                    <label class="form-check-label" for="Business-Angel">Business Angel</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="accelerator_incubator"
+                      id="Accelerator-Incubator" />
+                    <label class="form-check-label" for="Accelerator-Incubator">Accelerator / Incubator</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="vc_fund" id="VC-Fund" />
+                    <label class="form-check-label" for="VC-Fund">VC Fund</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="corporate" id="Corporate" />
+                    <label class="form-check-label" for="Corporate">Corporate</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="public_grant" id="Public-grant" />
+                    <label class="form-check-label" for="Public-grant">Public grant</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" formControlName="crowd" id="Crowd" />
+                    <label class="form-check-label" for="Crowd">Crowd</label>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+              <button type="submit" data-bs-dismiss="modal" class="btn btn-outline-warning">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Add member -->
+    <div class="modal fade custom-modal3" id="add-member" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog custom-dialog3">
+        <div class="modal-content">
+          <form [formGroup]="memberForm" (ngSubmit)="memberFormSubmit()">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add member</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body custom-body3">
+
+              <div class="card1">
+                <div class="image-frame">
+                  <img [src]="photoSrc" alt="Profile Picture" id="pro" (click)="selectFile()">
+                  <input #memberInput type="file" id="input-file" (change)="onFileSelected($event)"
+                    style="display: none;">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <label for="name"></label>
+                  <input formControlName="name" type="text" class="form-control custom-input"
+                    placeholder="First and last name">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <label for="job"></label>
+                  <input formControlName="job" type="text" class="form-control custom-input" placeholder="Job Title">
+                </div>
+              </div>
+              <label for="bio"></label>
+              <textarea formControlName="bio" class="form-control custom-textarea" placeholder="Biography"></textarea>
+
+              <div class="title mt-3">SOCIAL MEDIA LINKS</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="linkedin_url">LinkedIn URL</label>
+                  <input formControlName="linkedin_url" type="text" class="form-control custom-input"
+                    placeholder="LinkedIn URL">
+                </div>
+                <div class="col-4">
+                  <label for="facebook_url"> Facebook URL</label>
+                  <input formControlName="facebook_url" type="text" class="form-control custom-input"
+                    placeholder="Facebook URL">
+                </div>
+                <div class="col-4">
+                  <label for="twitter_url">Twitter URL</label>
+                  <input formControlName="twitter_url" type="text" class="form-control custom-input"
+                    placeholder="Twitter URL">
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-outline-warning" data-bs-dismiss="modal">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- edit member -->
+    <div class="modal fade custom-modal3" id="edit-member" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog custom-dialog3">
+        <div class="modal-content">
+          <form [formGroup]="editMemberForm" (ngSubmit)="editMemberFormSubmit()">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit member</h1>
+              <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body custom-body3">
+
+              <div class="card1">
+                <div class="image-frame">
+                  <img [src]="getmemberImageUrl(this.selectedMemberId)" alt="Profile Picture" id="pro"
+                    (click)="selectFile()">
+                  <input #memberInput type="file" id="input-file" (change)="onFileSelected($event)"
+                    style="display: none;">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <label for="name"></label>
+                  <input formControlName="name" type="text" class="form-control custom-input"
+                    placeholder="First and last name">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <label for="job"></label>
+                  <input formControlName="job" type="text" class="form-control custom-input" placeholder="Job Title">
+                </div>
+              </div>
+              <label for="bio"></label>
+              <textarea formControlName="bio" class="form-control custom-textarea" placeholder="Biography"></textarea>
+
+              <div class="title mt-4">SOCIAL MEDIA LINKS</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="linkedin_url">LinkedIn URL</label>
+                  <input formControlName="linkedin_url" type="text" class="form-control custom-input"
+                    placeholder="LinkedIn URL">
+                </div>
+                <div class="col-4">
+                  <label for="facebook_url"> Facebook URL</label>
+                  <input formControlName="facebook_url" type="text" class="form-control custom-input"
+                    placeholder="Facebook URL">
+                </div>
+                <div class="col-4">
+                  <label for="twitter_url">Twitter URL</label>
+                  <input formControlName="twitter_url" type="text" class="form-control custom-input"
+                    placeholder="Twitter URL">
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-outline-warning" data-bs-dismiss="modal">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

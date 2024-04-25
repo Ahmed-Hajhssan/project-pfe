@@ -1,0 +1,233 @@
+<div style="display: flex;">
+  <app-sidebar></app-sidebar>
+  <div style="flex: 1">
+    <app-navbar></app-navbar>
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="page">
+        <div class="p-container">
+          <div class="profile">
+
+            <div class="mb-4 d-flex">
+              <img id="selectedImage" [src]="imageUrl" alt="example placeholder" (click)="openFileInput('customFile1')"
+                class="clickable-image" />
+            </div>
+
+            <input #fileInput type="file" accept="image/*" class="form-control d-none" id="customFile1"
+              (change)="displaySelectedImage($event, 'selectedImage')" />
+            <div class="container">
+              <div class="container">
+                <div class="field">
+                  <input formControlName="name" type="text" placeholder="What's your name?" class="input1"
+                    [(ngModel)]="name" />
+                  <div class="line"></div>
+                </div>
+                <div class="field">
+                  <textarea formControlName="description"
+                    placeholder="Add 1-2 sentences of description for the project that will be displayed to investors as a sneak peak on the platform, our newsletters etc."></textarea>
+                  <div class="line"></div>
+                </div>
+                <div class="field-container">
+                  <div class="field3">
+                    <input formControlName="phone_number" type="text" class="input3" placeholder="Contact number"
+                      [(ngModel)]="phone" />
+                    <div class="line3"></div>
+                  </div>
+                  <div class="field2">
+                    <input formControlName="country" type="text" class="input2" placeholder="Country"
+                      [(ngModel)]="country" />
+                    <div class="line2"></div>
+                  </div>
+                  <div class="field2">
+                    <input formControlName="city" type="text" class="input2" placeholder="City" [(ngModel)]="city" />
+                    <div class="line2"></div>
+                  </div><br>
+                  <div class="d-flex">
+                    <div *ngIf="userSectors">
+                      <label *ngFor="let sector of userSectors" class="check">
+                        <span>
+                          {{ sector }}
+                          <button type="button" class="btn-close custom-small-btn"
+                            (click)="deleteSector(sector)"></button>
+                        </span>
+                      </label>
+                    </div>
+                    <button data-bs-toggle="modal" data-bs-target="#modal-sector" class="sector-button">
+                      <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><b>Add sector</b>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container2">
+        <input type="radio" name="slider" id="home" checked>
+        <input type="radio" name="slider" id="blog">
+        <nav>
+          <label for="home" class="home">Profile</label>
+          <label for="blog" class="blog">Portfolio</label>
+          <div class="slider"></div>
+        </nav>
+        <section>
+          <div class="content content-1">
+            <div class="title">PERSONAL INFORMATION</div>
+            <div class="row mt-2">
+              <div class="col-4">
+                <label for="name">Name</label>
+                <input formControlName="name" type="text" class="form-control custom-input" placeholder="Name"
+                  [(ngModel)]="name" />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-4">
+                <label for="country">Country</label>
+                <input formControlName="country" type="text" class="form-control custom-input" placeholder="Country"
+                  [(ngModel)]="country" />
+              </div>
+              <div class="col-4">
+                <label for="city">City</label>
+                <input formControlName="city" type="text" class="form-control custom-input" placeholder="City"
+                  [(ngModel)]="city" />
+              </div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="phone">Contact number</label>
+                  <input formControlName="phone_number" type="text" class="form-control custom-input"
+                    placeholder="Phone number" [(ngModel)]="phone" />
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="phone">Company</label>
+                  <input formControlName="company" type="text" class="form-control custom-input"
+                    placeholder="Company" />
+                </div>
+                <div class="col-4">
+                  <label for="phone">Investment amount</label>
+                  <select formControlName="investment_amount" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Investment amount</option>
+                    <option value="&lt; US$10k">&lt; US$10k</option>
+                    <option value="US$10k - 100k">US$10k - 100k</option>
+                    <option value="US$100k - 1mm">US$100k - 1mm</option>
+                    <option value="US$1mm - 2mm">US$1mm - 2mm</option>
+                    <option value="US$2mm - 5mm">US$2mm - 5mm</option>
+                    <option value="&gt; US$5mm;">&gt; US$5mm</option>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <label for="phone">Investor Type</label>
+                  <select formControlName="investor_type" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Investor Type</option>
+                    <option value="Myself">Myself</option>
+                    <option value="Family office">Family office</option>
+                    <option value="VC Fund">VC Fund</option>
+                    <option value="PE Fund">PE Fund</option>
+                    <option value="Corporate Fund">Corporate Fund</option>
+                    <option value="Hedge Fund">Hedge Fund</option>
+                    <option value="Another Individual">Another Individual</option>
+                  </select>
+                </div>
+              </div>
+              <div class="title">INVESTMENT PREFERENCES</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="phone">Area </label>
+                  <input formControlName="preferred_area" type="text" class="form-control custom-input"
+                    placeholder="Preferred area" />
+                </div>
+                <div class="col-4">
+                  <label for="phone">Company stage</label>
+                  <select formControlName="company_stage" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Company stage</option>
+                    <option value="Idea">Idea</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Early Growth">Early Growth</option>
+                    <option value="Growth">Growth</option>
+                    <option value="Maturity">Maturity</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="title mt-4">SOCIAL MEDIA LINKS</div>
+              <div class="row mt-2">
+                <div class="col-4">
+                  <label for="linkedin_url">LinkedIn URL</label>
+                  <input formControlName="linkedin_url" type="text" class="form-control custom-input"
+                    placeholder="LinkedIn URL">
+                </div>
+                <div class="col-4">
+                  <label for="facebook_url">Facebook URL</label>
+                  <input formControlName="facebook_url" type="text" class="form-control custom-input"
+                    placeholder="Facebook URL">
+                </div>
+                <div class="col-4">
+                  <label for="twitter_url">Twitter URL</label>
+                  <input formControlName="twitter_url" type="text" class="text" class="form-control custom-input"
+                    placeholder="Twitter URL">
+                </div>
+              </div>
+              <div class="center-button">
+                <button class="custom-button" type="submit" data-bs-toggle="modal" data-bs-target="#updated-user-modal">
+                  <fa-icon [icon]="faAngleRight" class="custom-yellow-small-icon"></fa-icon>
+                  Submit</button>
+              </div>
+            </div>
+          </div>
+          <div class="content content-2">
+            <div class="title"></div>
+          </div>
+
+        </section>
+      </div>
+    </form>
+  </div>
+
+  <!-- updated user modal -->
+  <div class="modal fade" id="updated-user-modal" tabindex="-1" aria-labelledby="updated-user-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="updated-user-modal-label">User Updated</h4>
+          <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          User updated successfully.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Sector-->
+  <div class="modal fade custom-modal" id="modal-sector" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog custom-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Select Sectors</h1>
+          <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body custom-body">
+          <div class="mb-3">
+            Selected {{ selectedCount }} of 5 sectors
+            <button class="btn btn-light btn-sm ml-5" (click)="resetSelection()">Reset Selection</button><br>
+          </div>
+          <label *ngFor="let sector of sectors" class="check">
+            <input id="sector-id" type="checkbox" [(ngModel)]="sector.checked"
+              [disabled]="sector.disabled ? 'disabled' : false" (change)="updateSelectedLabels()">
+            <span>{{ sector.name }}</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+          <button (click)="updateSector()" type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
+            Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

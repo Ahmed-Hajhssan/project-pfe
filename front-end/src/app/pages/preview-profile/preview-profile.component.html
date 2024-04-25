@@ -1,0 +1,256 @@
+<div class="profile-page">
+  <div class="content">
+    <div class="d-flex mt-4">
+      <img [src]="imageUrl" alt="example placeholder" class="clickable-image" />
+      <div class="container">
+        <p class="Company-name">{{currentUser.name}}</p>
+        <div class="d-flex">
+          <a href="{{currentUser.website_url}}" class="Company-link" target="_blank">{{currentUser.website_url}}</a>
+          <div class="d-flex">
+            <fa-icon [icon]="faLocationDot" *ngIf="currentUser.country || currentUser.city"
+              class="location-icon"></fa-icon>
+            <p>{{currentUser.country}}</p>
+            <p *ngIf="currentUser.country">, &nbsp;</p>
+            <p>{{currentUser.city}}</p>
+          </div>
+        </div>
+        <p>{{this.currentUser.description}}</p>
+        <div *ngIf="userSectors">
+          <label *ngFor="let sector of userSectors" class="check">
+            <span>
+              {{ sector }}
+            </span>
+          </label>
+      </div>
+      </div>
+      <div class="d-flex custom-margin">
+        <ng-container *ngIf="currentUser.facebook_url">
+          <a href="{{ currentUser.facebook_url }}" class="social-link" target="_blank"><fa-icon [icon]="faFacebookF"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+        <ng-container *ngIf="currentUser.linkedin_url">
+          <a href="{{ currentUser.linkedin_url }}" class="social-link" target="_blank"><fa-icon [icon]="faLinkedin"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+        <ng-container *ngIf="currentUser.twitter_url">
+          <a href="{{ currentUser.twitter_url }}" target="_blank"><fa-icon [icon]="faTwitter"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex mt-2">
+      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <div class="sticky-card card nav-size">
+          <nav>
+            <a (click)="smoothScroll('#overview')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" viewBox="0 0 24 24" fill="currentColor"
+                  aria-hidden="true" data-slot="icon" width="24">
+                  <path fill-rule="evenodd"
+                    d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                    clip-rule="evenodd"></path>
+                  <path
+                    d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z">
+                  </path>
+                </svg>
+                Overview
+              </div>
+            </a>
+            <a (click)="smoothScroll('#Funding-rounds')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M14.25 7.756a4.5 4.5 0 1 0 0 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z">
+                  </path>
+                </svg>
+                Funding rounds
+              </div>
+            </a>
+            <a (click)="smoothScroll('#Team')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z">
+                  </path>
+                </svg>
+                Team
+              </div>
+            </a>
+            <a (click)="smoothScroll('#Pitch-deck')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z">
+                  </path>
+                </svg>
+                Pitch deck
+              </div>
+            </a>
+            <a (click)="smoothScroll('#Documents')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z">
+                  </path>
+                </svg>
+                Documents
+              </div>
+            </a>
+            <a (click)="smoothScroll('#video-pitch')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z">
+                  </path>
+                </svg>
+                Video pitch
+              </div>
+            </a>
+          </nav>
+        </div>
+      </div>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <!--debut overview-->
+        <div id="overview" class="card overview-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Company overview</h2>
+                <hr class="text-gray">
+                <table class="table table-no-border">
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="text-gray">Business type</th>
+                      <td>{{currentUser.business_type}}</td>
+                      <th scope="row" class="text-gray">Product type</th>
+                      <td>{{currentUser.product_type}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">Company stage</th>
+                      <td>{{currentUser.company_stage}}</td>
+                      <th scope="row" class="text-gray">Annual revenue</th>
+                      <td>{{currentUser.annual_revenue}} €</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">MRR</th>
+                      <td>{{currentUser.mrr}} €</td>
+                      <th scope="row" class="text-gray">Employees count</th>
+                      <td>{{currentUser.employee_count}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--fin overview-->
+        <div *ngIf="membersExist" id="Team" class="card Team-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Team</h2>
+                <hr class="text-gray">
+                <div *ngFor="let member of members" class="card-2">
+                  <div class="card-content">
+                      <div class="image-frame">
+                        <img [src]="getmemberImageUrl(member._id)" alt="Profile Picture">
+                      </div>
+                    <span>
+                      <small class="text-gray">Name :</small>
+                      <div class="mb-2"><b>{{ member.name }} </b></div>
+                      <small class="text-gray">Job description :</small>
+                      <div>{{ member.job }}</div>
+                    </span>
+                    <span>
+                      <small class="text-gray">Bio :</small>
+                      <div class="fixed-width mb-2">{{ member.bio }}</div>
+
+                      <small class="text-gray">Social media :</small><br>
+                      <div class="mt-1">
+                        <ng-container *ngIf="member.facebook_url">
+                          <a href="{{ member.facebook_url }}" class="social-link" target="_blank"><fa-icon
+                              [icon]="faFacebookF" class="social-icons"></fa-icon></a>
+                        </ng-container>
+                        <ng-container *ngIf="member.linkedin_url">
+                          <a href="{{ member.linkedin_url }}" class="social-link" target="_blank"><fa-icon
+                              [icon]="faLinkedin" class="social-icons"></fa-icon></a>
+                        </ng-container>
+                        <ng-container *ngIf="member.twitter_url">
+                          <a href="{{ member.twitter_url }}" target="_blank"><fa-icon [icon]="faTwitter"
+                              class="social-icons"></fa-icon></a>
+                        </ng-container>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="fileExists" id="Pitch-deck" class="card pitch-deck-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Pitch deck</h2>
+                <hr class="text-gray">
+                <span>
+                  <ng-container>
+                    <iframe [src]="pitchDeckUrl" class="pitchDeck"></iframe>
+                  </ng-container>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="filesExist" id="Documents" class="card Documents-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Documents</h2>
+                <hr class="text-gray">
+                <div *ngIf="!filesExist" class="mb-3">Upload your first document.</div>
+              <div *ngIf="filesExist">
+                <div *ngFor="let fileUrl of fileUrls" class="card-3">
+                  <div class="card-content">
+                    <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{
+                      getFileNameFromUrl(fileUrl) }}</span>
+                    <div class="card-buttons">
+                      <a class="custom-button" [href]="fileUrl" target="_blank" class="Company-link" download><small>Download</small></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="currentUser.video_pitch || currentUser.video_pitchUrl" id="video-pitch"
+          class="card video-pitch-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Video Pitch</h2>
+                <hr class="text-gray">
+                <span>
+                  <video *ngIf="videoExist" class="custom-video" [src]="videoUrl" type="video/mp4" controls></video>
+                  <iframe *ngIf="videoUrlExist" class="custom-video" [src]="videoPitchUrl" frameborder="0"
+                    allowfullscreen></iframe>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg">
+    <div>
+      <h1 style="color: white;"></h1>
+    </div>
+  </div>
+</div>

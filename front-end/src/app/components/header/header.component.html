@@ -1,0 +1,13 @@
+<nav>
+  <ul >
+
+    <a href="#" class="brand">Brand</a>
+  </ul>
+  <div class="nav-menu">
+  <!--<li><a routerLink="../Profile">Profile</a></li>-->
+  <li *ngIf="!userAuthenticated"><a routerLink="../login">Login</a></li>
+  <li *ngIf="!userAuthenticated"><a routerLink="../sign-Up">Sign-up</a></li>
+  <li *ngIf="userAuthenticated"><a type="submit"  (click)="logout()">Logout</a></li>
+  </div>
+  
+</nav>
