@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTrashCan, faPenToSquare, } from '@fortawesome/free-regular-svg-icons';
 import { throwError } from 'rxjs';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,6 +31,8 @@ interface Company {
 export class InvestorProfileComponent implements OnInit{
   private baseUrl = environment.domain;
   currentUser: InvestorModel = {};
+  faTrashCan = faTrashCan;
+  faPenToSquare = faPenToSquare;
   editForm: FormGroup;
   faAngleRight = faAngleRight;
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -72,6 +75,9 @@ export class InvestorProfileComponent implements OnInit{
     });
   }
 
+  initPhoto(){
+    this.photoSrc = "assets/images/Default_pfp.png"
+  }
 
   fetchcompanies() {
     this.companiesExist = false;
@@ -96,13 +102,10 @@ export class InvestorProfileComponent implements OnInit{
       (companyData) => {
         this.editCompanyForm.patchValue({
           name: companyData.name,
-          job: companyData.job,
-          bio: companyData.bio,
-          linkedin_url: companyData.linkedin_url,
-          facebook_url: companyData.facebook_url,
-          twitter_url: companyData.twitter_url
+          type: companyData.type,
+          amount: companyData.amount
         });
-        this.getCompanyImageUrl(this.selectedCompanyId);
+        this.photoSrc = this.getCompanyImageUrl(this.selectedCompanyId);
       },
 
       (error: any) => {
@@ -148,6 +151,7 @@ export class InvestorProfileComponent implements OnInit{
             }
           );
       } else {
+        this.imageCompany = undefined;
         resolve();
       }
     })
@@ -155,7 +159,7 @@ export class InvestorProfileComponent implements OnInit{
 
   updateCompanyImage() {
     let body = {
-      image_company: this.imageCompany
+      image: this.imageCompany
     }
     this.investorService.updateCompany(this.selectedCompanyId, body).subscribe({
       complete: () => {
@@ -173,7 +177,7 @@ export class InvestorProfileComponent implements OnInit{
     if (company && company.image) {
       companyImageUrl = this.baseUrl + '/api/uploads/' + company.image;
     } else {
-      companyImageUrl = this.photoSrc;
+      companyImageUrl = "assets/images/Default_pfp.png";
     }
     return companyImageUrl;
   }
@@ -462,11 +466,13 @@ export class InvestorProfileComponent implements OnInit{
       let id = this.currentUser._id;
       this.onCompanyFileUpload().then(() => {
         let company = this.companyForm.value;
-        company.image_company = this.imageCompany;
+        company.image = this.imageCompany;
+        console.log(company);
         this.investorService.createCompany(id, company).subscribe({
           complete: () => {
             console.log('company successfully created!')
             this.fetchcompanies();
+            console.log(this.imageCompany);
           },
           error: (e) => {
             console.log(e);
@@ -486,6 +492,7 @@ export class InvestorProfileComponent implements OnInit{
       complete: () => {
         console.log('company successfully updated!')
         this.fetchcompanies();
+        this.photoSrc = "assets/images/Default_pfp.png";
       },
       error: (e) => {
         console.log(e);

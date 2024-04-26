@@ -453,3 +453,23 @@ label.check {
    // border: 1px solid #bbbbbb;
    // border-style: dashed;
   }
+
+  .card{
+    border: none;
+    margin-bottom: 10px;
+  }
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  .card-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .card-content:hover {
+    background-color: 	#fbfbfb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
