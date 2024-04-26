@@ -442,3 +442,43 @@ label.check {
     margin-right: 7px; 
   }
   
+  .card1 {
+    width: 400px;
+    margin-left: 70%;
+    margin-bottom: -3%;
+  }
+  .card1 img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+  }
+
+  .image-frame img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+   // border: 1px solid #bbbbbb;
+   // border-style: dashed;
+  }
+
+  .card{
+    border: none;
+    margin-bottom: 10px;
+  }
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  .card-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .card-content:hover {
+    background-color: 	#fbfbfb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }

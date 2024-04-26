@@ -70,7 +70,7 @@
           <input type="radio" name="slider" id="help">
           <input type="radio" name="slider" id="about">
           <nav>
-            <label for="home" class="home">Overview2</label>
+            <label for="home" class="home">Overview</label>
             <label for="blog" class="blog">Team</label>
             <label for="code" class="code">Documents</label>
             <label for="help" class="help">Video Pitch</label>
@@ -342,7 +342,7 @@
                 </div>
               </div>
               <div class="right-button-container" *ngIf="membersExist">
-                <button class="custom-button" data-bs-toggle="modal" data-bs-target="#add-member">
+                <button class="custom-button" data-bs-toggle="modal" data-bs-target="#add-member" (click)="initPhoto()">
                   <fa-icon [icon]="faCirclePlus" class="custom-yellow-small-icon"></fa-icon><small>Add
                     member</small></button>
               </div>
@@ -1105,7 +1105,7 @@
 
               <div class="card1">
                 <div class="image-frame">
-                  <img [src]="getmemberImageUrl(this.selectedMemberId)" alt="Profile Picture" id="pro"
+                  <img [src]="photoSrc" alt="Profile Picture" id="pro"
                     (click)="selectFile()">
                   <input #memberInput type="file" id="input-file" (change)="onFileSelected($event)"
                     style="display: none;">

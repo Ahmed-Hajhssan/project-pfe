@@ -133,6 +133,9 @@ export class ProfileComponent implements OnInit {
     return (this.questionForm.get('questions') as FormArray).controls;
   }
 
+  initPhoto(){
+    this.photoSrc = "assets/images/Default_pfp.png"
+  }
 
   onSelect(event: any) {
     console.log(event);
@@ -173,7 +176,7 @@ export class ProfileComponent implements OnInit {
           facebook_url: memberData.facebook_url,
           twitter_url: memberData.twitter_url
         });
-        this.getmemberImageUrl(this.selectedMemberId);
+        this.photoSrc=this.getmemberImageUrl(this.selectedMemberId);
       },
 
       (error: any) => {
@@ -569,7 +572,7 @@ export class ProfileComponent implements OnInit {
     if (member && member.image_member) {
       memberImageUrl = this.baseUrl + '/api/uploads/' + member.image_member;
     } else {
-      memberImageUrl = this.photoSrc;
+      memberImageUrl = "assets/images/Default_pfp.png";
     }
     return memberImageUrl;
   }
@@ -1132,7 +1135,7 @@ export class ProfileComponent implements OnInit {
         console.log(this.previous_rounds)
       },
       (error) => {
-        console.log('Error retrieving members:', error);
+        console.log('Error retrieving rounds:', error);
       }
     );
   }

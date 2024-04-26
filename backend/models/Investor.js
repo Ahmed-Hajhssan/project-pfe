@@ -17,6 +17,9 @@ let Investor = new mongoose.Schema({
   preferred_area: { type: String, required: false },
   company_stage: [{ type: String, required: false }],
   amount: { type: String, required: false },
+  company_stage: { type: String, required: false },
+  investment_amount: { type: String, required: false },
+  companies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' }],
 })
 
 module.exports = mongoose.model('Investor', Investor)

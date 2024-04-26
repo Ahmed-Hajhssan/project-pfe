@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTrashCan, faPenToSquare, } from '@fortawesome/free-regular-svg-icons';
 import { throwError } from 'rxjs';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,6 +13,14 @@ interface Sector {
   name: string;
   checked: boolean;
   disabled?: boolean;
+}
+
+interface Company {
+  _id: string;
+  name: string;
+  amount: string;
+  type: string;
+  image?: string;
 }
 
 @Component({
@@ -22,9 +31,12 @@ interface Sector {
 export class InvestorProfileComponent implements OnInit {
   private baseUrl = environment.domain;
   currentUser: InvestorModel = {};
+  faTrashCan = faTrashCan;
+  faPenToSquare = faPenToSquare;
   editForm: FormGroup;
   faAngleRight = faAngleRight;
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+  @ViewChild('companyInput', { static: false }) companyInput: ElementRef;
   imageUrl: string;
   imageProfile: any;
   sector: Sector[] = [];
@@ -38,6 +50,14 @@ export class InvestorProfileComponent implements OnInit {
   userAmount : string;
   userType : string;
   userCompanyStages: string[];
+  companyForm:FormGroup;
+  editCompanyForm:FormGroup;
+  companies: Company[] = [];
+  companyImageUrl: string;
+  companiesExist:boolean;
+  selectedCompanyId: string;
+  imageCompany: any;
+  photoSrc = "assets/images/Default_pfp.png";
 
   constructor(
     public investorService: InvestorService,
@@ -59,7 +79,130 @@ export class InvestorProfileComponent implements OnInit {
       this.getAmount();
       this.gettype();
       this.getCompanyStages();
+      this.fetchcompanies();
     });
+  }
+
+  initPhoto(){
+    this.photoSrc = "assets/images/Default_pfp.png"
+  }
+
+  fetchcompanies() {
+    this.companiesExist = false;
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.getCompanies(this.currentUser._id).subscribe(
+        (companies: Company[]) => {
+          this.companies = companies;
+          if (this.companies.length > 0) {
+            this.companiesExist = true;
+          }
+        },
+        (error) => {
+          console.log('Error retrieving companies:', error);
+        }
+      );
+    }
+  }
+
+  updateCompany(companyId: string) {
+    this.selectedCompanyId = companyId;
+    this.investorService.getCompany(companyId).subscribe(
+      (companyData) => {
+        this.editCompanyForm.patchValue({
+          name: companyData.name,
+          type: companyData.type,
+          amount: companyData.amount
+        });
+        this.photoSrc = this.getCompanyImageUrl(this.selectedCompanyId);
+      },
+
+      (error: any) => {
+        this.errorMgmt(error);
+      }
+    );
+  }
+
+  deleteCompany(companyId: string) {
+    if (window.confirm('Are you sure?')) {
+      if (this.currentUser && this.currentUser._id) {
+        this.investorService.deleteCompany(this.currentUser._id, companyId).subscribe({
+          complete: () => {
+            console.log('company successfully deleted!')
+            this.fetchcompanies();
+          },
+          error: (e) => {
+            console.log(e);
+          }
+        })
+      }
+    }
+  }
+
+  onCompanyFileUpload() {
+    return new Promise<void>((resolve, reject) => {
+      const imageBlob = this.companyInput.nativeElement.files[0];
+      if (imageBlob) {
+        const formData = new FormData();
+        formData.set('file', imageBlob);
+
+        this.investorService.uploadFile(formData)
+          .subscribe(
+            (response: any) => {
+              let imageCompany = response.filename;
+              this.imageCompany = imageCompany;
+              resolve();
+              console.log(imageCompany);
+            },
+            (error: any) => {
+              reject();
+              this.errorMgmt(error);
+            }
+          );
+      } else {
+        this.imageCompany = undefined;
+        resolve();
+      }
+    })
+  }
+
+  updateCompanyImage() {
+    let body = {
+      image: this.imageCompany
+    }
+    this.investorService.updateCompany(this.selectedCompanyId, body).subscribe({
+      complete: () => {
+        console.log('company updated successfully!');
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    });
+  }
+
+  getCompanyImageUrl(companyId: string): string {
+    const company = this.companies.find(company => company._id === companyId);
+    let companyImageUrl: string;
+    if (company && company.image) {
+      companyImageUrl = this.baseUrl + '/api/uploads/' + company.image;
+    } else {
+      companyImageUrl = "assets/images/Default_pfp.png";
+    }
+    return companyImageUrl;
+  }
+
+  selectFile() {
+    document.getElementById('input-file')?.click();
+  }
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e: any) => {
+        this.photoSrc = e.target.result;
+      };
+      this.onCompanyFileUpload();
+    }
   }
 
   onFileUpload(): void {
@@ -483,6 +626,56 @@ export class InvestorProfileComponent implements OnInit {
       twitter_url: [this.currentUser.twitter_url],
 
     });
+    this.companyForm = this.fb.group({
+      name: [''],
+      amount: [''],
+      type: [''],
+    });
+
+    this.editCompanyForm = this.fb.group({
+      name: [''],
+      amount: [''],
+      type: [''],
+    });
+  }
+
+  companyFormSubmit() {
+    if (this.currentUser && this.currentUser._id) {
+      let id = this.currentUser._id;
+      this.onCompanyFileUpload().then(() => {
+        let company = this.companyForm.value;
+        company.image = this.imageCompany;
+        console.log(company);
+        this.investorService.createCompany(id, company).subscribe({
+          complete: () => {
+            console.log('company successfully created!')
+            this.fetchcompanies();
+            console.log(this.imageCompany);
+          },
+          error: (e) => {
+            console.log(e);
+          }
+        })
+      })
+    }
+  }
+
+  editCompanyFormSubmit() {
+    const updatedCompanyData = this.editCompanyForm.value;
+    const companyId = this.selectedCompanyId;
+    if (this.companyInput.nativeElement.files[0]) {
+      this.updateCompanyImage();
+    }
+    this.investorService.updateCompany(companyId, updatedCompanyData).subscribe({
+      complete: () => {
+        console.log('company successfully updated!')
+        this.fetchcompanies();
+        this.photoSrc = "assets/images/Default_pfp.png";
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    })
   }
 
   onSubmit() {
