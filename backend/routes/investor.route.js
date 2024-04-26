@@ -16,10 +16,10 @@ app.use((req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: './uploads',
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     try {
       const fileExtension = file.mimetype.split('/')[1];
-      const randomString = Math.random().toString(36).substring(2, 8); 
+      const randomString = Math.random().toString(36).substring(2, 8);
       const uniqueFilename = Date.now() + '_' + randomString + '.' + fileExtension;
       cb(null, uniqueFilename);
     } catch (error) {
@@ -28,8 +28,8 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({storage: storage})
-investorRoute.use('/uploads', express.static('uploads',{ maxage: "864000" }));
+const upload = multer({ storage: storage })
+investorRoute.use('/uploads', express.static('uploads', { maxage: "864000" }));
 
 // upload single file
 investorRoute.post('/file', upload.single('file'), function (req, res, next) {
@@ -37,6 +37,74 @@ investorRoute.post('/file', upload.single('file'), function (req, res, next) {
   if (file) {
     res.json(req.file);
   } else throw "error";
+});
+
+//get investor type
+investorRoute.route('/gettype/:id').get(async (req, res, next) => {
+  try {
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'investor not found' });
+    }
+
+    const type = investor.type;
+
+    res.json(type);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get investment amount
+investorRoute.route('/getamount/:id').get(async (req, res, next) => {
+  try {
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'investor not found' });
+    }
+
+    const amount = investor.amount;
+
+    res.json(amount);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get company stages
+investorRoute.route('/getCompanyStages/:id').get(async (req, res, next) => {
+  try {
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'investor not found' });
+    }
+
+    const companyStages = investor.company_stage;
+
+    res.json(companyStages);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get stages
+investorRoute.route('/getstage/:id').get(async (req, res, next) => {
+  try {
+    const investor = await Investor.findById(req.params.id);
+
+    if (!investor) {
+      return res.status(404).json({ error: 'investor not found' });
+    }
+
+    const stages = investor.stage;
+
+    res.json(stages);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //get sector
@@ -48,7 +116,7 @@ investorRoute.route('/getsector/:id').get(async (req, res, next) => {
       return res.status(404).json({ error: 'investor not found' });
     }
 
-    const sectors = investor.sector; 
+    const sectors = investor.sector;
 
     res.json(sectors);
   } catch (error) {

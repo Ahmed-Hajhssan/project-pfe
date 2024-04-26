@@ -16,6 +16,26 @@ export class InvestorService {
 
   constructor(private http: HttpClient) { }
 
+  getCompanyStages(userId: string): Observable<string[]> {
+    const url = `${this.baseUrl}/investor/getCompanyStages/${userId}`;
+    return this.http.get<string[]>(url);
+  }
+
+  gettype(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/investor/gettype/${userId}`;
+    return this.http.get<any>(url);
+  }
+
+  getAmount(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/investor/getamount/${userId}`;
+    return this.http.get<any>(url);
+  }
+
+  getStages(userId: string): Observable<string[]> {
+    const url = `${this.baseUrl}/investor/getstage/${userId}`;
+    return this.http.get<string[]>(url);
+  }
+
   getSectors(userId: string): Observable<string[]> {
     const url = `${this.baseUrl}/investor/getsector/${userId}`;
     return this.http.get<string[]>(url);

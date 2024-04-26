@@ -13,9 +13,7 @@ export interface InvestorModel{
   twitter_url?: string;
   image_profile?: string;
   company?: string;
-  investor_type?: string;
   preferred_area?: string;
   company_stage?: string;
-  investment_amount?: string;
 
 }

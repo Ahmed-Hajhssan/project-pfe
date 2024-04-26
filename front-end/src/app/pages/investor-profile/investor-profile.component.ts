@@ -4,7 +4,7 @@ import { InvestorService } from '../../shared/investor-service';
 import { environment } from '../../../environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { throwError } from 'rxjs';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,7 +19,7 @@ interface Sector {
   templateUrl: './investor-profile.component.html',
   styleUrl: './investor-profile.component.scss'
 })
-export class InvestorProfileComponent implements OnInit{
+export class InvestorProfileComponent implements OnInit {
   private baseUrl = environment.domain;
   currentUser: InvestorModel = {};
   editForm: FormGroup;
@@ -29,11 +29,15 @@ export class InvestorProfileComponent implements OnInit{
   imageProfile: any;
   sector: Sector[] = [];
   userSectors: string[];
+  userStages: string[];
   faCirclePlus = faCirclePlus;
-  name:string;
-  country:string;
-  city:string;
-  phone:string;
+  name: string;
+  country: string;
+  city: string;
+  phone: string;
+  userAmount : string;
+  userType : string;
+  userCompanyStages: string[];
 
   constructor(
     public investorService: InvestorService,
@@ -43,7 +47,7 @@ export class InvestorProfileComponent implements OnInit{
     this.initializeForm();
   }
 
-    
+
   ngOnInit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
     this.investorService.getUser(id).subscribe((res) => {
@@ -51,6 +55,10 @@ export class InvestorProfileComponent implements OnInit{
       this.initializeForm();
       this.fetchImage();
       this.getSectors();
+      this. getStages();
+      this.getAmount();
+      this.gettype();
+      this.getCompanyStages();
     });
   }
 
@@ -130,7 +138,7 @@ export class InvestorProfileComponent implements OnInit{
     }
   }
 
-    openFileInput(inputId: string) {
+  openFileInput(inputId: string) {
     const fileInput = document.getElementById(inputId);
     if (fileInput) {
       fileInput.click();
@@ -287,20 +295,190 @@ export class InvestorProfileComponent implements OnInit{
       );
     }
   }
+
+  selectAllStages() {
+    const checkboxes = document.getElementsByName('stage');
+    const checked = true;
   
-  initializeForm(){
+    for (let i = 0; i < checkboxes.length; i++) {
+      const checkbox = checkboxes[i] as HTMLInputElement;
+      checkbox.checked = checked;
+    }
+  }
+  updateStage() {
+    const selectedStages = Array.from(document.querySelectorAll('input[name="stage"]:checked'))
+      .map(checkbox => (checkbox as HTMLInputElement).value);
+  
+    const body = {
+      stage: selectedStages
+    };
+    console.log(selectedStages)
+  
+    this.investorService.updateUser(this.currentUser._id, body).subscribe({
+      next: () => {
+        console.log('Content updated successfully!');
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    });
+  }
+  getStages() {
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.getStages(this.currentUser._id).subscribe(
+        (stages: string[]) => {
+          this.userStages = stages;
+          console.log(this.userStages);
+          const checkboxes = document.querySelectorAll<HTMLInputElement>('input[name="stage"]');
+          checkboxes.forEach((checkbox: HTMLInputElement) => {
+            if (this.userStages.includes(checkbox.value)) {
+              checkbox.checked = true;
+            }
+          });
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  updateAmount() {
+    const selectedAmount = (document.querySelector('input[name="amount"]:checked') as HTMLInputElement)?.value;
+  
+    if (selectedAmount) {
+      const body = {
+        amount: selectedAmount
+      };
+      console.log(selectedAmount);
+  
+      this.investorService.updateUser(this.currentUser._id, body).subscribe({
+        next: () => {
+          console.log('Content updated successfully!');
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    }
+  }
+  getAmount() {
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.getAmount(this.currentUser._id).subscribe(
+        (amount: string) => {
+          this.userAmount = amount;
+          console.log(this.userAmount);
+          const radio = document.querySelectorAll<HTMLInputElement>('input[name="amount"]');
+          radio.forEach((radio: HTMLInputElement) => {
+            if (radio.value == this.userAmount) {
+              radio.checked = true;
+            }
+          });
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  updateType() {
+    const selectedType = (document.querySelector('input[name="investor-type"]:checked') as HTMLInputElement)?.value;
+  
+    if (selectedType) {
+      const body = {
+        type: selectedType
+      };
+      console.log(selectedType);
+  
+      this.investorService.updateUser(this.currentUser._id, body).subscribe({
+        next: () => {
+          console.log('Content updated successfully!');
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    }
+  }
+  gettype() {
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.gettype(this.currentUser._id).subscribe(
+        (type: string) => {
+          this.userType = type;
+          console.log(this.userType);
+          const radio = document.querySelectorAll<HTMLInputElement>('input[name="investor-type"]');
+          radio.forEach((radio: HTMLInputElement) => {
+            if (radio.value == this.userType) {
+              radio.checked = true;
+            }
+          });
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+  
+  selectAllCompnayStages() {
+    const checkboxes = document.getElementsByName('company_stage');
+    const checked = true;
+  
+    for (let i = 0; i < checkboxes.length; i++) {
+      const checkbox = checkboxes[i] as HTMLInputElement;
+      checkbox.checked = checked;
+    }
+  }
+  updateCompanyStage() {
+    const selectedCompanyStages = Array.from(document.querySelectorAll('input[name="company_stage"]:checked'))
+      .map(checkbox => (checkbox as HTMLInputElement).value);
+  
+    const body = {
+      company_stage: selectedCompanyStages
+    };
+    console.log(selectedCompanyStages)
+  
+    this.investorService.updateUser(this.currentUser._id, body).subscribe({
+      next: () => {
+        console.log('Content updated successfully!');
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    });
+  }
+  getCompanyStages() {
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.getCompanyStages(this.currentUser._id).subscribe(
+        (Companystages: string[]) => {
+          this.userCompanyStages = Companystages;
+          console.log(this.userCompanyStages);
+          const checkboxes = document.querySelectorAll<HTMLInputElement>('input[name="company_stage"]');
+          checkboxes.forEach((checkbox: HTMLInputElement) => {
+            if (this.userCompanyStages.includes(checkbox.value)) {
+              checkbox.checked = true;
+            }
+          });
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+  
+
+  initializeForm() {
     this.editForm = this.fb.group({
       name: [this.currentUser.name],
       description: [this.currentUser.description],
       phone_number: [this.currentUser.phone_number],
       country: [this.currentUser.country],
       city: [this.currentUser.city],
+      company: [this.currentUser.company], 
       linkedin_url: [this.currentUser.linkedin_url],
-      company: [this.currentUser.company],
-      investor_type: [this.currentUser.investor_type],
       preferred_area: [this.currentUser.preferred_area],
-      company_stage: [this.currentUser.company_stage],
-      investment_amount: [this.currentUser.investment_amount],
       facebook_url: [this.currentUser.facebook_url],
       twitter_url: [this.currentUser.twitter_url],
 
@@ -331,5 +509,5 @@ export class InvestorProfileComponent implements OnInit{
     console.error(errorMessage);
     return throwError(errorMessage);
   }
-  
+
 }

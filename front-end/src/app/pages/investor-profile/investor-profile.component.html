@@ -17,8 +17,7 @@
             <div class="container">
               <div class="container">
                 <div class="field">
-                  <input formControlName="name" type="text" placeholder="What's your name?" class="input1"
-                    [(ngModel)]="name" />
+                  <input formControlName="name" type="text" placeholder="What's your name?" class="input1" />
                   <div class="line"></div>
                 </div>
                 <div class="field">
@@ -28,17 +27,15 @@
                 </div>
                 <div class="field-container">
                   <div class="field3">
-                    <input formControlName="phone_number" type="text" class="input3" placeholder="Contact number"
-                      [(ngModel)]="phone" />
+                    <input formControlName="phone_number" type="text" class="input3" placeholder="Contact number" />
                     <div class="line3"></div>
                   </div>
                   <div class="field2">
-                    <input formControlName="country" type="text" class="input2" placeholder="Country"
-                      [(ngModel)]="country" />
+                    <input formControlName="country" type="text" class="input2" placeholder="Country" />
                     <div class="line2"></div>
                   </div>
                   <div class="field2">
-                    <input formControlName="city" type="text" class="input2" placeholder="City" [(ngModel)]="city" />
+                    <input formControlName="city" type="text" class="input2" placeholder="City" />
                     <div class="line2"></div>
                   </div><br>
                   <div class="d-flex">
@@ -75,26 +72,23 @@
             <div class="row mt-2">
               <div class="col-4">
                 <label for="name">Name</label>
-                <input formControlName="name" type="text" class="form-control custom-input" placeholder="Name"
-                  [(ngModel)]="name" />
+                <input formControlName="name" type="text" class="form-control custom-input" placeholder="Name" />
               </div>
             </div>
             <div class="row mt-2">
               <div class="col-4">
                 <label for="country">Country</label>
-                <input formControlName="country" type="text" class="form-control custom-input" placeholder="Country"
-                  [(ngModel)]="country" />
+                <input formControlName="country" type="text" class="form-control custom-input" placeholder="Country" />
               </div>
               <div class="col-4">
                 <label for="city">City</label>
-                <input formControlName="city" type="text" class="form-control custom-input" placeholder="City"
-                  [(ngModel)]="city" />
+                <input formControlName="city" type="text" class="form-control custom-input" placeholder="City" />
               </div>
               <div class="row mt-2">
                 <div class="col-4">
                   <label for="phone">Contact number</label>
                   <input formControlName="phone_number" type="text" class="form-control custom-input"
-                    placeholder="Phone number" [(ngModel)]="phone" />
+                    placeholder="Phone number" />
                 </div>
               </div>
               <div class="row mt-2">
@@ -103,30 +97,69 @@
                   <input formControlName="company" type="text" class="form-control custom-input"
                     placeholder="Company" />
                 </div>
-                <div class="col-4">
-                  <label for="phone">Investment amount</label>
-                  <select formControlName="investment_amount" class="form-select custom-input" id="Company-stage">
-                    <option value="" disabled selected hidden>Investment amount</option>
-                    <option value="&lt; US$10k">&lt; US$10k</option>
-                    <option value="US$10k - 100k">US$10k - 100k</option>
-                    <option value="US$100k - 1mm">US$100k - 1mm</option>
-                    <option value="US$1mm - 2mm">US$1mm - 2mm</option>
-                    <option value="US$2mm - 5mm">US$2mm - 5mm</option>
-                    <option value="&gt; US$5mm;">&gt; US$5mm</option>
-                  </select>
+                <label class="mt-3 mb-3">Investment amount</label>
+                <div>
+                  <label class="check">
+                    <input type="radio" name="amount" value="< TND10k">
+                    <span>&lt; TND10k</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="amount" value="TND10k - 100k">
+                    <span>TND10k - 100k</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="amount" value="TND100k - 1mm">
+                    <span>TND100k - 1mm</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="amount" value="TND1mm - 2mm">
+                    <span>TND1mm - 2mm</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="amount" value="TND2mm - 5mm">
+                    <span>TND2mm - 5mm</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="amount" value="> TND5mm">
+                    <span>&gt; TND5mm</span>
+                  </label>
                 </div>
-                <div class="col-4">
-                  <label for="phone">Investor Type</label>
-                  <select formControlName="investor_type" class="form-select custom-input" id="Company-stage">
-                    <option value="" disabled selected hidden>Investor Type</option>
-                    <option value="Myself">Myself</option>
-                    <option value="Family office">Family office</option>
-                    <option value="VC Fund">VC Fund</option>
-                    <option value="PE Fund">PE Fund</option>
-                    <option value="Corporate Fund">Corporate Fund</option>
-                    <option value="Hedge Fund">Hedge Fund</option>
-                    <option value="Another Individual">Another Individual</option>
-                  </select>
+                <div class="d-flex justify-content-end">
+                  <button (click)="updateAmount()" type="button" class="custom-button"><small>Save</small></button>
+                </div>
+                <label>Investor Type</label>
+                <div>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="Myself">
+                    <span>Myself</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="Family office">
+                    <span>Family office</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="VC Fund">
+                    <span>VC Fund</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="PE Fund">
+                    <span>PE Fund</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="Corporate Fund">
+                    <span>Corporate Fund</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="Hedge Fund">
+                    <span>Hedge Fund</span>
+                  </label>
+                  <label class="check">
+                    <input type="radio" name="investor-type" value="Another Individual">
+                    <span>Another Individual</span>
+                  </label>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <button (click)="updateType()" type="button" class="custom-button"><small>Save</small></button>
                 </div>
               </div>
               <div class="title">INVESTMENT PREFERENCES</div>
@@ -136,20 +169,95 @@
                   <input formControlName="preferred_area" type="text" class="form-control custom-input"
                     placeholder="Preferred area" />
                 </div>
-                <div class="col-4">
-                  <label for="phone">Company stage</label>
-                  <select formControlName="company_stage" class="form-select custom-input" id="Company-stage">
-                    <option value="" disabled selected hidden>Company stage</option>
-                    <option value="Idea">Idea</option>
-                    <option value="Pre-seed">Pre-seed</option>
-                    <option value="Seed">Seed</option>
-                    <option value="Early Growth">Early Growth</option>
-                    <option value="Growth">Growth</option>
-                    <option value="Maturity">Maturity</option>
-                  </select>
-                </div>
               </div>
-
+              <label class="mt-3 mb-3">Company stage</label>
+              <div>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Idea">
+                  <span>Idea</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Pre-seed">
+                  <span>Pre-seed</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Seed">
+                  <span>Seed</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Early Growth">
+                  <span>Early Growth</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Growth">
+                  <span>Growth</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="company_stage" value="Maturity">
+                  <span>Maturity</span>
+                </label>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button (click)="selectAllCompnayStages()" class="custom-button"><small>Select All</small></button>
+                <div class="m-2"></div>
+                <button (click)="updateCompanyStage()" type="button" class="custom-button"><small>Save</small></button>
+              </div>
+              <label class="mb-3">Stages of fundraising</label>
+              <div>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Founders Round">
+                  <span>Founders Round</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Seed Round">
+                  <span>Seed Round</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Pre A Round">
+                  <span>Pre A Round</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Series A">
+                  <span>Series A</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Series B">
+                  <span>Series B</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Series C">
+                  <span>Series C</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Pre-IPO">
+                  <span>Pre-IPO</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Startup Up Capital">
+                  <span>Startup Up Capital</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Growth Capital">
+                  <span>Growth Capital</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Working Capital Credit Facility">
+                  <span>Working Capital Credit Facility</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Bank Loans">
+                  <span>Bank Loans</span>
+                </label>
+                <label class="check">
+                  <input type="checkbox" name="stage" value="Shareholder Loans">
+                  <span>Shareholder Loans</span>
+                </label>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button (click)="selectAllStages()" class="custom-button "><small>Select All</small></button>
+                <div class="m-2"></div>
+                <button (click)="updateStage()" type="button" class="custom-button"><small>Save</small></button>
+              </div>
               <div class="title mt-4">SOCIAL MEDIA LINKS</div>
               <div class="row mt-2">
                 <div class="col-4">
