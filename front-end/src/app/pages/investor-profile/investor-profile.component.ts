@@ -651,6 +651,7 @@ export class InvestorProfileComponent implements OnInit {
             console.log('company successfully created!')
             this.fetchcompanies();
             console.log(this.imageCompany);
+            this.companyInput.nativeElement.value="";
           },
           error: (e) => {
             console.log(e);
@@ -671,6 +672,7 @@ export class InvestorProfileComponent implements OnInit {
         console.log('company successfully updated!')
         this.fetchcompanies();
         this.photoSrc = "assets/images/Default_pfp.png";
+        this.companyInput.nativeElement.value="";
       },
       error: (e) => {
         console.log(e);

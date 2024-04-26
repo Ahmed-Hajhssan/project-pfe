@@ -547,6 +547,7 @@ export class ProfileComponent implements OnInit {
             }
           );
       } else {
+        this.imageMember = undefined;
         resolve();
       }
     })
@@ -901,6 +902,7 @@ export class ProfileComponent implements OnInit {
           complete: () => {
             console.log('member successfully created!')
             this.fetchMembers();
+            this.memberInput.nativeElement.value="";
           },
           error: (e) => {
             console.log(e);
@@ -920,6 +922,8 @@ export class ProfileComponent implements OnInit {
       complete: () => {
         console.log('member successfully updated!')
         this.fetchMembers();
+        this.photoSrc = "assets/images/Default_pfp.png";
+        this.memberInput.nativeElement.value="";
       },
       error: (e) => {
         console.log(e);
