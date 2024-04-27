@@ -275,3 +275,36 @@ label.check {
     background-color: 	#F5F5DC;
     color: #545454;
   }
+  .campaign-container {
+    margin-top: 22px;
+    padding: 10px;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .header {
+    font-weight: bold;
+    font-size: 24px;
+    color: #333;
+    grid-column: span 3;
+    margin-bottom: 10px;
+  }
+  .buttons{
+    grid-column: span 3;
+    margin-left: 85%;
+    display: inline-flex;
+  }
+  
+  .category {
+    font-weight: bold;
+    color: #555;
+  }
+  .details {
+    color: #777;
+  }
+  
+  .currently_raising{
+    color: #d89626;
+  }
+  

@@ -7,6 +7,8 @@ import { faLocationDot, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { ViewportScroller } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { currently_raising } from '../../shared/currently_raising';
+import { previous_round } from '../../shared/previous_round';
 
 
 interface Member {
@@ -46,6 +48,8 @@ export class PreviewProfileComponent implements OnInit {
   fileUrls: string[];
   photoSrc = "assets/images/Default_pfp.png";
   userSectors: string[];
+  raising: currently_raising = {};
+  previous_rounds: previous_round[] = [];
 
   constructor(
     public authService: AuthService,
@@ -67,6 +71,10 @@ export class PreviewProfileComponent implements OnInit {
       this.fetchFiles();
       this.getSectors();
     });
+    this.authService.getCurrentlyRaising(id).subscribe((res) => {
+      this.raising = res;
+    });
+      this.fetchPreviousRounds();
   }
 
   smoothScroll(target: string) {
@@ -153,7 +161,7 @@ export class PreviewProfileComponent implements OnInit {
     const member = this.members.find(member => member._id === memberId);
     let memberImageUrl: string;
     if (member && member.image_member) {
-      memberImageUrl = this.baseUrl + '/uploads/' + member.image_member;
+      memberImageUrl = this.baseUrl + '/api/uploads/' + member.image_member;
     } else {
       memberImageUrl = this.photoSrc;
     }
@@ -196,5 +204,87 @@ export class PreviewProfileComponent implements OnInit {
       );
     }
   }
+
+  getSecurityFields(raising:any): string[] {
+    const securityFields: string[] = [];
+    const formValue = raising;
+
+    if (formValue.common_shares) {
+      securityFields.push('Common shares');
+    }
+    if (formValue.preferred_shares) {
+      securityFields.push('Preferred shares');
+    }
+    if (formValue.convertible_debt) {
+      securityFields.push('Convertible debt');
+    }
+    if (formValue.loan) {
+      securityFields.push('Loan');
+    }
+    if (formValue.other) {
+      securityFields.push('Other');
+    }
+    return securityFields;
+    
+  }
+
+  formatSecurities(raising: any) :any{
+    try{
+    const securities = this.getSecurityFields(raising);
+    if (securities.length > 0) {
+      return securities.join(', ');
+    }
+    }catch{
+      
+    }
+  }
+
+  getSourceFields(raising:any): string[] {
+    const sourceFields: string[] = [];
+    let formValue = raising;
+    if (formValue.business_angel) {
+      sourceFields.push('Business angel');
+    }
+    if (formValue.accelerator_incubator) {
+      sourceFields.push('Accelerator incubator');
+    }
+    if (formValue.vc_fund) {
+      sourceFields.push('VC fund');
+    }
+    if (formValue.corporate) {
+      sourceFields.push('Corporate');
+    }
+    if (formValue.public_grant) {
+      sourceFields.push('Public grant');
+    }
+    if (formValue.crowd) {
+      sourceFields.push('Crowd');
+    }
+    return sourceFields;
+  }
+  
+  formatSources(raising: any) : any {
+    try{
+      const sources = this.getSourceFields(raising);
+      if (sources.length > 0) {
+        return sources.join(', ');
+      }
+      }catch{
+        
+      }
+  }
+  fetchPreviousRounds(){
+    if (this.currentUser && this.currentUser._id) {
+    this.authService.getPreviousRounds(this.currentUser._id).subscribe(
+      (previous_rounds: previous_round[]) => {
+        this.previous_rounds = previous_rounds;
+        console.log(this.previous_rounds)
+      },
+      (error) => {
+        console.log('Error retrieving rounds:', error);
+      }
+    );
+  }
+}
 
 }

@@ -86,16 +86,16 @@ export class ProfileComponent implements OnInit {
   previousRoundForm: FormGroup;
   raising: currently_raising = {};
   previous_rounds: previous_round[] = [];
-  questions:any=[]
-  qn:number = 0;
+  questions: any = []
+  qn: number = 0;
   squestions: question[] = [];
   questionForm: FormGroup;
   addQuestionForm: FormGroup;
-  roundID:any;
-  company_name:string;
-  country:string;
-  city:string;
-  url:string;
+  roundID: any;
+  company_name: string;
+  country: string;
+  city: string;
+  url: string;
 
 
   constructor(
@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
     return (this.questionForm.get('questions') as FormArray).controls;
   }
 
-  initPhoto(){
+  initPhoto() {
     this.photoSrc = "assets/images/Default_pfp.png"
   }
 
@@ -176,7 +176,7 @@ export class ProfileComponent implements OnInit {
           facebook_url: memberData.facebook_url,
           twitter_url: memberData.twitter_url
         });
-        this.photoSrc=this.getmemberImageUrl(this.selectedMemberId);
+        this.photoSrc = this.getmemberImageUrl(this.selectedMemberId);
       },
 
       (error: any) => {
@@ -859,7 +859,7 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  initializePreviousRound(){
+  initializePreviousRound() {
     this.previousRoundForm = this.fb.group({
       year: ['2024'],
       type: ['Founders'],
@@ -902,7 +902,7 @@ export class ProfileComponent implements OnInit {
           complete: () => {
             console.log('member successfully created!')
             this.fetchMembers();
-            this.memberInput.nativeElement.value="";
+            this.memberInput.nativeElement.value = "";
           },
           error: (e) => {
             console.log(e);
@@ -923,7 +923,7 @@ export class ProfileComponent implements OnInit {
         console.log('member successfully updated!')
         this.fetchMembers();
         this.photoSrc = "assets/images/Default_pfp.png";
-        this.memberInput.nativeElement.value="";
+        this.memberInput.nativeElement.value = "";
       },
       error: (e) => {
         console.log(e);
@@ -944,7 +944,7 @@ export class ProfileComponent implements OnInit {
     return throwError(errorMessage);
   }
 
-  getSecurityFields(raising:any): string[] {
+  getSecurityFields(raising: any): string[] {
     const securityFields: string[] = [];
     const formValue = raising;
 
@@ -964,10 +964,10 @@ export class ProfileComponent implements OnInit {
       securityFields.push('Other');
     }
     return securityFields;
-    
+
   }
 
-  getSourceFields(raising:any): string[] {
+  getSourceFields(raising: any): string[] {
     const sourceFields: string[] = [];
     let formValue = raising;
     if (formValue.business_angel) {
@@ -989,60 +989,64 @@ export class ProfileComponent implements OnInit {
       sourceFields.push('Crowd');
     }
     return sourceFields;
-    
+
   }
 
-  formatSecurities(raising: any) :any{
-    try{
-    const securities = this.getSecurityFields(raising);
-    if (securities.length > 0) {
-      return securities.join(', ');
-    }
-    }catch{
-      
+  formatSecurities(raising: any): any {
+    try {
+      const securities = this.getSecurityFields(raising);
+      if (securities.length > 0) {
+        return securities.join(', ');
+      }
+    } catch {
+
     }
   }
 
-  formatSources(raising: any) : any {
-    try{
+  formatSources(raising: any): any {
+    try {
       const sources = this.getSourceFields(raising);
       if (sources.length > 0) {
         return sources.join(', ');
       }
-      }catch{
-        
-      }
+    } catch {
+
+    }
 
   }
 
-  deleteRaising(){
-    let id = localStorage.getItem('userId');
-    this.authService.deleteCurrentlyRaising(id).subscribe({
-      complete: () => {
-        this.ngOnInit();
-        console.log('Raising updated successfully!');
-      },
-      error: (e) => {
-        console.log(e);
-      }
-    });
+  deleteRaising() {
+    if (window.confirm('Are you sure?')) {
+      let id = localStorage.getItem('userId');
+      this.authService.deleteCurrentlyRaising(id).subscribe({
+        complete: () => {
+          this.ngOnInit();
+          console.log('Raising updated successfully!');
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    }
   }
 
-  deleteRound(roundID:any){
-    let id = localStorage.getItem('userId');
-    this.authService.deletePreviousRound(id,roundID).subscribe({
-      complete: () => {
-        this.ngOnInit();
-        console.log('Round deleted successfully!');
-      },
-      error: (e) => {
-        console.log(e);
-      }
-    });
+  deleteRound(roundID: any) {
+    if (window.confirm('Are you sure?')) {
+      let id = localStorage.getItem('userId');
+      this.authService.deletePreviousRound(id, roundID).subscribe({
+        complete: () => {
+          this.ngOnInit();
+          console.log('Round deleted successfully!');
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    }
   }
 
 
-  raisingSubmit(){
+  raisingSubmit() {
     let id = localStorage.getItem('userId');
     this.authService.createCurrentlyRaising(id, this.raisingForm.value).subscribe({
       complete: () => {
@@ -1055,7 +1059,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  previousRoundSubmit(){
+  previousRoundSubmit() {
     let id = localStorage.getItem('userId');
     this.authService.createPreviousRound(id, this.previousRoundForm.value).subscribe({
       complete: () => {
@@ -1069,11 +1073,10 @@ export class ProfileComponent implements OnInit {
 
   }
 
-
-  getRaising(){
+  getRaising() {
     let id = localStorage.getItem('userId');
     const myForm = this.raisingForm;
-    this.authService.getCurrentlyRaising(id).subscribe((data)=>{
+    this.authService.getCurrentlyRaising(id).subscribe((data) => {
       myForm.patchValue({
         type: data.type,
         size: data.size,
@@ -1091,18 +1094,18 @@ export class ProfileComponent implements OnInit {
         public_grant: data.public_grant,
         crowd: data.crowd
       });
-      
+
     },
-    (error: any) => {
-      console.error(error);
-    }
+      (error: any) => {
+        console.error(error);
+      }
     )
   }
 
-  getRound(roundId:any){
+  getRound(roundId: any) {
     let id = localStorage.getItem('userId');
     const myForm = this.previousRoundForm;
-    this.authService.getPreviousRound(id,roundId).subscribe((data)=>{
+    this.authService.getPreviousRound(id, roundId).subscribe((data) => {
       myForm.patchValue({
         year: data.year,
         type: data.type,
@@ -1121,17 +1124,16 @@ export class ProfileComponent implements OnInit {
         public_grant: data.public_grant,
         crowd: data.crowd
       });
-      this.roundID=roundId; 
+      this.roundID = roundId;
     },
-    (error: any) => {
-      console.error(error);
-    }
+      (error: any) => {
+        console.error(error);
+      }
     )
 
   }
 
-
-  fetchPreviousRounds(){
+  fetchPreviousRounds() {
     let id = localStorage.getItem('userId')
     this.authService.getPreviousRounds(id).subscribe(
       (previous_rounds: previous_round[]) => {
@@ -1144,11 +1146,11 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  raisingEdit(){
+  raisingEdit() {
     const data = this.raisingForm.value;
     const id = localStorage.getItem('userId');
-    this.authService.updateCurrentlyRaising(id,data).subscribe({
-      complete:() => {
+    this.authService.updateCurrentlyRaising(id, data).subscribe({
+      complete: () => {
         console.log('raising successfully updated!');
         this.ngOnInit();
       },
@@ -1159,11 +1161,11 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  previousRoundEdit(){
+  previousRoundEdit() {
     const data = this.previousRoundForm.value;
     const id = localStorage.getItem('userId');
-    this.authService.updatePreviousRound(id,this.roundID,data).subscribe({
-      complete:() => {
+    this.authService.updatePreviousRound(id, this.roundID, data).subscribe({
+      complete: () => {
         console.log('raising successfully updated!');
         this.ngOnInit();
       },
@@ -1174,37 +1176,37 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  addQuestion(){
+  addQuestion() {
     let qn = this.qn++;
     var item = {
-      'Question' : '',
-      'Answer' : ''
+      'Question': '',
+      'Answer': ''
     }
     this.questions.push(item);
     console.log(this.questions.length);
   }
 
-  deleteQuestion(qn:any){
+  deleteQuestion(qn: any) {
     console.log(qn);
-    this.questions.splice(qn,1);
+    this.questions.splice(qn, 1);
   }
 
   private fetchQuestions(): void {
-    try{
-    const employeeId = localStorage.getItem('userId'); // Replace with actual employee ID
-    this.authService.getQuestions(employeeId)
-      .subscribe(
-        (questions: question[]) => {
-          this.squestions = questions;
-          this.patchForm();
+    try {
+      const employeeId = localStorage.getItem('userId'); // Replace with actual employee ID
+      this.authService.getQuestions(employeeId)
+        .subscribe(
+          (questions: question[]) => {
+            this.squestions = questions;
+            this.patchForm();
 
-        },
-        
-        (error) => {
-          console.error('Error fetching questions:', error);
-        }
-      );
-  }catch{}
+          },
+
+          (error) => {
+            console.error('Error fetching questions:', error);
+          }
+        );
+    } catch { }
   }
 
   private patchForm(): void {
@@ -1219,12 +1221,12 @@ export class ProfileComponent implements OnInit {
       _id: question._id,
       Question: question.Question,
       Answer: question.Answer
-    });    
+    });
     return fb;
 
   }
 
-  editQuestion(){
+  editQuestion() {
     const updatedQuestionData = this.questionForm.value;
     const employeeId = localStorage.getItem('userId');
     updatedQuestionData.questions.forEach((question: any) => {
@@ -1242,12 +1244,12 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  delQuestion(index:any){
+  delQuestion(index: any) {
     let id = localStorage.getItem('userId');
     const formArray = this.questionForm.get('questions') as FormArray;
     let questionId = formArray.at(index).value._id
     console.log(questionId);
-    this.authService.deleteQuestion(id,questionId).subscribe({
+    this.authService.deleteQuestion(id, questionId).subscribe({
       complete: () => {
         this.ngOnInit();
         console.log('question deleted successfully!');
@@ -1258,7 +1260,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  submitQuestion(qn:any){
+  submitQuestion(qn: any) {
     let id = localStorage.getItem('userId');
     this.authService.createQuestion(id, this.addQuestionForm.value).subscribe({
       complete: () => {
@@ -1273,7 +1275,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  show(any:any){
+  show(any: any) {
 
     const formArray = this.questionForm.get('questions') as FormArray;
     console.log(formArray.at(any).value._id);

@@ -40,15 +40,15 @@ body {
 #sidebar {
     position: fixed;
     width: 80px;
-    height: 100vh; 
+    height: 100vh;
     min-width: 80px;
     transition: all .25s ease-in-out;
     background-color: #0e2238;
     display: flex;
     flex-direction: column;
-    top: 0; 
-    left: 0; 
-  }
+    top: 0;
+    left: 0;
+}
 
 #sidebar.expand {
     width: 220px;
@@ -91,13 +91,13 @@ a.sidebar-link {
     padding: .625rem 1.625rem;
     color: #FFF;
     display: block;
-    font-size: 0.9rem;
+    font-size: 16px;
     white-space: nowrap;
     border-left: 3px solid transparent;
 }
 
 .sidebar-link i {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-right: .75rem;
 }
 
@@ -145,7 +145,7 @@ a.sidebar-link:hover {
     transition: all .2s ease-out;
 }
 
-#content{
+#content {
     width: 80px;
     transition: all .25s ease-in-out;
 }
@@ -154,7 +154,8 @@ a.sidebar-link:hover {
 #content.expand {
     width: 220px;
 }
-hr{
+
+hr {
     color: #9c9b9b;
     margin-left: 22px;
     margin-right: 22px;

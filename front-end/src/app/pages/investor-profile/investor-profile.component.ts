@@ -47,14 +47,14 @@ export class InvestorProfileComponent implements OnInit {
   country: string;
   city: string;
   phone: string;
-  userAmount : string;
-  userType : string;
+  userAmount: string;
+  userType: string;
   userCompanyStages: string[];
-  companyForm:FormGroup;
-  editCompanyForm:FormGroup;
+  companyForm: FormGroup;
+  editCompanyForm: FormGroup;
   companies: Company[] = [];
   companyImageUrl: string;
-  companiesExist:boolean;
+  companiesExist: boolean;
   selectedCompanyId: string;
   imageCompany: any;
   photoSrc = "assets/images/Default_pfp.png";
@@ -75,7 +75,7 @@ export class InvestorProfileComponent implements OnInit {
       this.initializeForm();
       this.fetchImage();
       this.getSectors();
-      this. getStages();
+      this.getStages();
       this.getAmount();
       this.gettype();
       this.getCompanyStages();
@@ -83,7 +83,7 @@ export class InvestorProfileComponent implements OnInit {
     });
   }
 
-  initPhoto(){
+  initPhoto() {
     this.photoSrc = "assets/images/Default_pfp.png"
   }
 
@@ -442,7 +442,7 @@ export class InvestorProfileComponent implements OnInit {
   selectAllStages() {
     const checkboxes = document.getElementsByName('stage');
     const checked = true;
-  
+
     for (let i = 0; i < checkboxes.length; i++) {
       const checkbox = checkboxes[i] as HTMLInputElement;
       checkbox.checked = checked;
@@ -451,12 +451,12 @@ export class InvestorProfileComponent implements OnInit {
   updateStage() {
     const selectedStages = Array.from(document.querySelectorAll('input[name="stage"]:checked'))
       .map(checkbox => (checkbox as HTMLInputElement).value);
-  
+
     const body = {
       stage: selectedStages
     };
     console.log(selectedStages)
-  
+
     this.investorService.updateUser(this.currentUser._id, body).subscribe({
       next: () => {
         console.log('Content updated successfully!');
@@ -488,13 +488,13 @@ export class InvestorProfileComponent implements OnInit {
 
   updateAmount() {
     const selectedAmount = (document.querySelector('input[name="amount"]:checked') as HTMLInputElement)?.value;
-  
+
     if (selectedAmount) {
       const body = {
         amount: selectedAmount
       };
       console.log(selectedAmount);
-  
+
       this.investorService.updateUser(this.currentUser._id, body).subscribe({
         next: () => {
           console.log('Content updated successfully!');
@@ -527,13 +527,13 @@ export class InvestorProfileComponent implements OnInit {
 
   updateType() {
     const selectedType = (document.querySelector('input[name="investor-type"]:checked') as HTMLInputElement)?.value;
-  
+
     if (selectedType) {
       const body = {
         type: selectedType
       };
       console.log(selectedType);
-  
+
       this.investorService.updateUser(this.currentUser._id, body).subscribe({
         next: () => {
           console.log('Content updated successfully!');
@@ -563,11 +563,11 @@ export class InvestorProfileComponent implements OnInit {
       );
     }
   }
-  
+
   selectAllCompnayStages() {
     const checkboxes = document.getElementsByName('company_stage');
     const checked = true;
-  
+
     for (let i = 0; i < checkboxes.length; i++) {
       const checkbox = checkboxes[i] as HTMLInputElement;
       checkbox.checked = checked;
@@ -576,12 +576,12 @@ export class InvestorProfileComponent implements OnInit {
   updateCompanyStage() {
     const selectedCompanyStages = Array.from(document.querySelectorAll('input[name="company_stage"]:checked'))
       .map(checkbox => (checkbox as HTMLInputElement).value);
-  
+
     const body = {
       company_stage: selectedCompanyStages
     };
     console.log(selectedCompanyStages)
-  
+
     this.investorService.updateUser(this.currentUser._id, body).subscribe({
       next: () => {
         console.log('Content updated successfully!');
@@ -610,7 +610,7 @@ export class InvestorProfileComponent implements OnInit {
       );
     }
   }
-  
+
 
   initializeForm() {
     this.editForm = this.fb.group({
@@ -619,7 +619,7 @@ export class InvestorProfileComponent implements OnInit {
       phone_number: [this.currentUser.phone_number],
       country: [this.currentUser.country],
       city: [this.currentUser.city],
-      company: [this.currentUser.company], 
+      company: [this.currentUser.company],
       linkedin_url: [this.currentUser.linkedin_url],
       preferred_area: [this.currentUser.preferred_area],
       facebook_url: [this.currentUser.facebook_url],
@@ -651,7 +651,7 @@ export class InvestorProfileComponent implements OnInit {
             console.log('company successfully created!')
             this.fetchcompanies();
             console.log(this.imageCompany);
-            this.companyInput.nativeElement.value="";
+            this.companyInput.nativeElement.value = "";
           },
           error: (e) => {
             console.log(e);
@@ -672,7 +672,7 @@ export class InvestorProfileComponent implements OnInit {
         console.log('company successfully updated!')
         this.fetchcompanies();
         this.photoSrc = "assets/images/Default_pfp.png";
-        this.companyInput.nativeElement.value="";
+        this.companyInput.nativeElement.value = "";
       },
       error: (e) => {
         console.log(e);
@@ -681,6 +681,10 @@ export class InvestorProfileComponent implements OnInit {
   }
 
   onSubmit() {
+    this.updateAmount();
+    this.updateType();
+    this.updateCompanyStage();
+    this.updateStage();
     let id = this.actRoute.snapshot.paramMap.get('id');
     this.investorService.updateUser(id, this.editForm.value).subscribe({
       complete: () => {

@@ -21,7 +21,7 @@
               {{ sector }}
             </span>
           </label>
-      </div>
+        </div>
       </div>
       <div class="d-flex custom-margin">
         <ng-container *ngIf="currentUser.facebook_url">
@@ -54,6 +54,17 @@
                   </path>
                 </svg>
                 Overview
+              </div>
+            </a>
+            <a (click)="smoothScroll('#video-pitch')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z">
+                  </path>
+                </svg>
+                Video pitch
               </div>
             </a>
             <a (click)="smoothScroll('#Funding-rounds')">
@@ -100,17 +111,6 @@
                 Documents
               </div>
             </a>
-            <a (click)="smoothScroll('#video-pitch')">
-              <div class="nav-links">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z">
-                  </path>
-                </svg>
-                Video pitch
-              </div>
-            </a>
           </nav>
         </div>
       </div>
@@ -149,6 +149,97 @@
           </div>
         </div>
         <!--fin overview-->
+        <div *ngIf="currentUser.video_pitch || currentUser.video_pitchUrl" id="video-pitch"
+          class="card video-pitch-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Video Pitch</h2>
+                <hr class="text-gray">
+                <span>
+                  <video *ngIf="videoExist" class="custom-video" [src]="videoUrl" type="video/mp4" controls></video>
+                  <iframe *ngIf="videoUrlExist" class="custom-video" [src]="videoPitchUrl" frameborder="0"
+                    allowfullscreen></iframe>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="this.raising || (previous_rounds &&  previous_rounds.length>0)" id="Funding-rounds"
+          class="card Documents-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Funding rounds</h2>
+                <hr class="text-gray">
+                <div *ngIf="this.raising" class="campaign-container">
+                  <div class="header">Currently raising - <span class="currently_raising">{{raising.size}} TND</span>
+                  </div>
+                  <div class="row">
+                    <div class="category">Type</div>
+                    <div class="details">{{raising.type}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Round size</div>
+                    <div class="details">{{raising.size}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Already commited</div>
+                    <div class="details">{{raising.commited}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Security</div>
+                    <div class="details">{{formatSecurities(raising)}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Source</div>
+                    <div class="details">{{formatSources(raising)}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="category">Investors</div>
+                    <div class="details">{{raising.investors}}</div>
+                  </div>
+                  <div class="buttons">
+                  </div>
+                </div>
+                <hr *ngIf="this.raising" class="text-gray mt-4">
+
+                <div *ngIf="previous_rounds &&  previous_rounds.length>0">
+                  <hr style="color: #d3d3d3;">
+                  <div *ngFor="let round of previous_rounds" class="campaign-container">
+                    <div class="header"> {{round.year}} - <span class="currently_raising">{{round.size}} TND</span>
+                    </div>
+                    <div class="row">
+                      <div class="category">Type</div>
+                      <div class="details">{{round.type}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="category">Round size</div>
+                      <div class="details">{{round.size}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="category">Already commited</div>
+                      <div class="details">{{round.commited}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="category">Security</div>
+                      <div class="details">{{formatSecurities(round)}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="category">Source</div>
+                      <div class="details">{{formatSources(round)}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="category">Investors</div>
+                      <div class="details">{{round.investors}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div *ngIf="membersExist" id="Team" class="card Team-size">
           <div class="card-body">
             <div class="row gutters">
@@ -157,9 +248,9 @@
                 <hr class="text-gray">
                 <div *ngFor="let member of members" class="card-2">
                   <div class="card-content">
-                      <div class="image-frame">
-                        <img [src]="getmemberImageUrl(member._id)" alt="Profile Picture">
-                      </div>
+                    <div class="image-frame">
+                      <img [src]="getmemberImageUrl(member._id)" alt="Profile Picture">
+                    </div>
                     <span>
                       <small class="text-gray">Name :</small>
                       <div class="mb-2"><b>{{ member.name }} </b></div>
@@ -214,33 +305,18 @@
                 <h2 class="mb-2">Documents</h2>
                 <hr class="text-gray">
                 <div *ngIf="!filesExist" class="mb-3">Upload your first document.</div>
-              <div *ngIf="filesExist">
-                <div *ngFor="let fileUrl of fileUrls" class="card-3">
-                  <div class="card-content">
-                    <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{
-                      getFileNameFromUrl(fileUrl) }}</span>
-                    <div class="card-buttons">
-                      <a class="custom-button" [href]="fileUrl" target="_blank" class="Company-link" download><small>Download</small></a>
+                <div *ngIf="filesExist">
+                  <div *ngFor="let fileUrl of fileUrls" class="card-3">
+                    <div class="card-content">
+                      <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{
+                        getFileNameFromUrl(fileUrl) }}</span>
+                      <div class="card-buttons">
+                        <a class="custom-button" [href]="fileUrl" target="_blank" class="Company-link"
+                          download><small>Download</small></a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="currentUser.video_pitch || currentUser.video_pitchUrl" id="video-pitch"
-          class="card video-pitch-size">
-          <div class="card-body">
-            <div class="row gutters">
-              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <h2 class="mb-2">Video Pitch</h2>
-                <hr class="text-gray">
-                <span>
-                  <video *ngIf="videoExist" class="custom-video" [src]="videoUrl" type="video/mp4" controls></video>
-                  <iframe *ngIf="videoUrlExist" class="custom-video" [src]="videoPitchUrl" frameborder="0"
-                    allowfullscreen></iframe>
-                </span>
               </div>
             </div>
           </div>

@@ -183,7 +183,7 @@
               <hr class="text-gray">
  
               <div *ngIf="this.raising" class="campaign-container">
-                <div class="header">Currently raising - <span class="currently_raising">{{raising.size}} €</span></div>
+                <div class="header">Currently raising - <span class="currently_raising">{{raising.size}} TND</span></div>
                 <div class="row">
                   <div class="category">Type</div>
                   <div class="details">{{raising.type}}</div>
@@ -223,7 +223,7 @@
                 <div class="header" style="margin-top: 50px;">Funding rounds</div>
                 <hr style="color: #d3d3d3;">
                 <div *ngFor="let round of previous_rounds" class="campaign-container">
-                  <div class="header"> {{round.year}} - <span class="currently_raising">{{round.size}} €</span></div>
+                  <div class="header"> {{round.year}} - <span class="currently_raising">{{round.size}} TND</span></div>
                   <div class="row">
                     <div class="category">Type</div>
                     <div class="details">{{round.type}}</div>
