@@ -8,13 +8,15 @@ import { RouteGuard } from './shared/route-guard';
 import { PreviewProfileComponent } from './pages/preview-profile/preview-profile.component';
 import { ForgetPasswordComponent } from './pages/forget-password/forget-password.component';
 import { ResetComponent } from './pages/reset/reset.component';
+import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 
 const routes: Routes = [
   {path:'login', component:LoginComponent},
   {path:'sign-Up', component:RegisterComponent},
   {path:'Profile/:id', component:ProfileComponent, canActivate:[RouteGuard]},
   {path:'investorProfile/:id', component:InvestorProfileComponent, canActivate:[RouteGuard]},
-  {path:'Profile/preview-profile/:id', component:PreviewProfileComponent},
+  {path:'preview-profile-entrepreneur/:id', component:PreviewProfileComponent},
+  {path:'preview-profile-investor/:id', component:PreviewProfileInvestorComponent},
   {path:'forget-password', component:ForgetPasswordComponent},
   {path:'reset/:token', component:ResetComponent},
 ];

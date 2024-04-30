@@ -1,0 +1,154 @@
+<div class="profile-page">
+  <div class="content">
+    <div class="d-flex mt-4">
+      <img [src]="imageUrl" alt="example placeholder" class="clickable-image" />
+      <div class="container">
+        <p class="Company-name">{{currentUser.name}}</p>
+        <div class="d-flex">
+          <p class="Company-link">{{currentUser.phone_number }}</p>
+          <div class="d-flex">
+            <fa-icon [icon]="faLocationDot" *ngIf="currentUser.country || currentUser.city"
+              class="location-icon"></fa-icon>
+            <p>{{currentUser.country}}</p>
+            <p *ngIf="currentUser.country">, &nbsp;</p>
+            <p>{{currentUser.city}}</p>
+          </div>
+        </div>
+        <p>{{this.currentUser.description}}</p>
+        <div *ngIf="userSectors">
+          <label *ngFor="let sector of userSectors" class="check">
+            <span>
+              {{ sector }}
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex custom-margin">
+        <ng-container *ngIf="currentUser.facebook_url">
+          <a href="{{ currentUser.facebook_url }}" class="social-link" target="_blank"><fa-icon [icon]="faFacebookF"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+        <ng-container *ngIf="currentUser.linkedin_url">
+          <a href="{{ currentUser.linkedin_url }}" class="social-link" target="_blank"><fa-icon [icon]="faLinkedin"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+        <ng-container *ngIf="currentUser.twitter_url">
+          <a href="{{ currentUser.twitter_url }}" target="_blank"><fa-icon [icon]="faTwitter"
+              class="social-icons"></fa-icon></a>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex mt-2">
+      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <div class="sticky-card card nav-size">
+          <nav>
+            <a (click)="smoothScroll('#overview')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" viewBox="0 0 24 24" fill="currentColor"
+                  aria-hidden="true" data-slot="icon" width="24">
+                  <path fill-rule="evenodd"
+                    d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                    clip-rule="evenodd"></path>
+                  <path
+                    d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z">
+                  </path>
+                </svg>
+                Profile
+              </div>
+            </a>
+            <a (click)="smoothScroll('#video-pitch')">
+              <div class="nav-links">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z">
+                  </path>
+                </svg>
+                Portfolio
+              </div>
+            </a>
+          </nav>
+        </div>
+      </div>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <!--debut overview-->
+        <div id="overview" class="card overview-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Investor profile</h2>
+                <hr class="text-gray">
+                <table class="table table-no-border">
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="text-gray">Company</th>
+                      <td>{{ currentUser.company }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">Investor Type</th>
+                      <td>{{ this.userType }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">Investment amount</th>
+                      <td>{{ this.userAmount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="custom-padding">
+                  <p class="text-gray"><b>More</b></p>
+                  <p class="fixed-width">{{ currentUser.more }}</p>
+                </div>
+                
+                <h4 class="mt-2"><b>Investment preferences</b></h4>
+                <table class="table table-no-border">
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="text-gray">Geographical area</th>
+                      <td>{{ currentUser.preferred_area }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">Company stage</th>
+                      <td>
+                        <ng-container *ngFor="let stage of userCompanyStages">
+                          {{ stage }},&nbsp;&nbsp;
+                        </ng-container>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-gray">Stages of fundraising</th>
+                      <td>
+                        <ng-container *ngFor="let stage of userStages">
+                          {{ stage }},&nbsp;&nbsp;
+                        </ng-container>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--fin overview-->
+        <div id="video-pitch" class="card video-pitch-size">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h2 class="mb-2">Portfolio</h2>
+                <hr class="text-gray">
+                <span>
+
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg">
+    <div>
+      <h1 style="color: white;"></h1>
+    </div>
+  </div>
+</div>

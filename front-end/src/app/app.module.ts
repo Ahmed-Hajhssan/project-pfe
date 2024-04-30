@@ -27,6 +27,7 @@ import { AuthInterceptor } from './shared/auth-interceptor';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 import { PreviewProfileComponent } from './pages/preview-profile/preview-profile.component';
 import { InvestorProfileComponent } from './pages/investor-profile/investor-profile.component';
+import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 
 
 
@@ -47,6 +48,7 @@ import { InvestorProfileComponent } from './pages/investor-profile/investor-prof
     NavbarComponent,
     PreviewProfileComponent,
     InvestorProfileComponent,
+    PreviewProfileInvestorComponent,
 
   ],
   imports: [

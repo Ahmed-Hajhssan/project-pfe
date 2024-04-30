@@ -624,7 +624,7 @@ export class InvestorProfileComponent implements OnInit {
       preferred_area: [this.currentUser.preferred_area],
       facebook_url: [this.currentUser.facebook_url],
       twitter_url: [this.currentUser.twitter_url],
-
+      more: [this.currentUser.more],
     });
     this.companyForm = this.fb.group({
       name: [''],

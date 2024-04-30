@@ -36,6 +36,9 @@ export class AuthService {
   getUserId() {
     return this.userId;
   }
+  getUserRole() {
+    return this.role;
+  }
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -134,7 +137,7 @@ export class AuthService {
             this.logoutTimer = setTimeout(() => { this.logout() }, res.expiresIn * 1000);
             const now = new Date();
             const expiresDate = new Date(now.getTime() + (res.expiresIn * 1000));
-            this.storeLoginDetails(this.token, expiresDate, this.userId);
+            this.storeLoginDetails(this.token, expiresDate, this.userId, this.role);
           }
           return res; 
         })
@@ -179,16 +182,18 @@ export class AuthService {
     this.clearLoginDetails();
   }
 
-  storeLoginDetails(token: string, expirationDate: Date, userId: string) {
+  storeLoginDetails(token: string, expirationDate: Date, userId: string, role: string) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiresIn', expirationDate.toISOString());
     localStorage.setItem("userId", userId);
+    localStorage.setItem("role", role);
   }
 
   clearLoginDetails() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiresIn');
     localStorage.removeItem('userId');
+    localStorage.removeItem('role');
   }
 
   getLocalStorageData() {

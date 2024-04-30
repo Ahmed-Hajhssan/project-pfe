@@ -1,18 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
+
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
-  constructor(private actRoute: ActivatedRoute) { }
+export class NavbarComponent implements OnInit {
+  userRole: any;
+  id: any;
 
-  navigateToPreviewProfile(): void {
-    let id = this.actRoute.snapshot.paramMap.get('id');
-    const previewUrl = `/Profile/preview-profile/${id}`;
-    window.open(previewUrl, '_blank');
+  constructor(private actRoute: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.userRole = localStorage.getItem('role');
   }
 
+  navigateToPreviewProfile(): void {
+    let previewUrl: string;
+
+    if (this.userRole === 'entrepreneur') {
+      previewUrl = `/preview-profile-entrepreneur/${this.id}`;
+    } else if (this.userRole === 'investor') {
+      previewUrl = `/preview-profile-investor/${this.id}`;
+    } else {
+      console.error('Unknown role:', this.userRole);
+      return;
+    }
+
+    window.open(previewUrl, '_blank');
+  }
 }
