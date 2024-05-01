@@ -7,6 +7,14 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 
+interface Company {
+  _id: string;
+  name: string;
+  amount: string;
+  type: string;
+  image?: string;
+}
+
 @Component({
   selector: 'app-preview-profile-investor',
   templateUrl: './preview-profile-investor.component.html',
@@ -26,6 +34,8 @@ export class PreviewProfileInvestorComponent implements OnInit{
   userType: string;
   userCompanyStages: string[];
   userStages: string[];
+  companies: Company[] = [];
+  companiesExist: boolean;
 
   constructor(
     public investorService: InvestorService,
@@ -44,6 +54,7 @@ export class PreviewProfileInvestorComponent implements OnInit{
       this.gettype();
       this.getCompanyStages();
       this.getStages();
+      this.fetchcompanies();
     });
   }
 
@@ -125,6 +136,35 @@ export class PreviewProfileInvestorComponent implements OnInit{
       );
     }
   }
+
+  fetchcompanies() {
+    this.companiesExist = false;
+    if (this.currentUser && this.currentUser._id) {
+      this.investorService.getCompanies(this.currentUser._id).subscribe(
+        (companies: Company[]) => {
+          this.companies = companies;
+          if (this.companies.length > 0) {
+            this.companiesExist = true;
+          }
+        },
+        (error) => {
+          console.log('Error retrieving companies:', error);
+        }
+      );
+    }
+  }
+
+  getCompanyImageUrl(companyId: string): string {
+    const company = this.companies.find(company => company._id === companyId);
+    let companyImageUrl: string;
+    if (company && company.image) {
+      companyImageUrl = this.baseUrl + '/api/uploads/' + company.image;
+    } else {
+      companyImageUrl = "assets/images/Default_pfp.png";
+    }
+    return companyImageUrl;
+  }
+
   smoothScroll(target: string) {
     const targetElement = this.elementRef.nativeElement.querySelector(target);
     if (targetElement) {

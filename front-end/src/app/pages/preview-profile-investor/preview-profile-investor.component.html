@@ -42,7 +42,7 @@
       <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
         <div class="sticky-card card nav-size">
           <nav>
-            <a (click)="smoothScroll('#overview')">
+            <a (click)="smoothScroll('#profile')">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" viewBox="0 0 24 24" fill="currentColor"
                   aria-hidden="true" data-slot="icon" width="24">
@@ -56,7 +56,7 @@
                 Profile
               </div>
             </a>
-            <a (click)="smoothScroll('#video-pitch')">
+            <a (click)="smoothScroll('#portfolio')">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -71,13 +71,14 @@
         </div>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-        <!--debut overview-->
-        <div id="overview" class="card overview-size">
+        <!--debut profile-->
+        <div id="profile" class="card overview-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <h2 class="mb-2">Investor profile</h2>
                 <hr class="text-gray">
+                <div class="title mt-3">Personal information</div>
                 <table class="table table-no-border">
                   <tbody>
                     <tr>
@@ -90,7 +91,7 @@
                     </tr>
                     <tr>
                       <th scope="row" class="text-gray">Investment amount</th>
-                      <td>{{ this.userAmount }}</td>
+                      <td class="investment-amount">{{ this.userAmount }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -98,13 +99,15 @@
                   <p class="text-gray"><b>More</b></p>
                   <p class="fixed-width">{{ currentUser.more }}</p>
                 </div>
-                
-                <h4 class="mt-2"><b>Investment preferences</b></h4>
+
+                <div class="title">Investment preferences</div>
                 <table class="table table-no-border">
                   <tbody>
                     <tr>
                       <th scope="row" class="text-gray">Geographical area</th>
-                      <td>{{ currentUser.preferred_area }}</td>
+                      <td><fa-icon [icon]="faLocationDot" *ngIf="currentUser.preferred_area"
+                          class="location-icon"></fa-icon>
+                        {{ currentUser.preferred_area }}</td>
                     </tr>
                     <tr>
                       <th scope="row" class="text-gray">Company stage</th>
@@ -124,25 +127,45 @@
                     </tr>
                   </tbody>
                 </table>
-                
+
               </div>
             </div>
           </div>
         </div>
-        <!--fin overview-->
-        <div id="video-pitch" class="card video-pitch-size">
+        <!--fin profile-->
+
+        <div *ngIf="companies" id="portfolio" class="card Team-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <h2 class="mb-2">Portfolio</h2>
                 <hr class="text-gray">
-                <span>
+                <div class="title mt-3">Invested companies</div>
+                <div *ngFor="let company of companies" class="card-2">
+                  <div class="card-content">
+                    <div class="image-frame">
+                      <img [src]="getCompanyImageUrl(company._id)" alt="Profile Picture">
+                    </div>
+                    <span>
+                      <small class="text-gray">Name :</small>
+                      <div class="mb-2"><b>{{ company.name }}</b></div>
+                    </span>
+                    <span>
+                      <small class="text-gray">Investment amount :</small>
+                      <div>{{ company.amount }}</div>
+                    </span>
+                    <span>
+                      <small class="text-gray">Investment type :</small>
+                      <div>{{ company.type }}</div>
 
-                </span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
