@@ -292,6 +292,16 @@ entrepreneurRoute.route('/read/:id').get(async (req, res, next) => {
   }
 });
 
+//Get entrepreneurs
+entrepreneurRoute.route('/getEntrepreneurs').get(async (req, res, next) => {
+  try {
+    const entrepreneurs = await Entrepreneur.find();
+    res.json(entrepreneurs);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Update entrepreneur
 entrepreneurRoute.route('/update/:id').put(async (req, res, next) => {
   try {

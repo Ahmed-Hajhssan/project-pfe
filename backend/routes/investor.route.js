@@ -160,6 +160,16 @@ investorRoute.route('/read/:id').get(async (req, res, next) => {
   }
 });
 
+//Get Investors
+investorRoute.route('/getInvestors').get(async (req, res, next) => {
+  try {
+    const investors = await Investor.find();
+    res.json(investors);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Update investor
 investorRoute.route('/update/:id').put(async (req, res, next) => {
   try {

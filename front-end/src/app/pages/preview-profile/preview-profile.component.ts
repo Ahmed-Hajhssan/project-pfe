@@ -89,7 +89,7 @@ export class PreviewProfileComponent implements OnInit {
   fetchImage(): void {
     if (this.currentUser && this.currentUser._id) {
       if (this.currentUser.image_profile == null) {
-        this.imageUrl = 'assets/images/placeholder.png';
+        this.imageUrl = 'assets/images/3da39-no-user-image-icon-27.webp';
       } else {
         this.imageUrl = this.baseUrl + '/api/uploads/' + this.currentUser.image_profile;
       }
@@ -99,7 +99,7 @@ export class PreviewProfileComponent implements OnInit {
   }
 
   fetchVideo(): void {
-    if (this.currentUser && this.currentUser._id) {
+    if (this.currentUser && this.currentUser._id ) {
       if (this.currentUser.video_pitch == null) {
         this.videoExist = false;
       } else {
@@ -112,7 +112,7 @@ export class PreviewProfileComponent implements OnInit {
   }
 
   fetchVideoPitchUrl(): void {
-    if (this.currentUser && this.currentUser._id) {
+    if (this.currentUser && this.currentUser._id && this.currentUser.video_pitchUrl) {
       if (this.currentUser.video_pitchUrl === null) {
         this.videoUrlExist = false;
       } else {
@@ -122,8 +122,6 @@ export class PreviewProfileComponent implements OnInit {
         this.videoPitchUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + videoId);
         console.log(this.videoPitchUrl);
       }
-    } else {
-      console.error("User ID is undefined.");
     }
   }
 

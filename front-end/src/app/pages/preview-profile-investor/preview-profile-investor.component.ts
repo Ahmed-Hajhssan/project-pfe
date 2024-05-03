@@ -115,7 +115,7 @@ export class PreviewProfileInvestorComponent implements OnInit{
   fetchImage(): void {
     if (this.currentUser && this.currentUser._id) {
       if (this.currentUser.image_profile == null) {
-        this.imageUrl = 'assets/images/placeholder.png';
+        this.imageUrl = 'assets/images/3da39-no-user-image-icon-27.webp';
       } else {
         this.imageUrl = this.baseUrl + '/investor/uploads/' + this.currentUser.image_profile;
       }

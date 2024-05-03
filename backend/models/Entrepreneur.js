@@ -13,6 +13,7 @@ let Entrepreneur = new Schema({
    annual_revenue: {type: String, required: false},
    mrr: {type: String, required: false},
    employee_count: {type: String, required: false},
+   investment_size: {type: String, required: false},
    linkedin_url: {type: String, required: false},
    facebook_url: {type: String, required: false},
    twitter_url: {type: String, required: false},

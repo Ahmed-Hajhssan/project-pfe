@@ -28,6 +28,7 @@ import { NavbarComponent } from './pages/navbar/navbar.component';
 import { PreviewProfileComponent } from './pages/preview-profile/preview-profile.component';
 import { InvestorProfileComponent } from './pages/investor-profile/investor-profile.component';
 import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
+import { MatchMakingComponent } from './pages/match-making/match-making.component';
 
 
 
@@ -49,6 +50,7 @@ import { PreviewProfileInvestorComponent } from './pages/preview-profile-investo
     PreviewProfileComponent,
     InvestorProfileComponent,
     PreviewProfileInvestorComponent,
+    MatchMakingComponent,
 
   ],
   imports: [

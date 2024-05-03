@@ -15,12 +15,15 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private authenticationSub: Subscription;
   userAuthenticated = false;
   id:any;
+  userRole: any;
 
   constructor(private renderer: Renderer2, private authService: AuthService,private actRoute: ActivatedRoute) { }
 
 
   ngOnInit() {
-    this.id = localStorage.getItem('userId');
+    //this.id = localStorage.getItem('userId');
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.userRole = localStorage.getItem('role');
     this.expand();
     this.fullHeight();
     this.userAuthenticated = this.authService.getIsAuthenticated();
@@ -32,6 +35,24 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authenticationSub.unsubscribe();
+  }
+
+  getMatchmakingUrl(): string{
+    let url = `/matchmaking/${this.id}`;
+    return url
+  }
+
+  navigateToProfile(): string {
+    let previewUrl: string;
+
+    if (this.userRole === 'entrepreneur') {
+      previewUrl = `/Profile/${this.id}`;
+    } else if (this.userRole === 'investor') {
+      previewUrl = `/investorProfile/${this.id}`;
+    }else{
+      previewUrl =''
+    }
+    return previewUrl;
   }
 
 

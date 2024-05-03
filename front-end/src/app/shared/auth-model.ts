@@ -15,6 +15,7 @@ export interface AuthModel{
   annual_revenue?: string;
   mrr?: string;
   employee_count?: string;
+  investment_size?: string;
   linkedin_url?: string;
   facebook_url?: string;
   twitter_url?: string;

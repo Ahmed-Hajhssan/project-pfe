@@ -792,6 +792,7 @@ export class ProfileComponent implements OnInit {
       annual_revenue: [this.currentUser.annual_revenue],
       mrr: [this.currentUser.mrr],
       employee_count: [this.currentUser.employee_count],
+      investment_size: [this.currentUser.investment_size],
       linkedin_url: [this.currentUser.linkedin_url],
       facebook_url: [this.currentUser.facebook_url],
       twitter_url: [this.currentUser.twitter_url],
