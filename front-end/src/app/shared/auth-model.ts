@@ -25,5 +25,7 @@ export interface AuthModel{
   video_pitch?: string;
   video_pitchUrl?: string;
   sector?: string[];
+  score?: number;
+  criteria?: string[];
 
 }

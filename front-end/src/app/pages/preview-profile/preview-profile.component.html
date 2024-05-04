@@ -332,13 +332,12 @@
             </div>
           </div>
         </div>
-        <div *ngIf="filesExist" id="FAQ" class="card">
+        <div *ngIf="squestions && squestions.length > 0" id="FAQ" class="card">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <h2 class="mb-2">Frequently asked questions</h2>
                 <hr class="text-gray">
-                <div *ngIf="squestions && squestions.length > 0">
                   <div *ngFor="let question of squestions">
                     <div class="text-gray mt-3"><b>Question :</b></div>
                     <div class="d-flex">
@@ -355,7 +354,7 @@
                       <div class="answer">{{ question.Answer }}</div>
                     </div>
                   </div>
-                </div>
+                
               </div>
             </div>
           </div>
