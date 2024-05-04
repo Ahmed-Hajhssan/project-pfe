@@ -888,6 +888,7 @@ export class ProfileComponent implements OnInit {
     this.authService.updateUser(id, this.editForm.value).subscribe({
       complete: () => {
         console.log('Content updated successfully!');
+        this.updateProfileScore();
       },
       error: (e) => {
         console.log(e);
