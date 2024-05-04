@@ -68,7 +68,7 @@ export class MatchMakingComponent implements OnInit {
     let criteria:string[] = [];
     let userCompanyStage = this.currentEntrepreneur.company_stage;
     let userAmount = this.currentEntrepreneur.investment_size;
-    let userCountry = this.currentEntrepreneur.country?.toUpperCase();
+    let userCity = this.currentEntrepreneur.city?.toUpperCase();
     let userSectors = this.currentEntrepreneur.sector;
     this.matchMakingService.getInvestors().subscribe(
       (investors: InvestorModel[]) => {
@@ -81,9 +81,9 @@ export class MatchMakingComponent implements OnInit {
               mmScore++;
               criteria.push(userAmount);
             }
-            if(investor.country && investor.country.toUpperCase()==userCountry){
+            if(investor.city && investor.city.toUpperCase()==userCity){
               mmScore++;
-              criteria.push(userCountry);
+              criteria.push(userCity);
             }
             if(investor.sector && userSectors){
               let commonSectors = investor.sector.filter(element => userSectors?.includes(element));
