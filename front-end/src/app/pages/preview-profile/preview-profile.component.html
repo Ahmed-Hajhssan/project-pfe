@@ -113,7 +113,12 @@
             </a>
             <a (click)="smoothScroll('#FAQ')">
               <div class="nav-links">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z">
+                  </path>
+                </svg>
                 FAQ
               </div>
             </a>
@@ -327,22 +332,27 @@
             </div>
           </div>
         </div>
-        <div *ngIf="filesExist" id="FAQ" class="card Documents-size">
+        <div *ngIf="filesExist" id="FAQ" class="card">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <h2 class="mb-2">Documents</h2>
+                <h2 class="mb-2">Frequently asked questions</h2>
                 <hr class="text-gray">
-                <div *ngIf="!filesExist" class="mb-3">Upload your first document.</div>
-                <div *ngIf="filesExist">
-                  <div *ngFor="let fileUrl of fileUrls" class="card-3">
-                    <div class="card-content">
-                      <span><fa-icon [icon]="faPaperclip" class="custom-yellow-icon"></fa-icon> {{
-                        getFileNameFromUrl(fileUrl) }}</span>
-                      <div class="card-buttons">
-                        <a class="custom-button" [href]="fileUrl" target="_blank" class="Company-link"
-                          download><small>Download</small></a>
-                      </div>
+                <div *ngIf="squestions && squestions.length > 0">
+                  <div *ngFor="let question of squestions">
+                    <div class="text-gray mt-3"><b>Question :</b></div>
+                    <div class="d-flex">
+                    <div class="question">{{ question.Question }}</div>
+                    <!-- link trigger collapse -->
+                    <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()" [attr.aria-expanded]="!basicCollapse.collapsed"
+                      aria-controls="collapseExample">
+                      <fa-icon [icon]="faChevronDown" *ngIf="question.Answer" class="answer-icon"></fa-icon>
+                    </a>
+                  </div>
+                    <!--Collapsed content-->
+                    <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+                      <div class="text-gray"><b>Answer :</b></div>
+                      <div class="answer">{{ question.Answer }}</div>
                     </div>
                   </div>
                 </div>

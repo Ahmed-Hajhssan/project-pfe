@@ -5,6 +5,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -63,7 +64,8 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
     FontAwesomeModule,
     NgxDropzoneModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    MdbCollapseModule,
   ],
   providers: [
     provideClientHydration(),

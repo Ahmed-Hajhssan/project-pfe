@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../shared/auth-service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthModel } from '../../shared/auth-model';
-import { faLocationDot, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faPaperclip, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { ViewportScroller } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -20,6 +20,12 @@ interface Member {
   linkedin_url: string;
   facebook_url: string;
   twitter_url: string;
+}
+
+interface question {
+  _id: number;
+  Question: string;
+  Answer: string;
 }
 
 @Component({
@@ -41,7 +47,7 @@ export class PreviewProfileComponent implements OnInit {
   pitchDeckUrl: SafeResourceUrl;
   videoExist: boolean;
   videoUrlExist: boolean;
-  fileExists : boolean;
+  fileExists: boolean;
   membersExist: boolean;
   filesExist: boolean;
   members: Member[] = [];
@@ -50,6 +56,9 @@ export class PreviewProfileComponent implements OnInit {
   userSectors: string[];
   raising: currently_raising = {};
   previous_rounds: previous_round[] = [];
+  questions: any = [];
+  squestions: question[] = [];
+  faChevronDown = faChevronDown;
 
   constructor(
     public authService: AuthService,
@@ -74,14 +83,15 @@ export class PreviewProfileComponent implements OnInit {
     this.authService.getCurrentlyRaising(id).subscribe((res) => {
       this.raising = res;
     });
-      this.fetchPreviousRounds();
+    this.fetchPreviousRounds();
+    this.fetchQuestions();
   }
 
   smoothScroll(target: string) {
     const targetElement = this.elementRef.nativeElement.querySelector(target);
     if (targetElement) {
       const yOffset = targetElement.getBoundingClientRect().top + window.pageYOffset;
-      const offset = 80; 
+      const offset = 80;
       this.viewportScroller.scrollToPosition([0, yOffset - offset]);
     }
   }
@@ -99,7 +109,7 @@ export class PreviewProfileComponent implements OnInit {
   }
 
   fetchVideo(): void {
-    if (this.currentUser && this.currentUser._id ) {
+    if (this.currentUser && this.currentUser._id) {
       if (this.currentUser.video_pitch == null) {
         this.videoExist = false;
       } else {
@@ -203,7 +213,25 @@ export class PreviewProfileComponent implements OnInit {
     }
   }
 
-  getSecurityFields(raising:any): string[] {
+  fetchQuestions(): void {
+    if (this.currentUser && this.currentUser._id) {
+      try {
+        this.authService.getQuestions(this.currentUser._id)
+          .subscribe(
+            (questions: question[]) => {
+              this.squestions = questions;
+
+            },
+
+            (error) => {
+              console.error('Error fetching questions:', error);
+            }
+          );
+      } catch { }
+    }
+  }
+
+  getSecurityFields(raising: any): string[] {
     const securityFields: string[] = [];
     const formValue = raising;
 
@@ -223,21 +251,21 @@ export class PreviewProfileComponent implements OnInit {
       securityFields.push('Other');
     }
     return securityFields;
-    
+
   }
 
-  formatSecurities(raising: any) :any{
-    try{
-    const securities = this.getSecurityFields(raising);
-    if (securities.length > 0) {
-      return securities.join(', ');
-    }
-    }catch{
-      
+  formatSecurities(raising: any): any {
+    try {
+      const securities = this.getSecurityFields(raising);
+      if (securities.length > 0) {
+        return securities.join(', ');
+      }
+    } catch {
+
     }
   }
 
-  getSourceFields(raising:any): string[] {
+  getSourceFields(raising: any): string[] {
     const sourceFields: string[] = [];
     let formValue = raising;
     if (formValue.business_angel) {
@@ -260,29 +288,29 @@ export class PreviewProfileComponent implements OnInit {
     }
     return sourceFields;
   }
-  
-  formatSources(raising: any) : any {
-    try{
+
+  formatSources(raising: any): any {
+    try {
       const sources = this.getSourceFields(raising);
       if (sources.length > 0) {
         return sources.join(', ');
       }
-      }catch{
-        
-      }
+    } catch {
+
+    }
   }
-  fetchPreviousRounds(){
+  fetchPreviousRounds() {
     if (this.currentUser && this.currentUser._id) {
-    this.authService.getPreviousRounds(this.currentUser._id).subscribe(
-      (previous_rounds: previous_round[]) => {
-        this.previous_rounds = previous_rounds;
-        console.log(this.previous_rounds)
-      },
-      (error) => {
-        console.log('Error retrieving rounds:', error);
-      }
-    );
+      this.authService.getPreviousRounds(this.currentUser._id).subscribe(
+        (previous_rounds: previous_round[]) => {
+          this.previous_rounds = previous_rounds;
+          console.log(this.previous_rounds)
+        },
+        (error) => {
+          console.log('Error retrieving rounds:', error);
+        }
+      );
+    }
   }
-}
 
 }

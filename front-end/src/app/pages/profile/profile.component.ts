@@ -1194,7 +1194,7 @@ export class ProfileComponent implements OnInit {
 
   private fetchQuestions(): void {
     try {
-      const employeeId = localStorage.getItem('userId'); // Replace with actual employee ID
+      const employeeId = localStorage.getItem('userId'); 
       this.authService.getQuestions(employeeId)
         .subscribe(
           (questions: question[]) => {

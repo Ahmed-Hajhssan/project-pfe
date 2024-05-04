@@ -82,6 +82,11 @@ body {
   margin-right: 10px;
 }
 
+.answer-icon{
+  font-size: 20px;
+  margin-right: 10px;
+}
+
 .card {
   margin-top: 35px;
   background: #ffffff;
@@ -306,4 +311,24 @@ label.check {
   .currently_raising{
     color: #d89626;
   }
+
+  .question{
+    font-size: 17px;
+  }
+  .questions-margin{
+    margin-left: 15px;
+  }
+  .answer{
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    word-wrap: break-word; 
+    width: 50rem;
+  }
+  .answer-icon{
+    font-size: 20px;
+    color: #FFD700;
+  }
+  
+
+
   
