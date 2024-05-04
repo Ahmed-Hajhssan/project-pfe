@@ -6,6 +6,7 @@ import { InvestorModel } from '../../shared/investor-model';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../shared/auth-service';
 
 @Component({
   selector: 'app-match-making',
@@ -16,12 +17,15 @@ export class MatchMakingComponent implements OnInit {
 
   private baseUrl = environment.domain;
   role: any;
+  currentEntrepreneur: AuthModel = {};
+  currentInvestor: InvestorModel = {};
   entrepreneurs: AuthModel[] = [];
-  investors: InvestorModel[] = [];
+  investors: InvestorModel[] = []
   id:any
   faLocationDot = faLocationDot;
 
   constructor(
+    public authService: AuthService,
     private matchMakingService: MatchMakingService, 
     private actRoute: ActivatedRoute,
     private viewportScroller: ViewportScroller,
@@ -32,12 +36,21 @@ export class MatchMakingComponent implements OnInit {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.role = localStorage.getItem("role");
     if (this.role == "entrepreneur") {
-      this.getInvestors();
+      this.authService.getUser(this.id).subscribe((res) => {
+        this.currentEntrepreneur = res;
+        this.getInvestors();
+      })    
     } else if (this.role == "investor") {
-      this.getEntrepreneurs();
+      this.authService.getUser(this.id).subscribe((res) => {
+        this.currentInvestor = res;
+        this.getEntrepreneurs();
+      })
+      
     }
     console.log(this.role);
   }
+
+
 
   getEntrepreneurs() {
     this.matchMakingService.getEntrepreneurs().subscribe(
@@ -51,9 +64,43 @@ export class MatchMakingComponent implements OnInit {
   }
 
   getInvestors() {
+    let mmScore = 0;
+    let criteria:string[] = [];
+    let userCompanyStage = this.currentEntrepreneur.company_stage;
+    let userAmount = this.currentEntrepreneur.investment_size;
+    let userCountry = this.currentEntrepreneur.country?.toUpperCase();
+    let userSectors = this.currentEntrepreneur.sector;
     this.matchMakingService.getInvestors().subscribe(
       (investors: InvestorModel[]) => {
-        this.investors = investors;
+          investors.forEach((investor: InvestorModel)=>{
+            if(investor.company_stage && userCompanyStage && investor.company_stage.includes(userCompanyStage as string)){
+              mmScore++;
+              criteria.push(userCompanyStage);
+            }
+            if(investor.amount && investor.amount==userAmount){
+              mmScore++;
+              criteria.push(userAmount);
+            }
+            if(investor.country && investor.country.toUpperCase()==userCountry){
+              mmScore++;
+              criteria.push(userCountry);
+            }
+            if(investor.sector && userSectors){
+              let commonSectors = investor.sector.filter(element => userSectors?.includes(element));
+              if(commonSectors.length>0){
+                mmScore+=commonSectors.length;
+                criteria.push(...commonSectors);
+              }
+            }
+            investor.score=mmScore;
+            investor.criteria=criteria;
+            mmScore=0;
+            criteria=[]
+        })
+        investors = investors.filter(investor => investor.score && investor.score > 0);
+        investors.sort((a, b) => a.score && b.score? b.score - a.score : 0);
+        console.log(investors);
+        this.investors=investors;
       },
       (error) => {
         console.log('Error retrieving investors:', error);

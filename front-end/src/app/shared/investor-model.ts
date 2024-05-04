@@ -16,4 +16,8 @@ export interface InvestorModel{
   preferred_area?: string;
   company_stage?: string;
   more?: string;
+  amount?: string;
+  sector?: string[];
+  score?: number;
+  criteria?: string[];
 }
