@@ -67,6 +67,11 @@
                       </div>
                       <hr class="text-gray">
                       <div class="match-bio">{{entrepreneur.description}}</div>
+                      <label *ngFor="let criteria of entrepreneur.criteria" class="check mt-2">
+                        <span>
+                          {{criteria}}
+                        </span>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -104,6 +109,11 @@
                         </div>
                         <hr class="text-gray">
                         <div class="match-bio">{{investor.description}}</div>
+                        <label *ngFor="let criteria of  investor.criteria" class="check mt-2">
+                          <span>
+                            {{criteria}}
+                          </span>
+                        </label>
                       </div>
                     </div>
                   </div>
