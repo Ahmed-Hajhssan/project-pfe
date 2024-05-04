@@ -5,6 +5,7 @@ import { Observable, Subject, throwError } from "rxjs";
 import { Router } from "@angular/router";
 import { catchError, map } from 'rxjs/operators';
 import { environment } from "../../environments/environment";
+import { profile } from "console";
 
 
 
@@ -13,7 +14,8 @@ import { environment } from "../../environments/environment";
 @Injectable({ providedIn: "root" })
 
 export class AuthService {
-
+  profileScore:number=0;
+  pourcentage:any=0;
   private token: string;
   private authenticatedSub = new Subject<boolean>();
   private isAuthenticated = false;
