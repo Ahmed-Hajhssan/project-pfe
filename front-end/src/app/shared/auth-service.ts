@@ -89,7 +89,7 @@ export class AuthService {
   }
 
   deleteFile(userId: string) {
-    return this.http.delete<{ message: string }>(`${this.baseUrl}/deletefile/${userId}`);
+    return this.http.delete<{ message: string }>(`${this.baseUrl}/api/deletefile/${userId}`);
   }
 
   uploadFiles(formData: FormData) {

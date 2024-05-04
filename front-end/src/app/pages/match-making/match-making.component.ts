@@ -52,14 +52,12 @@ export class MatchMakingComponent implements OnInit {
     console.log(this.role);
   }
 
-
-
   getEntrepreneurs() {
     let mmScore = 0;
     let criteria: string[] = [];
     let userCompanyStage = this.currentInvestor.company_stage;
     let userAmount = this.currentInvestor.amount;
-    let userCity = this.currentInvestor.city?.toUpperCase();
+    let userCity = this.currentInvestor.preferred_area?.toUpperCase();
     let userSectors = this.currentInvestor.sector;
     this.matchMakingService.getEntrepreneurs().subscribe(
       (entrepreneurs: AuthModel[]) => {
@@ -117,7 +115,7 @@ export class MatchMakingComponent implements OnInit {
             mmScore++;
             criteria.push(userAmount);
           }
-          if (investor.city && investor.city.toUpperCase() == userCity) {
+          if (investor.preferred_area && investor.preferred_area.toUpperCase() == userCity) {
             mmScore++;
             criteria.push(userCity);
           }

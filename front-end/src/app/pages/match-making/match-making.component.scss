@@ -375,3 +375,33 @@ label.check:hover span {
 .view-profile-button:hover {
   background-color:  #F4BB44;
 }
+
+label.check {
+  cursor: pointer;
+  }
+  label.check input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+  }
+  label.check span {
+  padding: 5px 12px;
+    border: 2px solid #e0dede;
+    display: inline-block;
+    color: #545454;
+    border-radius: 50px;
+    font-size: 13px;
+    margin-right: 5px;
+  }
+  label.check input:checked + span {
+  border-color: 	#FDDA0D;
+    background-color: 	#F5F5DC;
+    color: #545454;
+  }
+  label.check:hover span {
+    border-color: 	#FDDA0D;
+    background-color: 	#F5F5DC;
+    color: #545454;
+  }
