@@ -98,6 +98,7 @@ export class ProfileComponent implements OnInit {
   url: string;
 
 
+
   constructor(
     public authService: AuthService,
     public fb: FormBuilder,
@@ -120,6 +121,7 @@ export class ProfileComponent implements OnInit {
       this.fetchVideoPitchUrl();
       this.fetchMembers();
       this.getSectors();
+      this.updateProfileScore();
     });
     this.authService.getCurrentlyRaising(id).subscribe((res) => {
       this.raising = res;
@@ -1281,5 +1283,43 @@ export class ProfileComponent implements OnInit {
     const formArray = this.questionForm.get('questions') as FormArray;
     console.log(formArray.at(any).value._id);
   }
+
+  
+  updateProfileScore(){
+    let profileScore = 2;
+    let pourcentage;
+    console.log(this.currentUser.name);
+    if(this.currentUser.name)
+      profileScore++;
+    if(this.currentUser.description)
+      profileScore++;
+    if(this.currentUser.country)
+      profileScore++;
+    if(this.currentUser.city)
+      profileScore++;
+    if(this.userSectors)
+      profileScore++;
+    if(this.currentUser.business_type)
+      profileScore++;
+    if(this.currentUser.product_type)
+      profileScore++;
+    if(this.currentUser.company_stage)
+      profileScore++;
+    if(this.currentUser.annual_revenue)
+      profileScore++;
+    if(this.currentUser.mrr)
+      profileScore++;
+    if(this.raising)
+      profileScore++;
+    if(this.membersExist)
+      profileScore++;
+    if(this.fileExists)
+      profileScore++;
+    pourcentage= ((profileScore * 100) / 15).toFixed(2);
+    this.authService.profileScore=profileScore;
+    this.authService.pourcentage=pourcentage;
+    console.log("score % : "+this.authService.profileScore)
+  }
+
 
 }

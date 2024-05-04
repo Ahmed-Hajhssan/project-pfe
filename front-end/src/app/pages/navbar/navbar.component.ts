@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
+import { AuthService } from '../../shared/auth-service';
 
 
 @Component({
@@ -11,11 +12,20 @@ export class NavbarComponent implements OnInit {
   userRole: any;
   id: any;
 
-  constructor(private actRoute: ActivatedRoute) {}
+  constructor(private actRoute: ActivatedRoute, public authService: AuthService,) {}
 
   ngOnInit() {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.userRole = localStorage.getItem('role');
+  }
+
+  profileScore(): number{
+    return this.authService.profileScore;
+
+  }
+
+  pourcentage(): any{
+    return this.authService.pourcentage;
   }
 
   navigateToPreviewProfile(): void {
