@@ -157,6 +157,7 @@ export class ProfileComponent implements OnInit {
           this.members = members;
           if (this.members.length > 0) {
             this.membersExist = true;
+            this.updateProfileScore();
           }
         },
         (error) => {
@@ -888,7 +889,7 @@ export class ProfileComponent implements OnInit {
     this.authService.updateUser(id, this.editForm.value).subscribe({
       complete: () => {
         console.log('Content updated successfully!');
-        this.updateProfileScore();
+        this.ngOnInit();
       },
       error: (e) => {
         console.log(e);
@@ -1319,7 +1320,8 @@ export class ProfileComponent implements OnInit {
     pourcentage= ((profileScore * 100) / 15).toFixed(2);
     this.authService.profileScore=profileScore;
     this.authService.pourcentage=pourcentage;
-    console.log("score % : "+this.authService.profileScore)
+    console.log("score % : "+this.authService.profileScore);
+    console.log(this.userSectors);
   }
 
 
