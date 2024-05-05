@@ -8,6 +8,7 @@ import { ViewportScroller } from '@angular/common';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-match-making',
@@ -31,7 +32,7 @@ export class MatchMakingComponent implements OnInit {
     private matchMakingService: MatchMakingService,
     private actRoute: ActivatedRoute,
     private viewportScroller: ViewportScroller,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +52,25 @@ export class MatchMakingComponent implements OnInit {
     }
     console.log(this.role);
   }
+
+  toppings = new FormControl('');
+  toppingList: string[] = [
+    '3D Printing', 'Advanced Materials', 'Aerospace', 'Agriculture', 'AI', 'Art & Design', 'Automotive',
+    'Automotive & Transport', 'Biotechnology', 'Blockchain', 'Chemistry', 'Cleantech', 'Climate', 'Construction',
+    'Data & Analytics', 'Drones', 'E-commerce', 'Education', 'Electronics', 'Energy', 'Enterprise Software',
+    'Fashion', 'Fintech', 'FMCG', 'Food & Beverage', 'Gaming', 'Generative Al', 'Hardware', 'Home', 'ICT', 'Industry',
+    'Insurtech', 'Internet loT', 'IT', 'Legal', 'Lifestyle', 'Distribution & Logistics', 'Manufacturing', 'Marine',
+    'Marketing & Advertising', 'Marketplace', 'Media & Entertainment', 'Healthcare & Medtech', 'Mining', 'Mobile',
+    'Nanotechnology', 'Oil & Gas', 'Pharma', 'Real Estate', 'Recruitment', 'Retailing', 'Robotics', 'SaaS',
+    'Security & Cybersecurity', 'Sharing Economy', 'Smart Cities', 'Social Networking', 'Sports', 'Telecommunications',
+    'Transport & Logistics', 'Travel', 'VR & AR', 'Web3'
+  ];
+
+  companyStages = new FormControl('');
+  stageList: string[] = [
+    'Idea', 'Pre-seed', 'Seed', 'Early Growth', 'Growth', 'Maturity'
+  ];
+  
 
   getEntrepreneurs() {
     let mmScore = 0;

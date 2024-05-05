@@ -6,6 +6,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -66,6 +68,8 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
     BrowserAnimationsModule,
     MatIconModule,
     MdbCollapseModule,
+    MatFormFieldModule, 
+    MatSelectModule,
   ],
   providers: [
     provideClientHydration(),
