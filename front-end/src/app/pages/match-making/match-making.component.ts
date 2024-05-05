@@ -8,7 +8,7 @@ import { ViewportScroller } from '@angular/common';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-match-making',
@@ -25,6 +25,7 @@ export class MatchMakingComponent implements OnInit {
   investors: InvestorModel[] = []
   id: any
   faLocationDot = faLocationDot;
+  searchForm: FormGroup;
 
   constructor(
     public authService: AuthService,
@@ -33,20 +34,34 @@ export class MatchMakingComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private viewportScroller: ViewportScroller,
     private elementRef: ElementRef,
-  ) { }
+    public fb: FormBuilder,
+  ) {
+    this.initializeForm();
+  }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.role = localStorage.getItem("role");
+
     if (this.role == "entrepreneur") {
       this.authService.getUser(this.id).subscribe((res) => {
         this.currentEntrepreneur = res;
+
         this.getInvestors();
+
       })
     } else if (this.role == "investor") {
       this.investorService.getUser(this.id).subscribe((res) => {
         this.currentInvestor = res;
-        this.getEntrepreneurs();
+        if (this.currentInvestor.company_stage || this.currentInvestor.sector ||  this.currentInvestor.amount ||  this.currentInvestor.preferred_area) {
+          this.getEntrepreneurs(
+            this.currentInvestor.company_stage,
+            this.currentInvestor.amount,
+            this.currentInvestor.preferred_area,
+            this.currentInvestor.sector
+          );
+        }
+        this.initializeForm();
       })
 
     }
@@ -70,15 +85,15 @@ export class MatchMakingComponent implements OnInit {
   stageList: string[] = [
     'Idea', 'Pre-seed', 'Seed', 'Early Growth', 'Growth', 'Maturity'
   ];
-  
 
-  getEntrepreneurs() {
+
+  getEntrepreneurs(companyStages: string[], investmentAmount: string, city: string, sectors: string[]) {
     let mmScore = 0;
     let criteria: string[] = [];
-    let userCompanyStage = this.currentInvestor.company_stage;
-    let userAmount = this.currentInvestor.amount;
-    let userCity = this.currentInvestor.preferred_area?.toUpperCase();
-    let userSectors = this.currentInvestor.sector;
+    let userCompanyStage = companyStages;
+    let userAmount = investmentAmount;
+    let userCity = city?.toUpperCase();
+    let userSectors = sectors;
     this.matchMakingService.getEntrepreneurs().subscribe(
       (entrepreneurs: AuthModel[]) => {
         entrepreneurs.forEach((entrepreneur: AuthModel) => {
@@ -175,6 +190,27 @@ export class MatchMakingComponent implements OnInit {
     }
 
     window.open(previewUrl, '_blank');
+  }
+
+  onSubmit() {
+    const formValues = this.searchForm.value;
+    // Access individual form controls
+    const companyStages = formValues.companyStages;
+    const investmentAmount = formValues.investment_amount;
+    const city = formValues.city;
+    const sectors = formValues.sector;
+    this.getEntrepreneurs(companyStages, investmentAmount, city, sectors);
+  }
+
+  initializeForm() {
+
+    this.searchForm = this.fb.group({
+      companyStages: [this.currentInvestor.company_stage],
+      investment_amount: [this.currentInvestor.amount],
+      city: [this.currentInvestor.preferred_area],
+      sector: [this.currentInvestor.sector],
+    });
+
   }
 
   smoothScroll(target: string) {

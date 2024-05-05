@@ -5,6 +5,8 @@
       <div class="d-flex mt-2">
 
         <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12">
+          
+          <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
           <div class="sticky-card card">
             <div class="filter-title">Filter by</div>
             <div class="row">
@@ -12,7 +14,7 @@
                 <label for="company_stage">Company stage</label>
                 <mat-form-field class="multiple-select">
                   <mat-label>Stages</mat-label>
-                  <mat-select [formControl]="companyStages" multiple>
+                  <mat-select formControlName ="companyStages" multiple>
                     @for (stage of stageList; track stage) {
                       <mat-option [value]="stage">{{stage}}</mat-option>
                     }
@@ -23,7 +25,7 @@
             <div class="row">
               <div *ngIf="this.role === 'entrepreneur'" class="col">
                 <label for="company_stage">Company stage</label>
-                <select formControlName="company_stage" class="form-select custom-input" id="Company-stage">
+                <select  class="form-select custom-input" id="Company-stage">
                   <option value="" disabled selected hidden>Company stage</option>
                   <option value="Idea">Idea</option>
                   <option value="Pre-seed">Pre-seed</option>
@@ -36,8 +38,8 @@
             </div>
             <div class="row">
               <div class="col">
-                <label for="employee_count">Investment size</label>
-                <select formControlName="investment_size" class="form-select custom-input" id="Company-stage">
+                <label for="investment_amount">Investment size</label>
+                <select formControlName="investment_amount" class="form-select custom-input">
                   <option value="" disabled selected hidden >Investment amount</option>
                   <option value="< TND10k">&lt; TND10k</option>
                   <option value="TND10k - 100k">TND10k - 100k</option>
@@ -59,7 +61,7 @@
                 <label for="sector">Sectors</label>
                 <mat-form-field class="multiple-select">
                   <mat-label>Sectors</mat-label>
-                  <mat-select [formControl]="toppings" multiple>
+                  <mat-select formControlName ="sector" multiple>
                     @for (topping of toppingList; track topping) {
                       <mat-option [value]="topping">{{topping}}</mat-option>
                     }
@@ -67,8 +69,10 @@
                 </mat-form-field>
               </div>
             </div>
-            <button class="custom-button">Search</button>
+            <button type="submit" class="custom-button">Search</button>
+            
           </div>
+          </form>
         </div>
 
 

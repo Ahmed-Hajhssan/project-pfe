@@ -14,7 +14,7 @@ export interface InvestorModel{
   image_profile?: string;
   company?: string;
   preferred_area?: string;
-  company_stage?: string;
+  company_stage?: string[];
   more?: string;
   amount?: string;
   sector?: string[];
