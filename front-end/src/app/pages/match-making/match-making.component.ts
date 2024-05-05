@@ -53,14 +53,12 @@ export class MatchMakingComponent implements OnInit {
     } else if (this.role == "investor") {
       this.investorService.getUser(this.id).subscribe((res) => {
         this.currentInvestor = res;
-        if (this.currentInvestor.company_stage || this.currentInvestor.sector ||  this.currentInvestor.amount ||  this.currentInvestor.preferred_area) {
           this.getEntrepreneurs(
-            this.currentInvestor.company_stage,
-            this.currentInvestor.amount,
-            this.currentInvestor.preferred_area,
-            this.currentInvestor.sector
+            this.currentInvestor.company_stage?this.currentInvestor.company_stage:[],
+            this.currentInvestor.amount?this.currentInvestor.amount:"",
+            this.currentInvestor.preferred_area?this.currentInvestor.preferred_area:"",
+            this.currentInvestor.sector?this.currentInvestor.sector:[]
           );
-        }
         this.initializeForm();
       })
 
