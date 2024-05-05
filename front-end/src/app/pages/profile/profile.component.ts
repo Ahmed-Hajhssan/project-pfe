@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit {
   members: Member[] = [];
   files: File[] = [];
   sector: Sector[] = [];
-  userSectors: string[];
+  userSectors: string[] = [];
   fileExists: boolean;
   filesExist: boolean;
   videoExist: boolean;
@@ -84,7 +84,7 @@ export class ProfileComponent implements OnInit {
   membersExist: boolean;
   raisingForm: FormGroup;
   previousRoundForm: FormGroup;
-  raising: currently_raising = {};
+  raising: currently_raising ;
   previous_rounds: previous_round[] = [];
   questions: any = []
   qn: number = 0;
@@ -125,6 +125,7 @@ export class ProfileComponent implements OnInit {
     });
     this.authService.getCurrentlyRaising(id).subscribe((res) => {
       this.raising = res;
+      this.updateProfileScore();
     });
     this.fetchQuestions();
     this.fetchPreviousRounds();
@@ -133,6 +134,10 @@ export class ProfileComponent implements OnInit {
   getControls() {
 
     return (this.questionForm.get('questions') as FormArray).controls;
+  }
+
+  getmembersExist(): boolean{
+    return this.membersExist;
   }
 
   initPhoto() {
@@ -195,6 +200,7 @@ export class ProfileComponent implements OnInit {
           complete: () => {
             console.log('member successfully deleted!')
             this.fetchMembers();
+            this.updateProfileScore();
           },
           error: (e) => {
             console.log(e);
@@ -216,6 +222,7 @@ export class ProfileComponent implements OnInit {
           let pitchDeck = response.filename;
           this.pitchDeck = pitchDeck;
           this.updatePitchDeck();
+          this.updateProfileScore();
           console.log(pitchDeck);
         },
         (error: any) => {
@@ -234,6 +241,7 @@ export class ProfileComponent implements OnInit {
         console.log('Content updated successfully!');
         this.currentUser.pitch_deck = this.pitchDeck;
         this.fetchFile();
+        this.updateProfileScore();
       },
       error: (e) => {
         console.log(e);
@@ -263,6 +271,7 @@ export class ProfileComponent implements OnInit {
               console.log(response.message);
               this.fileExists = false;
               this.pitchDeckUrl = '';
+              this.updateProfileScore();
             },
             error => {
               console.error(error);
@@ -722,6 +731,7 @@ export class ProfileComponent implements OnInit {
           });
           // update the selected count 
           this.updateSelectedLabels();
+          this.updateProfileScore();
         },
         (error: any) => {
           console.log(error);
@@ -1290,7 +1300,7 @@ export class ProfileComponent implements OnInit {
   updateProfileScore(){
     let profileScore = 2;
     let pourcentage;
-    console.log(this.currentUser.name);
+    console.log(this.userSectors);
     if(this.currentUser.name)
       profileScore++;
     if(this.currentUser.description)
@@ -1299,7 +1309,7 @@ export class ProfileComponent implements OnInit {
       profileScore++;
     if(this.currentUser.city)
       profileScore++;
-    if(this.userSectors)
+    if(this.userSectors.length>0)
       profileScore++;
     if(this.currentUser.business_type)
       profileScore++;
@@ -1312,8 +1322,8 @@ export class ProfileComponent implements OnInit {
     if(this.currentUser.mrr)
       profileScore++;
     if(this.raising)
-      profileScore++;
-    if(this.membersExist)
+        profileScore++;
+    if(this.members && this.members.length>0)
       profileScore++;
     if(this.fileExists)
       profileScore++;
@@ -1321,7 +1331,6 @@ export class ProfileComponent implements OnInit {
     this.authService.profileScore=profileScore;
     this.authService.pourcentage=pourcentage;
     console.log("score % : "+this.authService.profileScore);
-    console.log(this.userSectors);
   }
 
 
