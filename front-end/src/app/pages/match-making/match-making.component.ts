@@ -5,7 +5,7 @@ import { AuthModel } from '../../shared/auth-model';
 import { InvestorModel } from '../../shared/investor-model';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -26,6 +26,7 @@ export class MatchMakingComponent implements OnInit {
   id: any
   faLocationDot = faLocationDot;
   searchForm: FormGroup;
+  faMagnifyingGlass = faMagnifyingGlass;
 
   constructor(
     public authService: AuthService,
