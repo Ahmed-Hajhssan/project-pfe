@@ -80,7 +80,7 @@
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
           <!--entrepreneurs begin-->
           <div *ngIf="entrepreneurs.length > 0">
-            <div *ngFor="let entrepreneur of entrepreneurs">
+            <div *ngFor="let entrepreneur of displayedEntrepreneurs">
               <div class="card">
                 <div class="card-body">
                   <div class="row gutters">
@@ -159,6 +159,14 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="center mt-5">
+            <div class="pagination">
+              <a href="#" (click)="changePage('prev', $event)">&laquo;</a>
+              <a *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page, $event)" href="#">{{ page }}</a>
+              <a href="#" (click)="changePage('next', $event)">&raquo;</a>
             </div>
           </div>
 

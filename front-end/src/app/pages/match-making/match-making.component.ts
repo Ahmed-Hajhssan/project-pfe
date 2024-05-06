@@ -27,6 +27,8 @@ export class MatchMakingComponent implements OnInit {
   faLocationDot = faLocationDot;
   searchForm: FormGroup;
   faMagnifyingGlass = faMagnifyingGlass;
+  currentPage = 1;
+  pageSize = 1;
 
   constructor(
     public authService: AuthService,
@@ -90,6 +92,28 @@ export class MatchMakingComponent implements OnInit {
     'Idea', 'Pre-seed', 'Seed', 'Early Growth', 'Growth', 'Maturity'
   ];
 
+
+  get displayedEntrepreneurs(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.entrepreneurs.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get pages(): number[] {
+    const pageCount = Math.ceil(this.entrepreneurs.length / this.pageSize);
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+  }
+
+  changePage(page: number | 'prev' | 'next', event: Event): void {
+    if (page === 'prev' && this.currentPage > 1) {
+      this.currentPage--;
+    } else if (page === 'next' && this.currentPage < this.pages.length) {
+      this.currentPage++;
+    } else if (typeof page === 'number' && page >= 1 && page <= this.pages.length) {
+      this.currentPage = page;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+  }
 
   getEntrepreneurs(companyStages: string[], investmentAmount: string, city: string, sectors: string[]) {
     let mmScore = 0;

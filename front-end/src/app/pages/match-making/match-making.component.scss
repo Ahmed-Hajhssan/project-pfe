@@ -425,6 +425,8 @@ label.check:hover span {
   border: none;
   height: 50px;
   margin-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 label {
@@ -455,3 +457,24 @@ label {
   color:#FFD700;
   margin-right: 10px;
 }
+
+.center {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  margin: 0 4px;
+}
+
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
