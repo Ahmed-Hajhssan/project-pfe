@@ -47,8 +47,13 @@ export class MatchMakingComponent implements OnInit {
       this.authService.getUser(this.id).subscribe((res) => {
         this.currentEntrepreneur = res;
 
-        this.getInvestors();
-
+        this.getInvestors(         
+          this.currentEntrepreneur.company_stage?this.currentEntrepreneur.company_stage:'',
+          this.currentEntrepreneur.investment_size?this.currentEntrepreneur.investment_size:"",
+          this.currentEntrepreneur.city?this.currentEntrepreneur.city:"",
+          this.currentEntrepreneur.sector?this.currentEntrepreneur.sector:[]
+        );
+        this.initializeForm();
       })
     } else if (this.role == "investor") {
       this.investorService.getUser(this.id).subscribe((res) => {
@@ -90,7 +95,7 @@ export class MatchMakingComponent implements OnInit {
     let criteria: string[] = [];
     let userCompanyStage = companyStages;
     let userAmount = investmentAmount;
-    let userCity = city?.toUpperCase();
+    let userCity = city.toUpperCase();
     let userSectors = sectors;
     this.matchMakingService.getEntrepreneurs().subscribe(
       (entrepreneurs: AuthModel[]) => {
@@ -130,13 +135,13 @@ export class MatchMakingComponent implements OnInit {
     );
   }
 
-  getInvestors() {
+  getInvestors(companyStage: string, investmentAmount: string, city: string, sectors: string[]) {
     let mmScore = 0;
     let criteria: string[] = [];
-    let userCompanyStage = this.currentEntrepreneur.company_stage;
-    let userAmount = this.currentEntrepreneur.investment_size;
-    let userCity = this.currentEntrepreneur.city?.toUpperCase();
-    let userSectors = this.currentEntrepreneur.sector;
+    let userCompanyStage = companyStage;
+    let userAmount = investmentAmount;
+    let userCity = city.toUpperCase();
+    let userSectors = sectors
     this.matchMakingService.getInvestors().subscribe(
       (investors: InvestorModel[]) => {
         investors.forEach((investor: InvestorModel) => {
@@ -197,18 +202,29 @@ export class MatchMakingComponent implements OnInit {
     const investmentAmount = formValues.investment_amount;
     const city = formValues.city;
     const sectors = formValues.sector;
-    this.getEntrepreneurs(companyStages, investmentAmount, city, sectors);
+    if (this.role==="investor") {
+      this.getEntrepreneurs(companyStages, investmentAmount, city, sectors);
+    } else if (this.role==="entrepreneur"){
+      this.getInvestors(companyStages, investmentAmount, city, sectors);
+    } 
   }
 
   initializeForm() {
-
+    if(this.role==="investor")
     this.searchForm = this.fb.group({
       companyStages: [this.currentInvestor.company_stage],
       investment_amount: [this.currentInvestor.amount],
       city: [this.currentInvestor.preferred_area],
       sector: [this.currentInvestor.sector],
     });
-
+    else{
+    this.searchForm = this.fb.group({
+      companyStages: [this.currentEntrepreneur.company_stage],
+      investment_amount: [this.currentEntrepreneur.investment_size],
+      city: [this.currentEntrepreneur.city],
+      sector: [this.currentEntrepreneur.sector],
+    });
+    }
   }
 
   smoothScroll(target: string) {
