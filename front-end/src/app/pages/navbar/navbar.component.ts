@@ -42,4 +42,11 @@ export class NavbarComponent implements OnInit {
 
     window.open(previewUrl, '_blank');
   }
+
+  getMaxScore() : number{
+    let role = localStorage.getItem("role")
+    let number = 0;
+    role=="entrepreneur"?number = 15:number = 13;
+    return number;
+  }
 }

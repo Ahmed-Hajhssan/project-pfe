@@ -696,7 +696,7 @@ export class InvestorProfileComponent implements OnInit {
     this.investorService.updateUser(id, this.editForm.value).subscribe({
       complete: () => {
         console.log('Content updated successfully!');
-        this.updateProfileScore();
+        this.ngOnInit();
       },
       error: (e) => {
         console.log(e);
