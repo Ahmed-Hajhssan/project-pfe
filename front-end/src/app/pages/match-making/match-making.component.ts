@@ -27,8 +27,9 @@ export class MatchMakingComponent implements OnInit {
   faLocationDot = faLocationDot;
   searchForm: FormGroup;
   faMagnifyingGlass = faMagnifyingGlass;
-  currentPage = 1;
-  pageSize = 1;
+  currentEntrepreneurPage = 1;
+  currentInvestorPage = 1;
+  pageSize = 5;
 
   constructor(
     public authService: AuthService,
@@ -94,25 +95,47 @@ export class MatchMakingComponent implements OnInit {
 
 
   get displayedEntrepreneurs(): any[] {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const startIndex = (this.currentEntrepreneurPage - 1) * this.pageSize;
     return this.entrepreneurs.slice(startIndex, startIndex + this.pageSize);
   }
 
-  get pages(): number[] {
+  get displayedInvestors(): any[] {
+    const startIndex = (this.currentInvestorPage - 1) * this.pageSize;
+    return this.investors.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get entrepreneurPages(): number[] {
     const pageCount = Math.ceil(this.entrepreneurs.length / this.pageSize);
     return Array.from({ length: pageCount }, (_, i) => i + 1);
   }
 
-  changePage(page: number | 'prev' | 'next', event: Event): void {
-    if (page === 'prev' && this.currentPage > 1) {
-      this.currentPage--;
-    } else if (page === 'next' && this.currentPage < this.pages.length) {
-      this.currentPage++;
-    } else if (typeof page === 'number' && page >= 1 && page <= this.pages.length) {
-      this.currentPage = page;
+  get investorPages(): number[] {
+    const pageCount = Math.ceil(this.investors.length / this.pageSize);
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+  }
+
+
+  changePage(page: number | 'prev' | 'next', type: 'entrepreneurs' | 'investors', event: Event): void {
+    if (type === 'entrepreneurs') {
+      if (page === 'prev' && this.currentEntrepreneurPage > 1) {
+        this.currentEntrepreneurPage--;
+      } else if (page === 'next' && this.currentEntrepreneurPage < this.entrepreneurPages.length) {
+        this.currentEntrepreneurPage++;
+      } else if (typeof page === 'number' && page >= 1 && page <= this.entrepreneurPages.length) {
+        this.currentEntrepreneurPage = page;
+      }
+    } else if (type === 'investors') {
+      if (page === 'prev' && this.currentInvestorPage > 1) {
+        this.currentInvestorPage--;
+      } else if (page === 'next' && this.currentInvestorPage < this.investorPages.length) {
+        this.currentInvestorPage++;
+      } else if (typeof page === 'number' && page >= 1 && page <= this.investorPages.length) {
+        this.currentInvestorPage = page;
+      }
     }
     event.preventDefault();
     event.stopPropagation();
+
   }
 
   getEntrepreneurs(companyStages: string[], investmentAmount: string, city: string, sectors: string[]) {

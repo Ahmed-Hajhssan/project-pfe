@@ -5,74 +5,74 @@
       <div class="d-flex mt-2">
 
         <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12">
-          
+
           <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-          <div class="sticky-card card">
-            <div class="filter-title">Filter by</div>
-            <div class="row">
-              <div *ngIf="this.role === 'investor'" class="col">
-                <label for="company_stage">Company stage</label>
-                <mat-form-field class="multiple-select">
-                  <mat-label>Stages</mat-label>
-                  <mat-select formControlName ="companyStages" multiple>
-                    @for (stage of stageList; track stage) {
+            <div class="sticky-card card">
+              <div class="filter-title">Filter by</div>
+              <div class="row">
+                <div *ngIf="this.role === 'investor'" class="col">
+                  <label for="company_stage">Company stage</label>
+                  <mat-form-field class="multiple-select">
+                    <mat-label>Stages</mat-label>
+                    <mat-select formControlName="companyStages" multiple>
+                      @for (stage of stageList; track stage) {
                       <mat-option [value]="stage">{{stage}}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div *ngIf="this.role === 'entrepreneur'" class="col">
-                <label for="company_stage">Company stage</label>
-                <select formControlName ="companyStages" class="form-select custom-input" id="Company-stage">
-                  <option value="" disabled selected hidden>Company stage</option>
-                  <option value="Idea">Idea</option>
-                  <option value="Pre-seed">Pre-seed</option>
-                  <option value="Seed">Seed</option>
-                  <option value="Early Growth">Early Growth</option>
-                  <option value="Growth">Growth</option>
-                  <option value="Maturity">Maturity</option>
-                </select>
+              <div class="row">
+                <div *ngIf="this.role === 'entrepreneur'" class="col">
+                  <label for="company_stage">Company stage</label>
+                  <select formControlName="companyStages" class="form-select custom-input" id="Company-stage">
+                    <option value="" disabled selected hidden>Company stage</option>
+                    <option value="Idea">Idea</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Early Growth">Early Growth</option>
+                    <option value="Growth">Growth</option>
+                    <option value="Maturity">Maturity</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="investment_amount">Investment size</label>
-                <select formControlName="investment_amount" class="form-select custom-input">
-                  <option value="" disabled selected hidden >Investment amount</option>
-                  <option value="< TND10k">&lt; TND10k</option>
-                  <option value="TND10k - 100k">TND10k - 100k</option>
-                  <option value="TND100k - 1mm">TND100k - 1mm</option>
-                  <option value="TND1mm - 2mm">TND1mm - 2mm</option>
-                  <option value="TND2mm - 5mm">TND2mm - 5mm</option>
-                  <option value="> TND5mm">&gt; TND5mm</option>
-                </select>
+              <div class="row">
+                <div class="col">
+                  <label for="investment_amount">Investment size</label>
+                  <select formControlName="investment_amount" class="form-select custom-input">
+                    <option value="" disabled selected hidden>Investment amount</option>
+                    <option value="< TND10k">&lt; TND10k</option>
+                    <option value="TND10k - 100k">TND10k - 100k</option>
+                    <option value="TND100k - 1mm">TND100k - 1mm</option>
+                    <option value="TND1mm - 2mm">TND1mm - 2mm</option>
+                    <option value="TND2mm - 5mm">TND2mm - 5mm</option>
+                    <option value="> TND5mm">&gt; TND5mm</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="city">City</label>
-                <input class="form-control custom-input" formControlName="city" type="text" placeholder="City">
+              <div class="row">
+                <div class="col">
+                  <label for="city">City</label>
+                  <input class="form-control custom-input" formControlName="city" type="text" placeholder="City">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="sector">Sectors</label>
-                <mat-form-field class="multiple-select">
-                  <mat-label>Sectors</mat-label>
-                  <mat-select formControlName ="sector" multiple>
-                    @for (topping of toppingList; track topping) {
+              <div class="row">
+                <div class="col">
+                  <label for="sector">Sectors</label>
+                  <mat-form-field class="multiple-select">
+                    <mat-label>Sectors</mat-label>
+                    <mat-select formControlName="sector" multiple>
+                      @for (topping of toppingList; track topping) {
                       <mat-option [value]="topping">{{topping}}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
+              <button type="submit" class="custom-button">
+                <fa-icon [icon]="faMagnifyingGlass" class="custom-yellow-small-icon"></fa-icon>Search</button>
+
             </div>
-            <button type="submit" class="custom-button">
-            <fa-icon [icon]="faMagnifyingGlass" class="custom-yellow-small-icon"></fa-icon>Search</button>
-            
-          </div>
           </form>
         </div>
 
@@ -121,7 +121,7 @@
           <!--entrepreneurs end-->
 
           <div *ngIf="investors.length > 0">
-            <div *ngFor="let investor of investors ">
+            <div *ngFor="let investor of displayedInvestors">
               <div *ngIf="investor.score && investor.score > 0">
                 <div class="card">
                   <div class="card-body">
@@ -162,11 +162,22 @@
             </div>
           </div>
 
-          <div class="center mt-5">
+          <!-- Pagination for investors -->
+          <div *ngIf="this.role === 'entrepreneur'" class="center mt-5">
             <div class="pagination">
-              <a href="#" (click)="changePage('prev', $event)">&laquo;</a>
-              <a *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page, $event)" href="#">{{ page }}</a>
-              <a href="#" (click)="changePage('next', $event)">&raquo;</a>
+              <a href="#" (click)="changePage('prev', 'investors', $event)">&laquo;</a>
+              <a *ngFor="let page of investorPages" [class.active]="currentInvestorPage === page"
+                (click)="changePage(page, 'investors', $event)" href="#">{{ page }}</a>
+              <a href="#" (click)="changePage('next', 'investors', $event)">&raquo;</a>
+            </div>
+          </div>
+          <!-- Pagination for entrepreneurs -->
+          <div *ngIf="this.role === 'investor'" class="center mt-5">
+            <div class="pagination">
+              <a href="#" (click)="changePage('prev', 'entrepreneurs', $event)">&laquo;</a>
+              <a *ngFor="let page of entrepreneurPages" [class.active]="currentEntrepreneurPage === page"
+                (click)="changePage(page, 'entrepreneurs', $event)" href="#">{{ page }}</a>
+              <a href="#" (click)="changePage('next', 'entrepreneurs', $event)">&raquo;</a>
             </div>
           </div>
 
