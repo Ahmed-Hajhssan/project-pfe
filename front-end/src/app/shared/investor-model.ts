@@ -20,4 +20,6 @@ export interface InvestorModel{
   sector?: string[];
   score?: number;
   criteria?: string[];
+  stage?: string[];
+  type?: string;
 }

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { InvestorModel } from "../../shared/investor-model";
 import { InvestorService } from '../../shared/investor-service';
+import { AuthService } from '../../shared/auth-service';
 import { environment } from '../../../environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -40,7 +41,7 @@ export class InvestorProfileComponent implements OnInit {
   imageUrl: string;
   imageProfile: any;
   sector: Sector[] = [];
-  userSectors: string[];
+  userSectors: string[] = [];
   userStages: string[];
   faCirclePlus = faCirclePlus;
   name: string;
@@ -61,6 +62,7 @@ export class InvestorProfileComponent implements OnInit {
 
   constructor(
     public investorService: InvestorService,
+    public authService: AuthService,
     public fb: FormBuilder,
     private actRoute: ActivatedRoute,
   ) {
@@ -80,6 +82,8 @@ export class InvestorProfileComponent implements OnInit {
       this.gettype();
       this.getCompanyStages();
       this.fetchcompanies();
+      this.updateProfileScore();
+      console.log(res);
     });
   }
 
@@ -95,6 +99,7 @@ export class InvestorProfileComponent implements OnInit {
           this.companies = companies;
           if (this.companies.length > 0) {
             this.companiesExist = true;
+            this.updateProfileScore();
           }
         },
         (error) => {
@@ -129,6 +134,7 @@ export class InvestorProfileComponent implements OnInit {
           complete: () => {
             console.log('company successfully deleted!')
             this.fetchcompanies();
+            this.ngOnInit();
           },
           error: (e) => {
             console.log(e);
@@ -416,6 +422,7 @@ export class InvestorProfileComponent implements OnInit {
           });
           // update the selected count 
           this.updateSelectedLabels();
+          this.updateProfileScore();
         },
         (error: any) => {
           console.log(error);
@@ -689,6 +696,7 @@ export class InvestorProfileComponent implements OnInit {
     this.investorService.updateUser(id, this.editForm.value).subscribe({
       complete: () => {
         console.log('Content updated successfully!');
+        this.updateProfileScore();
       },
       error: (e) => {
         console.log(e);
@@ -707,6 +715,39 @@ export class InvestorProfileComponent implements OnInit {
     }
     console.error(errorMessage);
     return throwError(errorMessage);
+  }
+
+
+  updateProfileScore(){
+    let profileScore = 2;
+    let pourcentage;
+    console.log(this.userSectors);
+    if(this.currentUser.name)
+      profileScore++;
+    if(this.currentUser.description)
+      profileScore++;
+    if(this.currentUser.country)
+      profileScore++;
+    if(this.currentUser.city)
+      profileScore++;
+    if(this.userSectors.length>0)
+      profileScore++;
+    if(this.currentUser.company_stage && this.currentUser.company_stage.length>0)
+      profileScore++;
+    if(this.currentUser.preferred_area)
+      profileScore++;
+    if(this.currentUser.stage && this.currentUser.stage.length>0)
+      profileScore++;
+    if(this.currentUser.type)
+      profileScore++;
+    if(this.currentUser.phone_number)
+      profileScore++;
+    if(this.companies && this.companies.length>0)
+      profileScore++;
+    pourcentage= ((profileScore * 100) / 13).toFixed(2);
+    this.authService.profileScore=profileScore;
+    this.authService.pourcentage=pourcentage;
+    console.log("score % : "+this.authService.profileScore);
   }
 
 }
