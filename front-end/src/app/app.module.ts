@@ -10,6 +10,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -77,6 +78,8 @@ import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/match
     MatSelectModule,
     MatSidenavModule,
     MatButtonModule,
+    NgbDropdownModule,
+    NgbModule,
   ],
   providers: [
     provideClientHydration(),

@@ -29,6 +29,7 @@ export class MatchMakingComponent implements OnInit {
   requests_sent: any[] = [];
   requests_received: any[] = [];
   matchmaking_list: any[] = [];
+  requests: any[] = [];
   id: any;
   faLocationDot = faLocationDot;
   searchForm: FormGroup;
@@ -57,7 +58,7 @@ export class MatchMakingComponent implements OnInit {
     if (this.role == "entrepreneur") {
       this.authService.getUser(this.id).subscribe((res) => {
         this.currentEntrepreneur = res;
-
+        this.getUser();
         this.getInvestors(
           this.currentEntrepreneur.company_stage ? this.currentEntrepreneur.company_stage : '',
           this.currentEntrepreneur.investment_size ? this.currentEntrepreneur.investment_size : "",
@@ -65,11 +66,11 @@ export class MatchMakingComponent implements OnInit {
           this.currentEntrepreneur.sector ? this.currentEntrepreneur.sector : []
         );
         this.initializeForm();
-        this.getUser();
       })
     } else if (this.role == "investor") {
       this.investorService.getUser(this.id).subscribe((res) => {
         this.currentInvestor = res;
+        this.getUser();
         this.getEntrepreneurs(
           this.currentInvestor.company_stage ? this.currentInvestor.company_stage : [],
           this.currentInvestor.amount ? this.currentInvestor.amount : "",
@@ -77,7 +78,7 @@ export class MatchMakingComponent implements OnInit {
           this.currentInvestor.sector ? this.currentInvestor.sector : []
         );
         this.initializeForm();
-        this.getUser();
+        
       })
 
     }
@@ -107,8 +108,25 @@ export class MatchMakingComponent implements OnInit {
       this.requests_sent = res.request_sent;
       this.requests_received = res.request_received;
       this.matchmaking_list = res.matchmakings_list;
-      console.log(this.requests_received);
+      this.getRequests();
+      console.log(this.requests)
     })
+  }
+
+  getRequests(): any{
+    let users:AuthModel[] = [];
+    if(this.role==="investor")
+    for (let id of this.requests_received) {
+      this.authService.getUser(id).subscribe(
+        (user: AuthModel) => {
+          users.push(user);
+        },
+        (error: any) => {
+          console.log(`Failed to retrieve user with ID ${id}`, error);
+        }
+      );
+    }
+    this.requests = users;
   }
 
   inList(id: any): boolean {
