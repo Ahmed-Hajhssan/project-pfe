@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +34,7 @@ import { PreviewProfileComponent } from './pages/preview-profile/preview-profile
 import { InvestorProfileComponent } from './pages/investor-profile/investor-profile.component';
 import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 import { MatchMakingComponent } from './pages/match-making/match-making.component';
+import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/matchmaking-requests.component';
 
 
 
@@ -54,6 +57,8 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
     InvestorProfileComponent,
     PreviewProfileInvestorComponent,
     MatchMakingComponent,
+    MatchmakingRequestsComponent,
+    
 
   ],
   imports: [
@@ -70,6 +75,8 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
     MdbCollapseModule,
     MatFormFieldModule, 
     MatSelectModule,
+    MatSidenavModule,
+    MatButtonModule,
   ],
   providers: [
     provideClientHydration(),

@@ -9,6 +9,8 @@ import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ic
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-match-making',
@@ -16,20 +18,25 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrl: './match-making.component.scss'
 })
 export class MatchMakingComponent implements OnInit {
+  
 
   private baseUrl = environment.domain;
   role: any;
   currentEntrepreneur: AuthModel = {};
   currentInvestor: InvestorModel = {};
   entrepreneurs: AuthModel[] = [];
-  investors: InvestorModel[] = []
-  id: any
+  investors: InvestorModel[] = [];
+  requests_sent: any[] = [];
+  requests_received: any[] = [];
+  matchmaking_list: any[] = [];
+  id: any;
   faLocationDot = faLocationDot;
   searchForm: FormGroup;
   faMagnifyingGlass = faMagnifyingGlass;
   currentEntrepreneurPage = 1;
   currentInvestorPage = 1;
   pageSize = 5;
+
 
   constructor(
     public authService: AuthService,
@@ -51,24 +58,26 @@ export class MatchMakingComponent implements OnInit {
       this.authService.getUser(this.id).subscribe((res) => {
         this.currentEntrepreneur = res;
 
-        this.getInvestors(         
-          this.currentEntrepreneur.company_stage?this.currentEntrepreneur.company_stage:'',
-          this.currentEntrepreneur.investment_size?this.currentEntrepreneur.investment_size:"",
-          this.currentEntrepreneur.city?this.currentEntrepreneur.city:"",
-          this.currentEntrepreneur.sector?this.currentEntrepreneur.sector:[]
+        this.getInvestors(
+          this.currentEntrepreneur.company_stage ? this.currentEntrepreneur.company_stage : '',
+          this.currentEntrepreneur.investment_size ? this.currentEntrepreneur.investment_size : "",
+          this.currentEntrepreneur.city ? this.currentEntrepreneur.city : "",
+          this.currentEntrepreneur.sector ? this.currentEntrepreneur.sector : []
         );
         this.initializeForm();
+        this.getUser();
       })
     } else if (this.role == "investor") {
       this.investorService.getUser(this.id).subscribe((res) => {
         this.currentInvestor = res;
-          this.getEntrepreneurs(
-            this.currentInvestor.company_stage?this.currentInvestor.company_stage:[],
-            this.currentInvestor.amount?this.currentInvestor.amount:"",
-            this.currentInvestor.preferred_area?this.currentInvestor.preferred_area:"",
-            this.currentInvestor.sector?this.currentInvestor.sector:[]
-          );
+        this.getEntrepreneurs(
+          this.currentInvestor.company_stage ? this.currentInvestor.company_stage : [],
+          this.currentInvestor.amount ? this.currentInvestor.amount : "",
+          this.currentInvestor.preferred_area ? this.currentInvestor.preferred_area : "",
+          this.currentInvestor.sector ? this.currentInvestor.sector : []
+        );
         this.initializeForm();
+        this.getUser();
       })
 
     }
@@ -93,6 +102,51 @@ export class MatchMakingComponent implements OnInit {
     'Idea', 'Pre-seed', 'Seed', 'Early Growth', 'Growth', 'Maturity'
   ];
 
+  getUser() {
+    this.matchMakingService.getUser(this.id).subscribe((res) => {
+      this.requests_sent = res.request_sent;
+      this.requests_received = res.request_received;
+      this.matchmaking_list = res.matchmakings_list;
+      console.log(this.requests_received);
+    })
+  }
+
+  inList(id: any): boolean {
+    if (this.requests_sent.includes(id) || this.requests_received.includes(id) || this.matchmaking_list.includes(id)){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  request(receiverId: any) {
+    let senderId = this.id;
+    this.matchMakingService.requestMaching(senderId, receiverId).subscribe();
+    this.ngOnInit();
+  }
+  showMore(): void {
+    if (this.role === 'entrepreneur') {
+      this.matchMakingService.getInvestors().subscribe({
+        next: (investors: InvestorModel[]) => {
+          this.investors = investors;
+        },
+        error: (error: any) => {
+          console.error('Error fetching investors:', error);
+        }
+      });
+    } else if (this.role === 'investor') {
+      this.matchMakingService.getEntrepreneurs().subscribe({
+        next: (entrepreneurs: AuthModel[]) => {
+          this.entrepreneurs = entrepreneurs;
+          console.log(entrepreneurs);
+        },
+        error: (error: any) => {
+          console.error('Error fetching entrepreneurs:', error);
+        }
+      });
+    }
+  }
 
   get displayedEntrepreneurs(): any[] {
     const startIndex = (this.currentEntrepreneurPage - 1) * this.pageSize;
@@ -250,28 +304,28 @@ export class MatchMakingComponent implements OnInit {
     const investmentAmount = formValues.investment_amount;
     const city = formValues.city;
     const sectors = formValues.sector;
-    if (this.role==="investor") {
+    if (this.role === "investor") {
       this.getEntrepreneurs(companyStages, investmentAmount, city, sectors);
-    } else if (this.role==="entrepreneur"){
+    } else if (this.role === "entrepreneur") {
       this.getInvestors(companyStages, investmentAmount, city, sectors);
-    } 
+    }
   }
 
   initializeForm() {
-    if(this.role==="investor")
-    this.searchForm = this.fb.group({
-      companyStages: [this.currentInvestor.company_stage],
-      investment_amount: [this.currentInvestor.amount],
-      city: [this.currentInvestor.preferred_area],
-      sector: [this.currentInvestor.sector],
-    });
-    else{
-    this.searchForm = this.fb.group({
-      companyStages: [this.currentEntrepreneur.company_stage],
-      investment_amount: [this.currentEntrepreneur.investment_size],
-      city: [this.currentEntrepreneur.city],
-      sector: [this.currentEntrepreneur.sector],
-    });
+    if (this.role === "investor")
+      this.searchForm = this.fb.group({
+        companyStages: [this.currentInvestor.company_stage],
+        investment_amount: [this.currentInvestor.amount],
+        city: [this.currentInvestor.preferred_area],
+        sector: [this.currentInvestor.sector],
+      });
+    else {
+      this.searchForm = this.fb.group({
+        companyStages: [this.currentEntrepreneur.company_stage],
+        investment_amount: [this.currentEntrepreneur.investment_size],
+        city: [this.currentEntrepreneur.city],
+        sector: [this.currentEntrepreneur.sector],
+      });
     }
   }
 

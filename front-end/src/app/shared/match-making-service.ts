@@ -16,6 +16,21 @@ export class MatchMakingService {
 
   constructor(private http: HttpClient) { }
 
+    getUser(id: any): Observable<any> {
+    let api = `${this.baseUrl}/read/${id}`;
+    return this.http.get(api, { headers: this.headers }).pipe(
+      map((res) => {
+        return res || {};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  requestMaching(senderId: any, receiverId: any): Observable<any> {
+    const url = `${this.baseUrl}/request/${senderId}/${receiverId}`;
+    return this.http.put<any>(url,{});
+  }
+
   getEntrepreneurs(): Observable<any> {
     const url = `${this.baseUrl}/api/getEntrepreneurs`;
     return this.http.get(url);
