@@ -4,6 +4,7 @@ const userRoute = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 
 let User = require('../models/User');
@@ -21,39 +22,163 @@ app.use((req, res, next) => {
     next();
 })
 
+// Get user
+userRoute.route('/read/:id').get(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+// requests 
+userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
+    try {
+        const { senderId, receiverId } = req.params;
+
+        const sender = await User.findById(senderId);
+        const receiver = await User.findById(receiverId);
+        const indexReceived = sender.request_received.indexOf(receiverId);
+
+
+        if (!sender || !receiver) {
+            return res.status(404).json({ error: 'Sender or receiver not found' });
+        }
+        if (indexReceived == -1) {
+            receiver.request_received.push(senderId);
+            sender.request_sent.push(receiverId);
+
+            await receiver.save();
+            await sender.save();
+        } else {
+            receiver.matchmakings_list.push(senderId);
+            sender.matchmakings_list.push(receiverId);
+
+            const indexSender = sender.request_received.indexOf(receiverId);
+            const indexReceiver = receiver.request_sent.indexOf(senderId);
+                if (indexSender !== -1) {
+                    sender.request_received.splice(indexSender, 1);
+                }
+                if (indexReceiver !== -1) {
+                    receiver.request_sent.splice(indexReceiver, 1);
+                }
+
+            await receiver.save();
+            await sender.save();
+
+        }
+        res.status(201).json({
+            receiver,
+            sender
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+//matchmaking
+userRoute.put('/matchmaking/:senderId/:receiverId', async (req, res, next) => {
+    const { senderId, receiverId } = req.params;
+
+    const sender = await User.findById(senderId);
+    const receiver = await User.findById(receiverId);
+
+    if (!sender || !receiver) {
+        return res.status(404).json({ error: 'Sender or receiver not found' });
+    }
+
+    receiver.matchmakings_list.push(senderId);
+    sender.matchmakings_list.push(receiverId);
+
+    const indexSender = sender.request_sent.indexOf(receiverId);
+    const indexReceiver = receiver.request_received.indexOf(senderId);
+    if (indexReceiver == -1 || indexSender == -1) {
+        return res.status(404).json({ message: 'request not found' });
+    } else {
+        if (indexSender !== -1) {
+            sender.request_sent.splice(indexSender, 1);
+        }
+        if (indexReceiver !== -1) {
+            receiver.request_received.splice(indexReceiver, 1);
+        }
+    }
+
+    await receiver.save();
+    await sender.save();
+
+    res.status(201).json({
+        receiver,
+        sender
+    });
+
+})
+
+//matchmaking
+userRoute.put('/decline/:senderId/:receiverId', async (req, res, next) => {
+    const { senderId, receiverId } = req.params;
+
+    const sender = await User.findById(senderId);
+    const receiver = await User.findById(receiverId);
+
+    if (!sender || !receiver) {
+        return res.status(404).json({ error: 'Sender or receiver not found' });
+    }
+
+    const indexSender = sender.request_sent.indexOf(receiverId);
+    const indexReceiver = receiver.request_received.indexOf(senderId);
+    if (indexReceiver == -1 || indexSender == -1) {
+        return res.status(404).json({ message: 'request not found' });
+    } else {
+        if (indexSender !== -1) {
+            sender.request_sent.splice(indexSender, 1);
+            await sender.save();
+        }
+        if (indexReceiver !== -1) {
+            receiver.request_received.splice(indexReceiver, 1);
+            await receiver.save();
+        }
+    }
+    res.status(201).json({
+        receiver,
+        sender
+    });
+
+})
+
 // reset password *
 userRoute.post('/reset-password', async (req, res, next) => {
     try {
-      const token = req.body.token;
-      const newPassword = req.body.password;
-  
-      const data = jwt.verify(token, "secret_string");
-  
-      // Find the user by email
-      const user = await User.findOne({ email: { $regex: '^' + data.email + '$', $options: 'i' } });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-  
-      // Encrypt the new password
-      const salt = await bcrypt.genSalt(10);
-      const encryptedPassword = await bcrypt.hash(newPassword, salt);
-  
-      user.password = encryptedPassword;
-      const updatedUser = await user.save();
-  
-      res.status(200).json({
-        message: 'Password reset successfully!',
-        result: updatedUser
-      });
+        const token = req.body.token;
+        const newPassword = req.body.password;
+
+        const data = jwt.verify(token, "secret_string");
+
+        // Find the user by email
+        const user = await User.findOne({ email: { $regex: '^' + data.email + '$', $options: 'i' } });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Encrypt the new password
+        const salt = await bcrypt.genSalt(10);
+        const encryptedPassword = await bcrypt.hash(newPassword, salt);
+
+        user.password = encryptedPassword;
+        const updatedUser = await user.save();
+
+        res.status(200).json({
+            message: 'Password reset successfully!',
+            result: updatedUser
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        message: 'Something went wrong while resetting the password!'
-      });
+        console.error(error);
+        res.status(500).json({
+            message: 'Something went wrong while resetting the password!'
+        });
     }
-  });
+});
 
 // forget password
 userRoute.post('/send-email', async (req, res) => {
@@ -183,30 +308,30 @@ userRoute.post('/sign-up', (req, res) => {
 // login user
 userRoute.post('/login', async (req, res) => {
     try {
-      const user = await User.findOne({ email: req.body.email });
-  
-      if (!user) {
-        return res.status(401).json({ message: 'User not found' });
-      }
-  
-      const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-  
-      if (!passwordMatch) {
-        return res.status(401).json({ message: 'Password is incorrect' });
-      }
-  
-      const token = jwt.sign({ email: user.email, userId: user._id }, 'secret_string', { expiresIn: '8h' });
-  
-      return res.status(200).json({
-        token: token,
-        expiresIn: 3600 * 8,
-        userId: user._id,
-        role: user.role
-      });
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+
+        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Password is incorrect' });
+        }
+
+        const token = jwt.sign({ email: user.email, userId: user._id }, 'secret_string', { expiresIn: '8h' });
+
+        return res.status(200).json({
+            token: token,
+            expiresIn: 3600 * 8,
+            userId: user._id,
+            role: user.role
+        });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
-  });
+});
 
 
 module.exports = userRoute;
