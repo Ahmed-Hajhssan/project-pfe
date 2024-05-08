@@ -1,12 +1,10 @@
 <div class="d-flex">
   <app-sidebar></app-sidebar>
   <div class="container custom-container">
-    
+
     <div class="content">
       <div class="d-flex mt-2">
-
         <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12">
-          
 
           <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
             <div class="sticky-card card">
@@ -104,7 +102,7 @@
                             <p class="location">{{entrepreneur.city}}</p>
                           </div>
                           <div class="d-flex">
-                            <button (click)="request(entrepreneur._id)" class="matchmaking-button">Match</button>
+                            <button *ngIf="!inList(entrepreneur._id)" (click)="request(entrepreneur._id)" class="matchmaking-button">Match</button>
                             <button (click)="navigateToPreviewProfile(entrepreneur._id)"
                               class="view-profile-button">View
                               profile</button>
@@ -175,7 +173,7 @@
           </div>
 
           <!-- Pagination for investors -->
-          <div *ngIf="this.role === 'entrepreneur'" class="center mt-5">
+          <div *ngIf="this.role === 'entrepreneur'" class="center mt-4">
             <div class="pagination">
               <a href="#" (click)="changePage('prev', 'investors', $event)">&laquo;</a>
               <a *ngFor="let page of investorPages" [class.active]="currentInvestorPage === page"
@@ -184,7 +182,7 @@
             </div>
           </div>
           <!-- Pagination for entrepreneurs -->
-          <div *ngIf="this.role === 'investor'" class="center mt-5">
+          <div *ngIf="this.role === 'investor'" class="center mt-4">
             <div class="pagination">
               <a href="#" (click)="changePage('prev', 'entrepreneurs', $event)">&laquo;</a>
               <a *ngFor="let page of entrepreneurPages" [class.active]="currentEntrepreneurPage === page"
@@ -192,51 +190,53 @@
               <a href="#" (click)="changePage('next', 'entrepreneurs', $event)">&raquo;</a>
             </div>
           </div>
-
         </div>
-        <div ngbDropdown class="d-inline-block col">
+        
+        <div ngbDropdown class="d-inline-block col notification-dropdown">
           <button type="button" class="custom-button2" id="dropdownBasic1" ngbDropdownToggle>
-            dropdown
+            <fa-icon [icon]="faBell" class="notification-icon"></fa-icon>
           </button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="width: 400px;">
-          <div *ngFor="let request of this.requests">
-            <div class="card">
-              <div class="card-body">
-                <div class="row gutters">
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="d-flex">
-                      <img *ngIf="request.image_profile"
-                        [src]="'http://localhost:4000/api/uploads/' + request.image_profile"
-                        alt="request Image" class="profile_picture">
-                      <img *ngIf="!request.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
-                        alt="request Image" class="profile_picture">
-                      <div class="container">
-                        <div class="match-name">{{request.name}}</div>
-                        <a class="Company-link" href="{{request.website_url}}">{{request.website_url}}</a>
-                        <div class="d-flex">
-                          <fa-icon [icon]="faLocationDot" *ngIf="request.country || request.city"
-                            class="location-icon"></fa-icon>
-                          <p class="location">{{request.country}}</p>
-                          <p class="location" *ngIf="request.country">, &nbsp;</p>
-                          <p class="location">{{request.city}}</p>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="notification-card">
+            <div class="request-title mt-2">Matchmaking requests</div>
+            <div *ngFor="let request of this.requests">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row gutters">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="d-flex">
+                        <img *ngIf="request.image_profile"
+                          [src]="'http://localhost:4000/api/uploads/' + request.image_profile" alt="request Image"
+                          class="profile_picture">
+                        <img *ngIf="!request.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
+                          alt="request Image" class="profile_picture">
+                        <div class="container">
+                          <div class="match-name">{{request.name}}</div>
+                          <a class="Company-link" href="{{request.website_url}}">{{request.website_url}}</a>
+                          <div class="d-flex">
+                            <fa-icon [icon]="faLocationDot" *ngIf="request.country || request.city"
+                              class="location-icon"></fa-icon>
+                            <p class="location">{{request.country}}</p>
+                            <p class="location" *ngIf="request.country">, &nbsp;</p>
+                            <p class="location">{{request.city}}</p>
+                          </div>
                         </div>
-                        <div class="d-flex">
-                          <button (click)="request(request._id)" class="matchmaking-button">Accept</button>
-                          <button (click)="navigateToPreviewProfile(request._id)"
-                            class="view-profile-button">Decline</button>
+                        <div class="container notification-buttons">
+                          <div class="row">
+                            <div class="col-12 d-flex justify-content-center align-items-center">
+                              <button (click)="acceptRequest(request._id)" class="accept-button">Accept</button>
+                              <button (click)="declineRequest(request._id)" class="decline-button">Decline</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <hr class="text-gray">
-                    <div class="match-bio">{{request.description}}</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
-      </div>
-      
+
       </div>
     </div>
   </div>

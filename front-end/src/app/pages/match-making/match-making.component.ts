@@ -9,8 +9,7 @@ import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ic
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-match-making',
@@ -18,7 +17,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
   styleUrl: './match-making.component.scss'
 })
 export class MatchMakingComponent implements OnInit {
-  
+
 
   private baseUrl = environment.domain;
   role: any;
@@ -37,6 +36,7 @@ export class MatchMakingComponent implements OnInit {
   currentEntrepreneurPage = 1;
   currentInvestorPage = 1;
   pageSize = 5;
+  faBell = faBell;
 
 
   constructor(
@@ -78,7 +78,7 @@ export class MatchMakingComponent implements OnInit {
           this.currentInvestor.sector ? this.currentInvestor.sector : []
         );
         this.initializeForm();
-        
+
       })
 
     }
@@ -109,40 +109,70 @@ export class MatchMakingComponent implements OnInit {
       this.requests_received = res.request_received;
       this.matchmaking_list = res.matchmakings_list;
       this.getRequests();
-      console.log(this.requests)
     })
   }
 
-  getRequests(): any{
-    let users:AuthModel[] = [];
-    if(this.role==="investor")
-    for (let id of this.requests_received) {
-      this.authService.getUser(id).subscribe(
-        (user: AuthModel) => {
-          users.push(user);
-        },
-        (error: any) => {
-          console.log(`Failed to retrieve user with ID ${id}`, error);
-        }
-      );
+  getRequests() {
+    let entrepreneurs: AuthModel[] = [];
+    let investors: AuthModel[] = [];
+    if (this.role === "investor") {
+      for (let id of this.requests_received) {
+        this.authService.getUser(id).subscribe(
+          (user: AuthModel) => {
+            entrepreneurs.push(user);
+          },
+          (error: any) => {
+            console.log(`Failed to retrieve user with ID ${id}`, error);
+          }
+        );
+      }
+      this.requests = entrepreneurs;
+      console.log('entrepreneurs request', this.requests)
+    }else{
+      for (let id of this.requests_received) {
+        this.authService.getUser(id).subscribe(
+          (user: AuthModel) => {
+            investors.push(user);
+          },
+          (error: any) => {
+            console.log(`Failed to retrieve user with ID ${id}`, error);
+          }
+        );
+      }
+      this.requests = investors;
+      console.log('investors request', this.requests)
     }
-    this.requests = users;
+    
   }
 
   inList(id: any): boolean {
-    if (this.requests_sent.includes(id) || this.requests_received.includes(id) || this.matchmaking_list.includes(id)){
+    if (this.requests_sent.includes(id) || this.requests_received.includes(id) || this.matchmaking_list.includes(id)) {
       return true
     }
-    else{
+    else {
       return false
     }
   }
 
   request(receiverId: any) {
     let senderId = this.id;
-    this.matchMakingService.requestMaching(senderId, receiverId).subscribe();
+    this.matchMakingService.sendRequest(senderId, receiverId).subscribe();
     this.ngOnInit();
   }
+
+  acceptRequest(receiverId: any) {
+    let senderId = this.id;
+    this.matchMakingService.acceptRequest(senderId, receiverId).subscribe();
+    this.ngOnInit();
+    console.log('receiverid', receiverId)
+  }
+
+  declineRequest(receiverId: any) {
+    let senderId = this.id;
+    this.matchMakingService.declineRequest(senderId, receiverId).subscribe();
+    this.ngOnInit();
+  }
+
   showMore(): void {
     if (this.role === 'entrepreneur') {
       this.matchMakingService.getInvestors().subscribe({

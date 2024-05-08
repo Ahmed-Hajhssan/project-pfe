@@ -26,8 +26,18 @@ export class MatchMakingService {
     );
   }
 
-  requestMaching(senderId: any, receiverId: any): Observable<any> {
+  sendRequest(senderId: any, receiverId: any): Observable<any> {
     const url = `${this.baseUrl}/request/${senderId}/${receiverId}`;
+    return this.http.put<any>(url,{});
+  }
+
+  acceptRequest(senderId: any, receiverId: any): Observable<any> {
+    const url = `${this.baseUrl}/matchmaking/${senderId}/${receiverId}`;
+    return this.http.put<any>(url,{});
+  }
+
+  declineRequest(senderId: any, receiverId: any): Observable<any> {
+    const url = `${this.baseUrl}/decline/${senderId}/${receiverId}`;
     return this.http.put<any>(url,{});
   }
 

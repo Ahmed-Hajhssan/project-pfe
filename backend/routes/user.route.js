@@ -4,7 +4,6 @@ const userRoute = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const axios = require('axios');
 
 
 let User = require('../models/User');
@@ -25,14 +24,14 @@ app.use((req, res, next) => {
 // Get user
 userRoute.route('/read/:id').get(async (req, res, next) => {
     try {
-      const user = await User.findById(req.params.id);
-      res.json(user);
+        const user = await User.findById(req.params.id);
+        res.json(user);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
+});
 
-// requests 
+// request
 userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
     try {
         const { senderId, receiverId } = req.params;
@@ -57,12 +56,12 @@ userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
 
             const indexSender = sender.request_received.indexOf(receiverId);
             const indexReceiver = receiver.request_sent.indexOf(senderId);
-                if (indexSender !== -1) {
-                    sender.request_received.splice(indexSender, 1);
-                }
-                if (indexReceiver !== -1) {
-                    receiver.request_sent.splice(indexReceiver, 1);
-                }
+            if (indexSender !== -1) {
+                sender.request_received.splice(indexSender, 1);
+            }
+            if (indexReceiver !== -1) {
+                receiver.request_sent.splice(indexReceiver, 1);
+            }
 
             await receiver.save();
             await sender.save();
@@ -77,44 +76,47 @@ userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
     }
 });
 
-//matchmaking
+// Accept 
 userRoute.put('/matchmaking/:senderId/:receiverId', async (req, res, next) => {
-    const { senderId, receiverId } = req.params;
 
-    const sender = await User.findById(senderId);
-    const receiver = await User.findById(receiverId);
+    try {
+        const { senderId, receiverId } = req.params;
+        const sender = await User.findById(senderId);
+        const receiver = await User.findById(receiverId);
 
-    if (!sender || !receiver) {
-        return res.status(404).json({ error: 'Sender or receiver not found' });
-    }
-
-    receiver.matchmakings_list.push(senderId);
-    sender.matchmakings_list.push(receiverId);
-
-    const indexSender = sender.request_sent.indexOf(receiverId);
-    const indexReceiver = receiver.request_received.indexOf(senderId);
-    if (indexReceiver == -1 || indexSender == -1) {
-        return res.status(404).json({ message: 'request not found' });
-    } else {
-        if (indexSender !== -1) {
-            sender.request_sent.splice(indexSender, 1);
+        if (!sender || !receiver) {
+            return res.status(404).json({ error: 'Sender or receiver not found' });
         }
-        if (indexReceiver !== -1) {
-            receiver.request_received.splice(indexReceiver, 1);
+
+        receiver.matchmakings_list.push(senderId);
+        sender.matchmakings_list.push(receiverId);
+
+        const indexSender = sender.request_sent.indexOf(receiverId);
+        const indexReceiver = receiver.request_received.indexOf(senderId);
+        if (indexReceiver == -1 || indexSender == -1) {
+            return res.status(404).json({ message: 'request not found' });
+        } else {
+            if (indexSender !== -1) {
+                sender.request_sent.splice(indexSender, 1);
+            }
+            if (indexReceiver !== -1) {
+                receiver.request_received.splice(indexReceiver, 1);
+            }
         }
+
+        await receiver.save();
+        await sender.save();
+
+        res.status(201).json({
+            receiver,
+            sender
+        });
+    } catch (error) {
+        next(error);
     }
-
-    await receiver.save();
-    await sender.save();
-
-    res.status(201).json({
-        receiver,
-        sender
-    });
-
 })
 
-//matchmaking
+// Decline
 userRoute.put('/decline/:senderId/:receiverId', async (req, res, next) => {
     const { senderId, receiverId } = req.params;
 
