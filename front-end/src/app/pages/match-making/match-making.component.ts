@@ -114,7 +114,7 @@ export class MatchMakingComponent implements OnInit {
 
   getRequests() {
     let entrepreneurs: AuthModel[] = [];
-    let investors: AuthModel[] = [];
+    let investors: InvestorModel[] = [];
     if (this.role === "investor") {
       for (let id of this.requests_received) {
         this.authService.getUser(id).subscribe(
@@ -130,8 +130,8 @@ export class MatchMakingComponent implements OnInit {
       console.log('entrepreneurs request', this.requests)
     }else{
       for (let id of this.requests_received) {
-        this.authService.getUser(id).subscribe(
-          (user: AuthModel) => {
+        this.investorService.getUser(id).subscribe(
+          (user: InvestorModel) => {
             investors.push(user);
           },
           (error: any) => {
@@ -160,15 +160,15 @@ export class MatchMakingComponent implements OnInit {
     this.ngOnInit();
   }
 
-  acceptRequest(receiverId: any) {
-    let senderId = this.id;
+  acceptRequest(senderId: any) {
+    let receiverId = this.id;
     this.matchMakingService.acceptRequest(senderId, receiverId).subscribe();
     this.ngOnInit();
     console.log('receiverid', receiverId)
   }
 
-  declineRequest(receiverId: any) {
-    let senderId = this.id;
+  declineRequest(senderId: any) {
+    let receiverId = this.id;
     this.matchMakingService.declineRequest(senderId, receiverId).subscribe();
     this.ngOnInit();
   }
