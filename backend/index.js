@@ -36,6 +36,22 @@ const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
   console.log('Connected to port ' + port)
 })
+
+const io = require('socket.io')(server); 
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('message', (message) => {
+    console.log(message);
+    io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected!');
+  });
+});
+
 // Find 404 and hand over to error handler
 app.use((req, res, next) => {
   next(createError(404))

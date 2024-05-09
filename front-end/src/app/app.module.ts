@@ -36,6 +36,8 @@ import { InvestorProfileComponent } from './pages/investor-profile/investor-prof
 import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 import { MatchMakingComponent } from './pages/match-making/match-making.component';
 import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/matchmaking-requests.component';
+import { ChatComponent } from './pages/chat/chat.component';
+
 
 
 
@@ -59,6 +61,7 @@ import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/match
     PreviewProfileInvestorComponent,
     MatchMakingComponent,
     MatchmakingRequestsComponent,
+    ChatComponent,
     
 
   ],
