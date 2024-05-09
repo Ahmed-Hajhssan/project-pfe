@@ -35,9 +35,15 @@ h5{
 progress {
     background-color: #1b84ca; /* Change this to the desired color */
     height: 7px;
+    border-radius: 20px;
 }
 progress::-webkit-progress-value {
-    background-color: #d7b911;; /* Change this to the desired color */
+    background-color: #d7b911;
+    border-radius: 20px;
+}
+
+progress::-webkit-progress-bar {
+    border-radius: 20px;
 }
 #nav.navbar.custom-nav {
     background-color: #0e2238;
