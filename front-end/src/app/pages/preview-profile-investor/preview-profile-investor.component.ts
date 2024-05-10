@@ -6,6 +6,7 @@ import { faFacebookF, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { MatchMakingService } from '../../shared/match-making-service';
 
 interface Company {
   _id: string;
@@ -36,12 +37,16 @@ export class PreviewProfileInvestorComponent implements OnInit{
   userStages: string[];
   companies: Company[] = [];
   companiesExist: boolean;
+  matchmaking_list: any[] = [];
+  userId:any;
+  userExist:boolean=false;
 
   constructor(
     public investorService: InvestorService,
     private actRoute: ActivatedRoute,
     private viewportScroller: ViewportScroller,
     private elementRef: ElementRef,
+    private matchMakingService: MatchMakingService,
   ) { }
   
   ngOnInit(): void {
@@ -55,7 +60,20 @@ export class PreviewProfileInvestorComponent implements OnInit{
       this.getCompanyStages();
       this.getStages();
       this.fetchcompanies();
+      this.permission();
     });
+  }
+
+  permission() {
+    let userId = localStorage.getItem('userId');
+    this.matchMakingService.getUser(userId).subscribe((res) => {
+      this.matchmaking_list = res.matchmakings_list;
+      let id = this.actRoute.snapshot.paramMap.get('id');
+      console.log(this.matchmaking_list.includes(id) || userId == id)
+      if (this.matchmaking_list.includes(id) || userId == id) {
+        this.userExist=true
+      }
+    })
   }
 
   getAmount() {

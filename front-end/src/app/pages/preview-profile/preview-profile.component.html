@@ -56,7 +56,7 @@
                 Overview
               </div>
             </a>
-            <a (click)="smoothScroll('#video-pitch')">
+            <a (click)="smoothScroll('#video-pitch')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -67,7 +67,7 @@
                 Video pitch
               </div>
             </a>
-            <a (click)="smoothScroll('#Funding-rounds')">
+            <a (click)="smoothScroll('#Funding-rounds')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" fill="none" viewBox="0 0 24 24"
                   stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" width="24">
@@ -78,7 +78,7 @@
                 Funding rounds
               </div>
             </a>
-            <a (click)="smoothScroll('#Team')">
+            <a (click)="smoothScroll('#Team')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" class="nav-icons" fill="none" viewBox="0 0 24 24"
                   stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" width="24">
@@ -89,7 +89,7 @@
                 Team
               </div>
             </a>
-            <a (click)="smoothScroll('#Pitch-deck')">
+            <a (click)="smoothScroll('#Pitch-deck')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -100,7 +100,7 @@
                 Pitch deck
               </div>
             </a>
-            <a (click)="smoothScroll('#Documents')">
+            <a (click)="smoothScroll('#Documents')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -111,7 +111,7 @@
                 Documents
               </div>
             </a>
-            <a (click)="smoothScroll('#FAQ')">
+            <a (click)="smoothScroll('#FAQ')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -164,7 +164,7 @@
           </div>
         </div>
         <!--fin overview-->
-        <div *ngIf="currentUser.video_pitch || currentUser.video_pitchUrl" id="video-pitch"
+        <div *ngIf="(currentUser.video_pitch || currentUser.video_pitchUrl) && userExist" id="video-pitch"
           class="card video-pitch-size">
           <div class="card-body">
             <div class="row gutters">
@@ -180,7 +180,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="this.raising || (previous_rounds &&  previous_rounds.length>0)" id="Funding-rounds"
+        <div *ngIf="(this.raising || (previous_rounds &&  previous_rounds.length>0))&& userExist" id="Funding-rounds"
           class="card Documents-size">
           <div class="card-body">
             <div class="row gutters">
@@ -255,7 +255,7 @@
           </div>
         </div>
 
-        <div *ngIf="membersExist" id="Team" class="card Team-size">
+        <div *ngIf="membersExist && userExist" id="Team" class="card Team-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -298,7 +298,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="fileExists" id="Pitch-deck" class="card pitch-deck-size">
+        <div *ngIf="fileExists && userExist" id="Pitch-deck" class="card pitch-deck-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -313,7 +313,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="filesExist" id="Documents" class="card Documents-size">
+        <div *ngIf="filesExist && userExist" id="Documents" class="card Documents-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -336,7 +336,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="squestions && squestions.length > 0" id="FAQ" class="card">
+        <div *ngIf="(squestions && squestions.length > 0) && userExist" id="FAQ" class="card">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

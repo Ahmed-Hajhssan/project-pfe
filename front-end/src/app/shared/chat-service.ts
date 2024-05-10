@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { io } from "socket.io-client";
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -8,10 +9,11 @@ import { io } from "socket.io-client";
 })
 export class ChatService {
 
+  private baseUrl = environment.domain;
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
   constructor() {}
 
-  socket = io('http://localhost:4000');
+  socket = io(this.baseUrl);
 
   public sendMessage(message: string) {
     this.socket.emit('message', message);

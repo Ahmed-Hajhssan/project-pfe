@@ -56,7 +56,7 @@
                 Profile
               </div>
             </a>
-            <a (click)="smoothScroll('#portfolio')">
+            <a (click)="smoothScroll('#portfolio')" *ngIf="userExist">
               <div class="nav-links">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" aria-hidden="true" data-slot="icon" class="nav-icons" width="24">
@@ -134,7 +134,7 @@
         </div>
         <!--fin profile-->
 
-        <div *ngIf="companies" id="portfolio" class="card Team-size">
+        <div *ngIf="companies && userExist" id="portfolio" class="card Team-size">
           <div class="card-body">
             <div class="row gutters">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

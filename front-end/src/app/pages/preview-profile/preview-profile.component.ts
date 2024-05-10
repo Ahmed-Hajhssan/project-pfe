@@ -9,6 +9,7 @@ import { ViewportScroller } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { currently_raising } from '../../shared/currently_raising';
 import { previous_round } from '../../shared/previous_round';
+import { MatchMakingService } from '../../shared/match-making-service';
 
 
 interface Member {
@@ -59,13 +60,17 @@ export class PreviewProfileComponent implements OnInit {
   questions: any = [];
   squestions: question[] = [];
   faChevronDown = faChevronDown;
+  matchmaking_list: any[] = [];
+  userId:any;
+  userExist:boolean=false;
 
   constructor(
     public authService: AuthService,
     private actRoute: ActivatedRoute,
     private viewportScroller: ViewportScroller,
     private elementRef: ElementRef,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private matchMakingService: MatchMakingService,
   ) { }
 
   ngOnInit(): void {
@@ -79,12 +84,26 @@ export class PreviewProfileComponent implements OnInit {
       this.fetchMembers();
       this.fetchFiles();
       this.getSectors();
+      this.permission();
+
     });
     this.authService.getCurrentlyRaising(id).subscribe((res) => {
       this.raising = res;
     });
     this.fetchPreviousRounds();
     this.fetchQuestions();
+  }
+
+  permission() {
+    let userId = localStorage.getItem('userId');
+    this.matchMakingService.getUser(userId).subscribe((res) => {
+      this.matchmaking_list = res.matchmakings_list;
+      let id = this.actRoute.snapshot.paramMap.get('id');
+      console.log(this.matchmaking_list.includes(id) || userId == id)
+      if (this.matchmaking_list.includes(id) || userId == id) {
+        this.userExist=true
+      }
+    })
   }
 
   smoothScroll(target: string) {

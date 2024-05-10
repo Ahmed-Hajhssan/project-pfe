@@ -146,7 +146,7 @@ export class MatchMakingComponent implements OnInit {
   }
 
   inList(id: any): boolean {
-    if (this.requests_sent.includes(id) || this.requests_received.includes(id) || this.matchmaking_list.includes(id)) {
+    if (this.requests_sent.includes(id) || this.matchmaking_list.includes(id)) {
       return true
     }
     else {
