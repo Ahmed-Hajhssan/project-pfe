@@ -13,6 +13,7 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
 import { ChatComponent } from './pages/chat/chat.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   {path:'login', component:LoginComponent},
   {path:'sign-Up', component:RegisterComponent},
   {path:'Profile/:id', component:ProfileComponent, canActivate:[RouteGuard]},
@@ -22,7 +23,7 @@ const routes: Routes = [
   {path:'forget-password', component:ForgetPasswordComponent},
   {path:'reset/:token', component:ResetComponent},
   {path:'matchmaking/:id', component:MatchMakingComponent, canActivate:[RouteGuard]},
-  {path:'messagerie', component: ChatComponent, canActivate:[RouteGuard]},
+  {path:'chat/:id', component: ChatComponent, canActivate:[RouteGuard]},
 ];
 
 @NgModule({

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../../shared/chat-service';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -8,19 +10,38 @@ import { ChatService } from '../../shared/chat-service';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  public message: string;
-  public messages: string[] = [];
+  messages: any[] = [];
+  message: string = "";
+  receiverId: string = "";
+  userId = localStorage.getItem('userId');
+  private messageSubscription: Subscription;
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService,private actRoute: ActivatedRoute) {
+   }
 
   ngOnInit(): void {
-    this.chatService.getMessages().subscribe((message: string) => {
-      this.messages.push(message);
+    this.receiverId=this.actRoute.snapshot.paramMap.get('id')||"";
+    const room = [this.userId,this.receiverId].sort().join(", ");
+    this.chatService.connectToSocket(room)
+    this.chatService.requestMessages(this.userId||"", this.receiverId);
+    this.messageSubscription = this.chatService.receiveMessage().subscribe((data: any) => {
+      this.messages = data;
+      console.log(this.messages);
     });
+    this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
+      this.messages.push(data);
+    });
+  }
+  ngOnDestroy(): void {
+    this.messageSubscription.unsubscribe();
   }
 
   public sendMessage(): void {
-    this.chatService.sendMessage(this.message);
-    this.message = '';
+    if (this.message.trim() === '') {
+      return; // Don't send empty messages
+    }
+    // Emit the message to the server
+    this.chatService.sendMessage(this.userId||"", this.receiverId, this.message);
+    this.message = "";
   }
 }
