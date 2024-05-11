@@ -3,6 +3,10 @@ const path = require('path')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const app = express()
+
+
+
 // Connecting with mongo db
 mongoose
   .connect('mongodb://localhost:27017/Project')
@@ -17,7 +21,7 @@ const userRoute = require('./routes/user.route')
 const entrepreneurRoute = require('./routes/entrepreneur.route')
 const investorRoute = require('./routes/investor.route')
 
-const app = express()
+
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
@@ -37,20 +41,34 @@ const server = app.listen(port, () => {
   console.log('Connected to port ' + port)
 })
 
-const io = require('socket.io')(server); 
+const http = require("http");
+const socketIO = require("socket.io");
+const server2 = http.createServer(app);
+const io = socketIO(server2, {
+  cors: {
+    origin: "*",
+  },
+});
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("User connected: " + socket.id);
 
-  socket.on('message', (message) => {
-    console.log(message);
-    io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
+  socket.on("message", (message) => {
+    console.log("Received message: " + message);
+    io.emit("message", message); // Emit the message to all connected clients
   });
 
-  socket.on('disconnect', () => {
-    console.log('a user disconnected!');
+  socket.on("disconnect", () => {
+    console.log("User disconnected: " + socket.id);
   });
 });
+
+const port2 = process.env.PORT || 3000;
+server2.listen(port2, () => {
+  console.log(`Server started on port ${port2}`);
+});
+
+
 
 // Find 404 and hand over to error handler
 app.use((req, res, next) => {

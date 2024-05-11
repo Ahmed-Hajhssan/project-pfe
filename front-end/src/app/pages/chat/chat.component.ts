@@ -8,21 +8,19 @@ import { ChatService } from '../../shared/chat-service';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  newMessage: string;
-  messageList: string[] = [];
+  public message: string;
+  public messages: string[] = [];
 
-  constructor(private chatService: ChatService){
+  constructor(private chatService: ChatService) { }
+
+  ngOnInit(): void {
+    this.chatService.getMessages().subscribe((message: string) => {
+      this.messages.push(message);
+    });
   }
 
-  ngOnInit(){
-    this.chatService.getNewMessage().subscribe((message: string) => {
-      this.messageList.push(message);
-      console.log('ngOnInit works !!')
-    })
-  }
-
-  sendMessage() {
-    this.chatService.sendMessage(this.newMessage);
-    this.newMessage = '';
+  public sendMessage(): void {
+    this.chatService.sendMessage(this.message);
+    this.message = '';
   }
 }
