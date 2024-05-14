@@ -69,11 +69,12 @@ io.on('connection', (socket) => {
         senderId: data.senderId,
         receiverId: data.receiverId,
         message: data.message,
+        timestamp: Date(),
       });
       await newchat.save();
       console.log('Message saved to MongoDB.');
       // Emit the message to the appropriate users
-      io.to(room).emit('message', data);
+      io.to(room).emit('message', newchat);
     } catch (error) {
       console.error('Error saving message to MongoDB:', error);
     }

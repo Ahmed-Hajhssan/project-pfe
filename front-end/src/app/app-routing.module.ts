@@ -23,7 +23,7 @@ const routes: Routes = [
   {path:'forget-password', component:ForgetPasswordComponent},
   {path:'reset/:token', component:ResetComponent},
   {path:'matchmaking/:id', component:MatchMakingComponent, canActivate:[RouteGuard]},
-  {path:'chat/:id', component: ChatComponent, canActivate:[RouteGuard]},
+  {path:'chat', component: ChatComponent, canActivate:[RouteGuard]},
 ];
 
 @NgModule({
