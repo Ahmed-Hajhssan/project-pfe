@@ -13,7 +13,7 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
 import { ChatComponent } from './pages/chat/chat.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {path: '', redirectTo: '/login', pathMatch: 'full' },
   {path:'login', component:LoginComponent},
   {path:'sign-Up', component:RegisterComponent},
   {path:'Profile/:id', component:ProfileComponent, canActivate:[RouteGuard]},

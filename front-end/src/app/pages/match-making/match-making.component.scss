@@ -512,6 +512,8 @@ label {
   backdrop-filter: blur(10px);
   min-width: 380px;
   min-height: 150px;
+  max-height: 500px;
+  overflow-y: auto;
   width: 550px;
 }
 
