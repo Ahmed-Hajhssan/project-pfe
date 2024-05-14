@@ -136,6 +136,8 @@ export class AuthService {
               this.router.navigate([`/Profile/${this.userId}`]);
             if (this.role == "investor")
               this.router.navigate([`/investorProfile/${this.userId}`]);
+            if (this.role == "admin")
+              this.router.navigate([`/admin/${this.userId}`]);
             this.logoutTimer = setTimeout(() => { this.logout() }, res.expiresIn * 1000);
             const now = new Date();
             const expiresDate = new Date(now.getTime() + (res.expiresIn * 1000));

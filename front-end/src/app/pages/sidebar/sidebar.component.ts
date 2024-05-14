@@ -17,7 +17,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   id:any;
   userRole: any;
 
-  constructor(private renderer: Renderer2, private authService: AuthService,private actRoute: ActivatedRoute) { }
+  constructor(private renderer: Renderer2, private authService: AuthService, private actRoute: ActivatedRoute) { }
 
 
   ngOnInit() {
@@ -35,6 +35,12 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authenticationSub.unsubscribe();
+  }
+
+  
+  navigateToChat(): string{
+    let url = `/chat/${this.id}`;
+    return url
   }
 
   getMatchmakingUrl(): string{
