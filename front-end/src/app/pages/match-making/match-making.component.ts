@@ -157,20 +157,26 @@ export class MatchMakingComponent implements OnInit {
   request(receiverId: any) {
     let senderId = this.id;
     this.matchMakingService.sendRequest(senderId, receiverId).subscribe();
-    this.ngOnInit();
+    setTimeout(() => {
+      this.ngOnInit();
+    }, 100);
   }
 
   acceptRequest(senderId: any) {
     let receiverId = this.id;
     this.matchMakingService.acceptRequest(senderId, receiverId).subscribe();
-    this.ngOnInit();
+    setTimeout(() => {
+      this.ngOnInit();
+    }, 100);
     console.log('receiverid', receiverId)
   }
 
   declineRequest(senderId: any) {
     let receiverId = this.id;
     this.matchMakingService.declineRequest(senderId, receiverId).subscribe();
-    this.ngOnInit();
+    setTimeout(() => {
+      this.ngOnInit();
+    }, 100);
   }
 
   showMore(): void {

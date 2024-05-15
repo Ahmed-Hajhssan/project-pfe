@@ -29,7 +29,7 @@ export class ChatService {
   }
 
   sendMessage(senderId: string, receiverId: string, message: string) {
-    this.socket.emit('sendMessage', { senderId, receiverId, message });
+    this.socket.emit('message', { senderId, receiverId, message });
   }
 
 

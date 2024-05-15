@@ -41,6 +41,16 @@ export class MatchMakingService {
     return this.http.put<any>(url,{});
   }
 
+  countChats(): Observable<any> {
+    const url = `${this.baseUrl}/getChats`;
+    return this.http.get(url);
+  }
+
+  countMatchmakings(): Observable<any> {
+    const url = `${this.baseUrl}/getMatchmakings`;
+    return this.http.get(url);
+  }
+
   getEntrepreneurs(): Observable<any> {
     const url = `${this.baseUrl}/api/getEntrepreneurs`;
     return this.http.get(url);

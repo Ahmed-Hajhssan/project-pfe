@@ -65,6 +65,9 @@ export class ChatComponent implements OnInit {
   }
 
   getConv(conv:any){
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
     this.convList.forEach((conv)=>{
       conv.active = false;
     })
@@ -77,7 +80,7 @@ export class ChatComponent implements OnInit {
     const room = [this.userId,this.receiverId].sort().join(", ");
     this.chatService.connectToSocket(room)
     this.chatService.requestMessages(this.userId||"", this.receiverId);
-    this.messageSubscription = this.chatService.receiveMessage().subscribe((data: any) => {
+    this.chatService.receiveMessage().subscribe((data: any) => {
       this.messages = data;
       console.log(this.messages);
       setTimeout(() => {
