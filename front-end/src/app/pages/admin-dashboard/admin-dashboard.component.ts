@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../shared/admin-service';
 import { InvestorModel } from '../../shared/investor-model';
 import { AuthModel } from '../../shared/auth-model';
+import { MatchMakingService } from '../../shared/match-making-service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -13,15 +15,21 @@ export class AdminDashboardComponent implements OnInit{
 
   investors: InvestorModel[] = [];
   entrepreneurs: AuthModel[] = [];
+  matchmakings:number;
+  chats:number;
   
 
   constructor(
     public adminService: AdminService,
+    public matchmakingService: MatchMakingService,
+    private actRoute: ActivatedRoute,
   ){}
 
   ngOnInit(): void {
     this.getInvestors();
     this.getEntrepreneurs();
+    this.countChats();
+    this.countMatchmaking()
   }
 
   getInvestors(): void {
@@ -40,4 +48,18 @@ export class AdminDashboardComponent implements OnInit{
       );
   }
 
+
+  countChats(){
+    this.matchmakingService.countChats()
+      .subscribe((res)=>{
+        this.chats = res;
+    });
+  }
+
+  countMatchmaking(){
+    this.matchmakingService.countMatchmakings()
+      .subscribe((res)=>{
+        this.matchmakings = res;
+    });
+  }
 }

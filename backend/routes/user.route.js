@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-
+let Chat = require('../models/Chat');
 let User = require('../models/User');
 let Entrepreneur = require('../models/Entrepreneur');
 let Investor = require('../models/Investor');
@@ -148,6 +148,31 @@ userRoute.put('/decline/:senderId/:receiverId', async (req, res, next) => {
     });
 
 })
+
+userRoute.route('/getChats').get(async (req, res, next) => {
+    try {
+        const messages = await Chat.countDocuments()
+        res.json(messages);
+    } catch (error) {
+        next(error);
+    }
+});
+
+userRoute.route('/getMatchmakings').get(async (req, res, next) => {
+    try {
+        const users = await User.find()
+        let count = 0;
+        users.forEach(user => {
+            if(user.matchmakings_list){
+                count += user.matchmakings_list.length;
+            }
+        })
+        count = count / 2;
+        res.json(count);
+    } catch (error) {
+        next(error);
+    }
+});
 
 // reset password *
 userRoute.post('/reset-password', async (req, res, next) => {
