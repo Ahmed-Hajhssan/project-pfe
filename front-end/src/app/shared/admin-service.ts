@@ -29,14 +29,10 @@ export class AdminService {
       .put(api, data, { headers: this.headers })
       .pipe(catchError(this.handleError));
   }
-  getAllStatuses(): Observable<{ id: string, active: boolean }[]> {
-    return this.http.get<{ id: string, active: boolean }[]>('/getAllStatus');
+  getAllStatuses(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/getAllStatus`);
   }
 
-  getStatus(userId: string): Observable<any> {
-    const url = `${this.baseUrl}/getStatus/${userId}`;
-    return this.http.get<any>(url);
-  }
 
   handleError(error: HttpErrorResponse) {
     let msg = '';

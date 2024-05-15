@@ -25,7 +25,7 @@
               <th scope="col">Name</th>
               <th scope="col">Email</th>
               <th scope="col">Phone No</th>
-              <th scope="col center">Status</th>
+              <th scope="col center">Disactivate</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +45,7 @@
               <td>{{ investor.phone_number}}</td>
               <td class="text-center edit-block">
                 
-                <input type="checkbox" [checked]="status" name="status" (change)="updateStatus(investor._id, $event)">
+                <input type="checkbox" [checked]="getStatus(investor._id)" name="status" (change)="updateStatus(investor._id, $event)">
               </td>
             </tr>
           </tbody>
@@ -59,7 +59,7 @@
               <th scope="col">Name</th>
               <th scope="col">Email</th>
               <th scope="col">Website Url</th>
-              <th scope="col center">Update</th>
+              <th scope="col center">Disactivate</th>
             </tr>
           </thead>
           <tbody>
@@ -78,14 +78,8 @@
               <td>{{ entrepreneur.email}}</td>
               <td>{{ entrepreneur.website_url}}</td>
               <td class="text-center edit-block">
-                <span class="edit">
-                  <button type="button" class="custom-button"><fa-icon [icon]="faTrashCan"
-                      class="custom-red-icon"></fa-icon></button>
-                </span>&nbsp;
-                <span class="delete">
-                  <button type="button" class="custom-button" data-bs-toggle="modal"
-                    data-bs-target="#edit-member"><fa-icon [icon]="faPenToSquare"></fa-icon></button>
-                </span>
+                
+                <input type="checkbox" [checked]="getStatus(entrepreneur._id)" name="status" (change)="updateStatus(entrepreneur._id, $event)">
               </td>
             </tr>
           </tbody>

@@ -50,15 +50,13 @@ userRoute.route('/update/:id').put(async (req, res, next) => {
  // get all statuses
 userRoute.route('/getAllStatus').get(async (req, res, next) => {
     try {
-      const users = await User.find({}, 'active'); 
+      const users = await User.find({active: "false"}); 
   
-      if (!users || users.length === 0) {
+      if (!users) {
         return res.status(404).json({ error: 'No users found' });
-      }
-  
-      const statuses = users.map(user => ({ id: user._id, active: user.active })); 
-  
-      res.json(statuses); 
+      } 
+      const userIds = users.map(user => user._id);
+      res.json(userIds); 
     } catch (error) {
       next(error);
     }

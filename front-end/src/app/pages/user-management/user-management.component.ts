@@ -18,7 +18,7 @@ export class UserManagementComponent implements OnInit {
   id: any;
   userId: any;
   status: boolean;
-  statuses: { id: string, active: boolean }[];
+  inActive: any[] = []
   isChecked: boolean[];
 
 
@@ -32,6 +32,7 @@ export class UserManagementComponent implements OnInit {
     console.log('adminId', this.id)
     this.getInvestors();
     this.getEntrepreneurs();
+    this.getAllStatuses();
   }
 
   getInvestors(): void {
@@ -70,7 +71,7 @@ export class UserManagementComponent implements OnInit {
   getAllStatuses(): void {
     this.adminService.getAllStatuses().subscribe(
       (data) => {
-        this.statuses = data;
+        this.inActive = data;
       },
       (error) => {
         console.error('Error fetching user statuses:', error);
@@ -78,23 +79,13 @@ export class UserManagementComponent implements OnInit {
     );
   }
 
-  getStatus(userId: any): void {
-    console.log('ab', userId)
-    this.adminService.getStatus(userId).subscribe(
-      (status: boolean) => {
-        this.status = status;
-        console.log(this.status);
-        const checkbox = document.querySelectorAll<HTMLInputElement>('input[name="status"]');
-        checkbox.forEach((checkbox: HTMLInputElement) => {
-          if (checkbox.value === String(this.status)) {
-            checkbox.checked = true;
-          }
-        });
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
+  getStatus(userId: any): boolean {
+    console.log(this.inActive)
+    if(this.inActive.includes(userId)){
+      return true;
+    }else{
+      return false;
+    }
   }
 
 }
