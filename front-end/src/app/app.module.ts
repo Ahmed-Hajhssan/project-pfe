@@ -19,11 +19,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetComponent } from './pages/reset/reset.component';
 import { ForgetPasswordComponent } from './pages/forget-password/forget-password.component';
-import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { BackgroundimageComponent } from './backgroundimage/backgroundimage.component';
 import { Register2Component } from './pages/register-2/register-2.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import {TabsModule} from 'ngx-bootstrap/tabs';
@@ -35,7 +33,6 @@ import { PreviewProfileComponent } from './pages/preview-profile/preview-profile
 import { InvestorProfileComponent } from './pages/investor-profile/investor-profile.component';
 import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 import { MatchMakingComponent } from './pages/match-making/match-making.component';
-import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/matchmaking-requests.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
@@ -51,10 +48,8 @@ import { AdminSidebarComponent } from './pages/admin-sidebar/admin-sidebar.compo
     RegisterComponent,
     ResetComponent,
     ForgetPasswordComponent,
-    HomeComponent,
     HeaderComponent,
     FooterComponent,
-    BackgroundimageComponent,
     Register2Component,
     ProfileComponent,
     SidebarComponent,
@@ -63,7 +58,6 @@ import { AdminSidebarComponent } from './pages/admin-sidebar/admin-sidebar.compo
     InvestorProfileComponent,
     PreviewProfileInvestorComponent,
     MatchMakingComponent,
-    MatchmakingRequestsComponent,
     ChatComponent,
     AdminDashboardComponent,
     UserManagementComponent,
