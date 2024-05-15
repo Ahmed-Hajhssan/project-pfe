@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
   socket.id = senderId;
   console.log(senderId+' connected to room: "' + room+'"');
 
-  socket.on('sendMessage', async (data) => {
+  socket.on('message', async (data) => {
     console.log('Received message: ' + data.message);
     // Save the message to MongoDB
     try {
