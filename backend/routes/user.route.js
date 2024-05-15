@@ -32,6 +32,39 @@ userRoute.route('/read/:id').get(async (req, res, next) => {
     }
 });
 
+// Update user
+userRoute.route('/update/:id').put(async (req, res, next) => {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+  
+      // Wait for a short delay to ensure the update is completed
+      await new Promise(resolve => setTimeout(resolve, 1000));
+  
+      const user = await Investor.findById(updatedUser._id);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+ // get all statuses
+userRoute.route('/getAllStatus').get(async (req, res, next) => {
+    try {
+      const users = await User.find({}, 'active'); 
+  
+      if (!users || users.length === 0) {
+        return res.status(404).json({ error: 'No users found' });
+      }
+  
+      const statuses = users.map(user => ({ id: user._id, active: user.active })); 
+  
+      res.json(statuses); 
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+
 // request
 userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
     try {
@@ -271,7 +304,8 @@ userRoute.post('/sign-up', (req, res) => {
                     if (result) {
                         if (req.body.role === "entrepreneur") {
                             const entrepreneurModel = new Entrepreneur({
-                                _id: userModel._id
+                                _id: userModel._id,
+                                email: userModel.email
                             })
                             entrepreneurModel.save()
                                 .then(result => {
@@ -287,7 +321,8 @@ userRoute.post('/sign-up', (req, res) => {
                                 })
                         } else if (req.body.role === "investor") {
                             const investorModel = new Investor({
-                                _id: userModel._id
+                                _id: userModel._id,
+                                email: userModel.email
                             })
                             investorModel.save()
                                 .then(result => {
@@ -311,7 +346,7 @@ userRoute.post('/sign-up', (req, res) => {
 // login user
 userRoute.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email, active: true }); 
 
         if (!user) {
             return res.status(401).json({ message: 'User not found' });

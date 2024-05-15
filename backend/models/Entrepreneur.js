@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // Define collection and schema
 let Entrepreneur = new Schema({
+   email: {type: String, required: false},
    name: {type: String, required: false},
    description: {type: String, required: false},
    website_url: {type: String, required: false},

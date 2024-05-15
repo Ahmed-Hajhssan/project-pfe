@@ -23,6 +23,21 @@ export class AdminService {
     return this.http.get<any[]>(`${this.baseUrl}/api/getEntrepreneurs`);
   }
 
+  updateUser(id: any, data: any): Observable<any> {
+    let api = `${this.baseUrl}/update/${id}`;
+    return this.http
+      .put(api, data, { headers: this.headers })
+      .pipe(catchError(this.handleError));
+  }
+  getAllStatuses(): Observable<{ id: string, active: boolean }[]> {
+    return this.http.get<{ id: string, active: boolean }[]>('/getAllStatus');
+  }
+
+  getStatus(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/getStatus/${userId}`;
+    return this.http.get<any>(url);
+  }
+
   handleError(error: HttpErrorResponse) {
     let msg = '';
     if (error.error instanceof ErrorEvent) {

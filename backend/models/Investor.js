@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 let Investor = new mongoose.Schema({
+  email: {type: String, required: false},
   name: { type: String, required: false },
   description: { type: String, required: false },
   phone_number: { type: String, required: false },

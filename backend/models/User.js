@@ -7,6 +7,8 @@ let User = new mongoose.Schema({
   request_sent: [{ type: mongoose.Schema.Types.ObjectId, required: false }],
   request_received : [{ type: mongoose.Schema.Types.ObjectId, required: false }],
   matchmakings_list: [{ type: mongoose.Schema.Types.ObjectId, required: false }],
+  active: { type: Boolean, required: false, default: true },
+
 })
 
 module.exports = mongoose.model('User', User)

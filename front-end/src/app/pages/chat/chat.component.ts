@@ -31,7 +31,13 @@ export class ChatComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getConvList()
+    this.getConvList();
+    this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
+      this.messages.push(data);
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 5);
+    });
   }
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe();
@@ -78,12 +84,12 @@ export class ChatComponent implements OnInit {
         this.scrollToBottom();
       }, 5);
     });
-    this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
-      this.messages.push(data);
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 5);
-    });
+    // this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
+    //   this.messages.push(data);
+    //   setTimeout(() => {
+    //     this.scrollToBottom();
+    //   }, 5);
+    // });
   }
 
   getConvList(){

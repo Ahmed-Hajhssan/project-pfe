@@ -64,13 +64,13 @@
                     <ul class="m-b-0" *ngFor="let message of messages">
                         <li class="clearfix" *ngIf="message.senderId==userId">
                             <div class="message-data" style="margin-left: 85%;">
-                                <span class="message-data-time">{{message.timestamp}}</span>
+                                <span class="message-data-time">{{message.timestamp | date}}</span>
                             </div>
                             <div class="message other-message float-right"> {{message.message}} </div>
                         </li>
                         <li class="clearfix" *ngIf="message.senderId!=userId">
                             <div class="message-data">
-                                <span class="message-data-time">{{message.timestamp}}</span>
+                                <span class="message-data-time">{{message.timestamp | date }}</span>
                             </div>
                             <div class="message my-message">{{message.message}}</div>                                    
                         </li>                               
