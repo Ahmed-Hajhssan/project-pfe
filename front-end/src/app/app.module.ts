@@ -37,6 +37,9 @@ import { PreviewProfileInvestorComponent } from './pages/preview-profile-investo
 import { MatchMakingComponent } from './pages/match-making/match-making.component';
 import { MatchmakingRequestsComponent } from './pages/matchmaking-requests/matchmaking-requests.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
+import { AdminSidebarComponent } from './pages/admin-sidebar/admin-sidebar.component';
 
 
 
@@ -62,6 +65,9 @@ import { ChatComponent } from './pages/chat/chat.component';
     MatchMakingComponent,
     MatchmakingRequestsComponent,
     ChatComponent,
+    AdminDashboardComponent,
+    UserManagementComponent,
+    AdminSidebarComponent,
     
 
   ],

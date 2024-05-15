@@ -1,0 +1,102 @@
+<div class="d-flex">
+  <app-admin-sidebar></app-admin-sidebar>
+  <div class="content" id="content"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <div class="dashboard">
+
+    <main class="content-wrap">
+      <header class="content-head">
+        <h1>Users Management</h1>
+
+      </header>
+
+      <div class="container mt-4">
+        <!-- No data message -->
+        <p *ngIf="investors.length == 0 && entrepreneurs.length == 0" class="no-data text-center">There is no user yet!</p>
+        <!-- Users list -->
+        <div class="title">Investors</div>
+        <table class="table table-bordered">
+          <thead class="table-active">
+            <tr>
+              <th scope="col">Profile image</th>
+              <th scope="col">User ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone No</th>
+              <th scope="col center">Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let investor of investors">
+              <td class="text-center">
+                <div class="card">
+                  <div class="image-frame">
+                    <img *ngIf="investor.image_profile" [src]="'http://localhost:4000/api/uploads/' + investor.image_profile" alt="Profile Picture">
+                    <img *ngIf="!investor.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
+                          alt="Investor Image" class="profile_picture">
+                  </div>
+                </div>
+              </td>
+              <th scope="row">{{ investor._id}}</th>
+              <td>{{ investor.name}}</td>
+              <td>{{ investor.email}}</td>
+              <td>{{ investor.phone_number}}</td>
+              <td class="text-center edit-block">
+                <span class="edit">
+                  <button type="button" class="custom-button"><fa-icon [icon]="faTrashCan"
+                      class="custom-red-icon"></fa-icon></button>
+                </span>&nbsp;
+                <span class="delete">
+                  <button type="button" class="custom-button" data-bs-toggle="modal"
+                    data-bs-target="#edit-member"><fa-icon [icon]="faPenToSquare"></fa-icon></button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="title mt-5">Entrepreneurs</div>
+        <table class="table table-bordered">
+          <thead class="table-active">
+            <tr>
+              <th scope="col">Profile image</th> 
+              <th scope="col">User ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Website Url</th>
+              <th scope="col center">Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entrepreneur of entrepreneurs">
+              <td class="text-center">
+                <div class="card">
+                  <div class="image-frame">
+                    <img *ngIf="entrepreneur.image_profile" [src]="'http://localhost:4000/api/uploads/' + entrepreneur.image_profile" alt="Profile Picture">
+                    <img *ngIf="!entrepreneur.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
+                          alt="Investor Image" class="profile_picture">
+                  </div>
+                </div>
+              </td>
+              <th scope="row">{{ entrepreneur._id}}</th>
+              <td>{{ entrepreneur.name}}</td>
+              <td>{{ entrepreneur.email}}</td>
+              <td>{{ entrepreneur.website_url}}</td>
+              <td class="text-center edit-block">
+                <span class="edit">
+                  <button type="button" class="custom-button"><fa-icon [icon]="faTrashCan"
+                      class="custom-red-icon"></fa-icon></button>
+                </span>&nbsp;
+                <span class="delete">
+                  <button type="button" class="custom-button" data-bs-toggle="modal"
+                    data-bs-target="#edit-member"><fa-icon [icon]="faPenToSquare"></fa-icon></button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>

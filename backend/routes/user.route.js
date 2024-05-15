@@ -21,6 +21,7 @@ app.use((req, res, next) => {
     next();
 })
 
+
 // Get user
 userRoute.route('/read/:id').get(async (req, res, next) => {
     try {

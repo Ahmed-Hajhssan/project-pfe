@@ -11,6 +11,8 @@ import { ResetComponent } from './pages/reset/reset.component';
 import { PreviewProfileInvestorComponent } from './pages/preview-profile-investor/preview-profile-investor.component';
 import { MatchMakingComponent } from './pages/match-making/match-making.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -23,7 +25,10 @@ const routes: Routes = [
   {path:'forget-password', component:ForgetPasswordComponent},
   {path:'reset/:token', component:ResetComponent},
   {path:'matchmaking/:id', component:MatchMakingComponent, canActivate:[RouteGuard]},
-  {path:'chat', component: ChatComponent, canActivate:[RouteGuard]},
+  {path:'chat/:id', component: ChatComponent, canActivate:[RouteGuard]},
+  {path:'admin/:id', component: AdminDashboardComponent, canActivate:[RouteGuard]},
+  {path:'users-management/:id', component: UserManagementComponent, canActivate:[RouteGuard]},
+
 ];
 
 @NgModule({
