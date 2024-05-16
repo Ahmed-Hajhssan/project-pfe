@@ -53,11 +53,13 @@ body{
 }
 
 .people-list .chat-list img {
-    width: 45px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%
 }
 
 .people-list img {
+    
     float: left;
     border-radius: 50%
 }
@@ -80,12 +82,13 @@ body{
 .chat .chat-header img {
     float: left;
     border-radius: 40px;
-    width: 40px
+    width: 55px;
+    height: 55px;
 }
 
 .chat .chat-header .chat-about {
     float: left;
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .chat .chat-history {
@@ -255,4 +258,10 @@ body{
         height: calc(100vh - 350px);
         overflow-x: auto
     }
+}
+
+.title{
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 25px;
 }
