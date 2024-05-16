@@ -37,6 +37,7 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { AdminSidebarComponent } from './pages/admin-sidebar/admin-sidebar.component';
+import { FeedComponent } from './pages/feed/feed.component';
 
 
 
@@ -62,6 +63,7 @@ import { AdminSidebarComponent } from './pages/admin-sidebar/admin-sidebar.compo
     AdminDashboardComponent,
     UserManagementComponent,
     AdminSidebarComponent,
+    FeedComponent,
     
 
   ],

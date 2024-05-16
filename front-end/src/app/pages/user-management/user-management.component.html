@@ -14,7 +14,8 @@
 
       <div class="container mt-4">
         <!-- No data message -->
-        <p *ngIf="investors.length == 0 && entrepreneurs.length == 0" class="no-data text-center">There is no user yet!</p>
+        <p *ngIf="investors.length == 0 && entrepreneurs.length == 0" class="no-data text-center">There is no user yet!
+        </p>
         <!-- Users list -->
         <div class="title">Investors</div>
         <table class="table table-bordered">
@@ -33,9 +34,10 @@
               <td class="text-center">
                 <div class="card">
                   <div class="image-frame">
-                    <img *ngIf="investor.image_profile" [src]="'http://localhost:4000/api/uploads/' + investor.image_profile" alt="Profile Picture">
+                    <img *ngIf="investor.image_profile"
+                      [src]="'http://localhost:4000/api/uploads/' + investor.image_profile" alt="Profile Picture">
                     <img *ngIf="!investor.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
-                          alt="Investor Image" class="profile_picture">
+                      alt="Investor Image" class="profile_picture">
                   </div>
                 </div>
               </td>
@@ -43,9 +45,12 @@
               <td>{{ investor.name}}</td>
               <td>{{ investor.email}}</td>
               <td>{{ investor.phone_number}}</td>
-              <td class="text-center edit-block">
-                
-                <input type="checkbox" [checked]="getStatus(investor._id)" name="status" (change)="updateStatus(investor._id, $event)">
+              <td class="text-center">
+                <div class="checkbox-wrapper-34">
+                  <input class='tgl tgl-ios' id='toggle-34' type="checkbox" [checked]="getStatus(investor._id)"
+                    name="status" (change)="updateStatus(investor._id, $event)">
+                  <label class='tgl-btn' for='toggle-34'></label>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -54,7 +59,7 @@
         <table class="table table-bordered">
           <thead class="table-active">
             <tr>
-              <th scope="col">Profile image</th> 
+              <th scope="col">Profile image</th>
               <th scope="col">User ID</th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
@@ -67,9 +72,10 @@
               <td class="text-center">
                 <div class="card">
                   <div class="image-frame">
-                    <img *ngIf="entrepreneur.image_profile" [src]="'http://localhost:4000/api/uploads/' + entrepreneur.image_profile" alt="Profile Picture">
+                    <img *ngIf="entrepreneur.image_profile"
+                      [src]="'http://localhost:4000/api/uploads/' + entrepreneur.image_profile" alt="Profile Picture">
                     <img *ngIf="!entrepreneur.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
-                          alt="Investor Image" class="profile_picture">
+                      alt="Investor Image" class="profile_picture">
                   </div>
                 </div>
               </td>
@@ -77,9 +83,12 @@
               <td>{{ entrepreneur.name}}</td>
               <td>{{ entrepreneur.email}}</td>
               <td>{{ entrepreneur.website_url}}</td>
-              <td class="text-center edit-block">
-                
-                <input type="checkbox" [checked]="getStatus(entrepreneur._id)" name="status" (change)="updateStatus(entrepreneur._id, $event)">
+              <td class="text-center">
+                <div class="checkbox-wrapper-34">
+                  <input class='tgl tgl-ios' id='toggle-35' type="checkbox" [checked]="getStatus(entrepreneur._id)"
+                    name="status" (change)="updateStatus(entrepreneur._id, $event)">
+                  <label class='tgl-btn' for='toggle-35'></label>
+                </div>
               </td>
             </tr>
           </tbody>

@@ -13,6 +13,7 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
 import { ChatComponent } from './pages/chat/chat.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
+import { FeedComponent } from './pages/feed/feed.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path:'chat/:id', component: ChatComponent, canActivate:[RouteGuard]},
   {path:'admin/:id', component: AdminDashboardComponent, canActivate:[RouteGuard]},
   {path:'users-management/:id', component: UserManagementComponent, canActivate:[RouteGuard]},
+  {path:'feed', component: FeedComponent, canActivate:[RouteGuard]},
 
 ];
 
