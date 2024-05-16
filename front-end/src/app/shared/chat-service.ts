@@ -25,9 +25,7 @@ export class ChatService {
     this.socket = io('http://localhost:3000', { query: { roomName,senderId } });
   }
 
-  getId(id : any) {
-    this.receiveMessage = id;
-  }
+
 
   sendMessage(senderId: string, receiverId: string, message: string) {
     this.socket.emit('message', { senderId, receiverId, message });
@@ -38,7 +36,7 @@ export class ChatService {
     this.socket.emit('requestMessages', { userId, otherUserId });
   }
 
-  receiveMessage(): Observable<any> {
+  receivedMessage(): Observable<any> {
     return new Observable(observer => {
       this.socket.on('requestedMessages', (messages: any) => {
         observer.next(messages);

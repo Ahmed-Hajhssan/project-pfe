@@ -51,11 +51,13 @@ export class ChatComponent implements OnInit {
   }
 
   countUnreadMessages(senderIds: any[]) {
+    const unread:any[]=[];
     for (let senderId of senderIds) {
       this.chatService.countUnreadMessages(senderId, this.userId || "").subscribe((res: any) => {
-        this.unread.push(res.unreadCount);
+        unread.push(res.unreadCount);
       });
     }
+    this.unread=unread;
     console.log(this.unread);
   }
 
@@ -108,7 +110,7 @@ export class ChatComponent implements OnInit {
     const room = [this.userId, this.receiverId].sort().join(", ");
     this.chatService.connectToSocket(room)
     this.chatService.requestMessages(this.userId || "", this.receiverId);
-    this.chatService.receiveMessage().subscribe((data: any) => {
+    this.chatService.receivedMessage().subscribe((data: any) => {
       this.messages = data;
       console.log(this.messages);
       setTimeout(() => {
@@ -120,7 +122,7 @@ export class ChatComponent implements OnInit {
       setTimeout(() => {
         this.scrollToBottom();
       }, 5);
-      this.countUnreadMessages(this.matchmamatchmaking_list);
+      console.log(this.unread);
     });
   }
 
