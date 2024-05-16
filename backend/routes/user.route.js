@@ -205,6 +205,30 @@ userRoute.route('/getMatchmakings').get(async (req, res, next) => {
     }
 });
 
+// count unread messages between two IDs
+userRoute.route('/unread/:senderId/:receiverId').get( async (req, res) => {
+    const { senderId, receiverId } = req.params;
+    try {
+        const unreadCount = await Chat.countDocuments({ senderId: senderId, receiverId: receiverId, read: false });
+        res.json({ unreadCount });
+    } catch (error) {
+        console.error("Error counting unread messages:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+userRoute.route('/markAsRead/:senderId/:receiverId').put( async (req, res) => {
+    const { senderId, receiverId } = req.params;
+    try {
+        // Update messages to mark them as read
+        const result = await Chat.updateMany({ senderId: senderId, receiverId: receiverId }, { $set: { read: true } });
+        res.json({ success: true, message: `All messages between ${senderId} and ${receiverId} marked as read.` });
+    } catch (error) {
+        console.error("Error marking messages as read:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+});
+
 // reset password *
 userRoute.post('/reset-password', async (req, res, next) => {
     try {
