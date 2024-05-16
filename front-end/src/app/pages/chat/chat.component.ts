@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../../shared/chat-service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatchMakingService } from '../../shared/match-making-service';
 import { AuthService } from '../../shared/auth-service';
 import { InvestorService } from '../../shared/investor-service';
@@ -19,28 +19,50 @@ export class ChatComponent implements OnInit {
   receiverId: string = "";
   userId = localStorage.getItem('userId');
   messageSubscription: Subscription;
-  convList:any[] = []
-  image:string = 'assets/images/3da39-no-user-image-icon-27.webp'
-  name:string;
+  convList: any[] = [];
+  image: string = 'assets/images/3da39-no-user-image-icon-27.webp';
+  name: string;
+  unread: number[] = [];
+  matchmamatchmaking_list: any[] = [];
+  profileUrl: string;
+  inConv: boolean = false;
 
   constructor(private chatService: ChatService,
     private actRoute: ActivatedRoute,
     private matchMakingService: MatchMakingService,
     public authService: AuthService,
     public investorService: InvestorService) {
-   }
+  }
 
   ngOnInit(): void {
     this.getConvList();
-    this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
-      this.messages.push(data);
+    setTimeout(() => {
+      this.countUnreadMessages(this.matchmamatchmaking_list);
       setTimeout(() => {
-        this.scrollToBottom();
-      }, 5);
-    });
+        this.getConv(this.convList[0], 0);
+      }, 100);
+      console.log(this.unread);
+    }, 100);
+
+
   }
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe();
+  }
+
+  countUnreadMessages(senderIds: any[]) {
+    const unread:any[]=[];
+    for (let senderId of senderIds) {
+      this.chatService.countUnreadMessages(senderId, this.userId || "").subscribe((res: any) => {
+        unread.push(res.unreadCount);
+      });
+    }
+    this.unread=unread;
+    console.log(this.unread);
+  }
+
+  markMessagesAsRead(senderId: string): void {
+    this.chatService.markMessagesAsRead(senderId, this.userId || "").subscribe()
   }
 
   scrollToBottom(): void {
@@ -57,48 +79,58 @@ export class ChatComponent implements OnInit {
       return; // Don't send empty messages
     }
     // Emit the message to the server
-    this.chatService.sendMessage(this.userId||"", this.receiverId, this.message);
+    this.chatService.sendMessage(this.userId || "", this.receiverId, this.message);
     this.message = "";
     setTimeout(() => {
       this.scrollToBottom();
     }, 5);
   }
 
-  getConv(conv:any){
+  getConv(conv: any, i: number) {
+    this.inConv = true;
     if (this.messageSubscription) {
       this.messageSubscription.unsubscribe();
     }
-    this.convList.forEach((conv)=>{
+    this.markMessagesAsRead(conv._id);
+    this.unread[i] = 0;
+    this.convList.forEach((conv) => {
       conv.active = false;
     })
     conv.active = true;
-    this.name=conv.name;
+    this.name = conv.name;
     this.image = 'assets/images/3da39-no-user-image-icon-27.webp';
     if (conv.image_profile)
-      this.image='http://localhost:4000/api/uploads/' + conv.image_profile;
-    this.receiverId=conv._id;
-    const room = [this.userId,this.receiverId].sort().join(", ");
+      this.image = 'http://localhost:4000/api/uploads/' + conv.image_profile;
+    if (this.role == "entrepreneur") {
+      this.profileUrl = "preview-profile-investor/" + conv._id
+    } else {
+      this.profileUrl = "preview-profile-entrepreneur/" + conv._id
+    }
+    this.receiverId = conv._id;
+    const room = [this.userId, this.receiverId].sort().join(", ");
     this.chatService.connectToSocket(room)
-    this.chatService.requestMessages(this.userId||"", this.receiverId);
-    this.chatService.receiveMessage().subscribe((data: any) => {
+    this.chatService.requestMessages(this.userId || "", this.receiverId);
+    this.chatService.receivedMessage().subscribe((data: any) => {
       this.messages = data;
       console.log(this.messages);
       setTimeout(() => {
         this.scrollToBottom();
       }, 5);
     });
-    // this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
-    //   this.messages.push(data);
-    //   setTimeout(() => {
-    //     this.scrollToBottom();
-    //   }, 5);
-    // });
+    this.messageSubscription = this.chatService.receiveMessages().subscribe((data: any) => {
+      this.messages.push(data);
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 5);
+      console.log(this.unread);
+    });
   }
 
-  getConvList(){
-    let convList:any[] = [];
+  getConvList() {
+    let convList: any[] = [];
     this.matchMakingService.getUser(this.userId).subscribe((res) => {
       let matchmaking_list = res.matchmakings_list;
+      this.matchmamatchmaking_list = res.matchmakings_list;
       if (this.role === "investor") {
         for (let id of matchmaking_list) {
           this.authService.getUser(id).subscribe(
@@ -112,7 +144,7 @@ export class ChatComponent implements OnInit {
         }
         this.convList = convList;
         console.log('entrepreneurs list', this.convList)
-      }else{
+      } else {
         for (let id of matchmaking_list) {
           this.investorService.getUser(id).subscribe(
             (user: any) => {
@@ -125,11 +157,11 @@ export class ChatComponent implements OnInit {
         }
         this.convList = convList;
         console.log('investors list', this.convList)
-        
-        
+
+
       }
-      
-      
+
+
     })
 
   }

@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ChatService {
 
   private socket: Socket;
+  private baseUrl = environment.domain;
 
 
   constructor(private http: HttpClient,private actRoute: ActivatedRoute) {
@@ -24,9 +25,7 @@ export class ChatService {
     this.socket = io('http://localhost:3000', { query: { roomName,senderId } });
   }
 
-  getId(id : any) {
-    this.receiveMessage = id;
-  }
+
 
   sendMessage(senderId: string, receiverId: string, message: string) {
     this.socket.emit('message', { senderId, receiverId, message });
@@ -37,7 +36,7 @@ export class ChatService {
     this.socket.emit('requestMessages', { userId, otherUserId });
   }
 
-  receiveMessage(): Observable<any> {
+  receivedMessage(): Observable<any> {
     return new Observable(observer => {
       this.socket.on('requestedMessages', (messages: any) => {
         observer.next(messages);
@@ -51,6 +50,14 @@ export class ChatService {
         observer.next(messages);
       });
     });
+  }
+
+  countUnreadMessages(senderId: string, receiverId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/unread/${senderId}/${receiverId}`);
+  }
+
+  markMessagesAsRead(senderId: string, receiverId: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/markAsRead/${senderId}/${receiverId}`, {});
   }
 
 }

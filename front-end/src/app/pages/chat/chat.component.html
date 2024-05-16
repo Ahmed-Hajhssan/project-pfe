@@ -22,12 +22,12 @@
                     </div>
                     <input type="text" class="form-control" placeholder="Search...">
                 </div>
-                <ul class="list-unstyled chat-list mt-2 mb-0" *ngFor="let conv of convList">
-                    <li class="clearfix" [class.active]="conv.active" (click)="getConv(conv)">
+                <ul class="list-unstyled chat-list mt-2 mb-0" *ngFor="let conv of convList; let i = index">
+                    <li class="clearfix" [class.active]="conv.active" (click)="getConv(conv,i)">
                         <img *ngIf="conv.image_profile" [src]="'http://localhost:4000/api/uploads/' + conv.image_profile" alt="avatar">
                         <img *ngIf="!conv.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp" alt="avatar">
                         <div class="about">
-                            <div class="name">{{conv.name}}</div>                                            
+                            <div class="name">{{conv.name}} <span *ngIf="unread[i]>0" class=" badge rounded-pill bg-danger" style="margin-left: 5px;">{{unread[i]}}</span></div>                                            
                         </div>
                     </li>
                     <!--<li class="clearfix active">
@@ -44,19 +44,13 @@
                 <div class="chat-header clearfix">
                     <div class="row">
                         <div class="col-lg-6">
-                            <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                            <a [href]="profileUrl" data-toggle="modal" data-target="#view_info">
                                 <img [src]="image" alt="avatar">
                             </a>
                             <div class="chat-about">
                                 <h6 class="m-b-0">{{name}}</h6>
                                 <small>Last seen: 2 hours ago</small>
                             </div>
-                        </div>
-                        <div class="col-lg-6 hidden-sm text-right">
-                            <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
-                            <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
-                            <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
-                            <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
                         </div>
                     </div>
                 </div>
