@@ -387,7 +387,8 @@ body {
 .content-wrap {
 	grid-area: content;
 	padding: 3em;
-	overflow: auto;
+	overflow: auto; 
+	padding-left: 65px;
 	
 	.content-head	{
 		display: flex;

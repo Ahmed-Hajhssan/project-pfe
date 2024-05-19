@@ -53,9 +53,11 @@ body{
 }
 
 .people-list .chat-list img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .people-list img {
@@ -82,8 +84,10 @@ body{
 .chat .chat-header img {
     float: left;
     border-radius: 40px;
-    width: 55px;
-    height: 55px;
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .chat .chat-header .chat-about {

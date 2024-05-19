@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 
 let Chat = require('../models/Chat');
 let User = require('../models/User');
+let Poste = require('../models/Poste');
 let Entrepreneur = require('../models/Entrepreneur');
 let Investor = require('../models/Investor');
 const UserToken = require('../models/UserToken');
@@ -22,6 +23,45 @@ app.use((req, res, next) => {
 })
 
 
+
+// Add Poste
+userRoute.route('/addPoste/:id').post(async (req, res, next) => {
+    try {
+
+      const poste = await Poste.create(req.body);
+      const user = await User.findById(req.params.id);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      user.postes.push(poste._id);
+  
+      await user.save();
+  
+      res.json(poste);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+// get all Postes
+userRoute.route('/getPostes/:id').get(async (req, res, next) => {
+    try {
+  
+        const user = await User.findById(req.params.id);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+      }
+  
+      const postes = await Poste.find({ _id: { $in: user.postes } });
+  
+      res.json(postes);
+    } catch (error) {
+      next(error);
+    }
+  });
 // Get user
 userRoute.route('/read/:id').get(async (req, res, next) => {
     try {

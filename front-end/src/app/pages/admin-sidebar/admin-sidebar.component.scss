@@ -56,8 +56,8 @@ body {
 }
 
 #sidebar.expand {
-    width: 220px;
-    min-width: 220px;
+    width: 240px;
+    min-width: 240px;
 }
 
 .toggle-btn {
@@ -158,4 +158,10 @@ a.sidebar-link:hover {
 
 #content.expand {
     width: 220px;
+}
+
+hr {
+    color: #9c9b9b;
+    margin-left: 22px;
+    margin-right: 22px;
 }

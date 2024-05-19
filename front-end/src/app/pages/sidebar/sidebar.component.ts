@@ -37,7 +37,11 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authenticationSub.unsubscribe();
   }
 
-  
+  navigateToFeed(): string{
+    let url = `/feed/${this.id}`;
+    return url
+  }
+
   navigateToChat(): string{
     let url = `/chat/${this.id}`;
     return url

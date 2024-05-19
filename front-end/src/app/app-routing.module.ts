@@ -29,7 +29,7 @@ const routes: Routes = [
   {path:'chat/:id', component: ChatComponent, canActivate:[RouteGuard]},
   {path:'admin/:id', component: AdminDashboardComponent, canActivate:[RouteGuard]},
   {path:'users-management/:id', component: UserManagementComponent, canActivate:[RouteGuard]},
-  {path:'feed', component: FeedComponent, canActivate:[RouteGuard]},
+  {path:'feed/:id', component: FeedComponent, canActivate:[RouteGuard]},
 
 ];
 

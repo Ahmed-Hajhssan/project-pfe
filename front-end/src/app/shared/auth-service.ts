@@ -44,6 +44,16 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  addPoste(userId: any, posteData: any): Observable<any> {
+    const url = `${this.baseUrl}/addPoste/${userId}`;
+    return this.http.post(url, posteData);
+  }
+
+  getpostes(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/getPostes/${userId}`;
+    return this.http.get(url);
+  }
+
   sendEmail(email: string) {
     const url = `${this.baseUrl}/send-email`;
     return this.http.post<any>(url, { email: email });
@@ -328,10 +338,6 @@ export class AuthService {
   getPreviousRound(employeeId: any, roundId: any): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/${employeeId}/previous_round/${roundId}`);
   }
-
-
-
-
 
 }
 
