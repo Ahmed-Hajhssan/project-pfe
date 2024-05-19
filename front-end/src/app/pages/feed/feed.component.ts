@@ -9,11 +9,13 @@ import { InvestorService } from '../../shared/investor-service';
 import { InvestorModel } from '../../shared/investor-model';
 
 
-interface Poste {
+interface Post {
   title: string;
   content: string;
   file_path?: string;
   visibility?: string;
+  likes?: string;
+  comments?: string[];
 }
 
 @Component({
@@ -25,13 +27,15 @@ export class FeedComponent implements OnInit {
 
   private baseUrl = environment.domain;
   posteForm: FormGroup;
+  editPost: FormGroup;
   Entreprenur: AuthModel = {};
   Investor: InvestorModel = {};
   imageUrl: string;
-  postesExist: boolean;
-  postes: any[] = [];
+  postsExist: boolean;
+  posts: any[] = [];
   id: any;
   role: any;
+  selectedPosteId: string;
 
   constructor(
     public authService: AuthService,
@@ -54,31 +58,31 @@ export class FeedComponent implements OnInit {
       this.authService.getUser(id).subscribe((res) => {
         this.Entreprenur = res;
         this.fetchImage();
-        this.fetchPostes();
+        this.fetchPosts();
 
       });
     } else if (this.role == "investor") {
       this.investorService.getUser(id).subscribe((res) => {
         this.Investor = res;
         this.fetchImage();
-        this.fetchPostes();
+        this.fetchPosts();
 
       });
     }
     this.initializeForm();
   }
 
-  fetchPostes() {
-    this.postesExist = false;
+  fetchPosts() {
+    this.postsExist = false;
     let id = this.actRoute.snapshot.paramMap.get('id');
     id = id ? id : ''; // Provide a default empty string if id is null
 
-    this.authService.getpostes(id).subscribe(
-      (postes: Poste[]) => {
-        this.postes = postes;
+    this.authService.getposts(id).subscribe(
+      (posts: Post[]) => {
+        this.posts = posts;
         this.sortPostesByIndexDesc();
-        if (this.postes.length > 0) {
-          this.postesExist = true;
+        if (this.posts.length > 0) {
+          this.postsExist = true;
         }
       },
       (error) => {
@@ -88,7 +92,51 @@ export class FeedComponent implements OnInit {
   }
 
   sortPostesByIndexDesc() {
-    this.postes.reverse();
+    this.posts.reverse();
+  }
+
+  deletePost(postId: any) {
+    if (window.confirm('Are you sure?')) {
+      let id = this.actRoute.snapshot.paramMap.get('id');
+      id = id ? id : '';
+      this.authService.deletePost(id, postId).subscribe({
+        complete: () => {
+          console.log('post successfully deleted!')
+          this.fetchPosts();
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      })
+    }
+
+  }
+  updatePost(postId: string) {
+    this.selectedPosteId = postId;
+    this.authService.getPost(postId).subscribe(
+      (memberData) => {
+        this.editPost.patchValue({
+          content: memberData.content,
+        });
+      },
+
+      (error: any) => {
+      }
+    );
+  }
+
+  editPostSubmit() {
+    const updatedMemberData = this.editPost.value;
+    const postId = this.selectedPosteId;
+    this.authService.updatePost(postId, updatedMemberData).subscribe({
+      complete: () => {
+        console.log('post successfully updated!')
+        this.fetchPosts();
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    })
   }
 
   fetchImage(): void {
@@ -121,11 +169,15 @@ export class FeedComponent implements OnInit {
     this.posteForm = this.fb.group({
       content: ['']
     });
+
+    this.editPost = this.fb.group({
+      content: [''],
+    });
   }
 
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
-    this.authService.addPoste(id, this.posteForm.value).subscribe({
+    this.authService.addPost(id, this.posteForm.value).subscribe({
       complete: () => {
         console.log('new poste added successfully !');
         this.ngOnInit();
@@ -135,4 +187,5 @@ export class FeedComponent implements OnInit {
       }
     });
   }
+  
 }

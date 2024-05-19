@@ -44,14 +44,29 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  addPoste(userId: any, posteData: any): Observable<any> {
-    const url = `${this.baseUrl}/addPoste/${userId}`;
-    return this.http.post(url, posteData);
+  addPost(userId: any, postData: any): Observable<any> {
+    const url = `${this.baseUrl}/addPost/${userId}`;
+    return this.http.post(url, postData);
   }
 
-  getpostes(userId: string): Observable<any> {
-    const url = `${this.baseUrl}/getPostes/${userId}`;
+  getposts(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/getPosts/${userId}`;
     return this.http.get(url);
+  }
+
+  getPost(PostId: string): Observable<any> {
+    const url = `${this.baseUrl}/getPost/${PostId}`;
+    return this.http.get<any>(url);
+  }
+
+  deletePost(userId: string, posteId: string): Observable<any> {
+    const url = `${this.baseUrl}/deletePost/${userId}/${posteId}`;
+    return this.http.delete(url);
+  }
+
+  updatePost(postId: string, PostData: any): Observable<any> {
+    const url = `${this.baseUrl}/updatePost/${postId}`;
+    return this.http.put<any>(url, PostData);
   }
 
   sendEmail(email: string) {

@@ -8,7 +8,7 @@ let User = new mongoose.Schema({
   request_received : [{ type: mongoose.Schema.Types.ObjectId, required: false }],
   matchmakings_list: [{ type: mongoose.Schema.Types.ObjectId, required: false }],
   active: { type: Boolean, required: false, default: true },
-  postes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Poste' }], 
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], 
 
 })
 

@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 
 let Chat = require('../models/Chat');
 let User = require('../models/User');
-let Poste = require('../models/Poste');
+let Post = require('../models/Post');
 let Entrepreneur = require('../models/Entrepreneur');
 let Investor = require('../models/Investor');
 const UserToken = require('../models/UserToken');
@@ -24,29 +24,29 @@ app.use((req, res, next) => {
 
 
 
-// Add Poste
-userRoute.route('/addPoste/:id').post(async (req, res, next) => {
+// Add Post
+userRoute.route('/addPost/:id').post(async (req, res, next) => {
     try {
 
-      const poste = await Poste.create(req.body);
+      const post = await Post.create(req.body);
       const user = await User.findById(req.params.id);
   
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      user.postes.push(poste._id);
+      user.posts.push(post._id);
   
       await user.save();
   
-      res.json(poste);
+      res.json(post);
     } catch (error) {
       next(error);
     }
   });
 
-// get all Postes
-userRoute.route('/getPostes/:id').get(async (req, res, next) => {
+// get all Posts
+userRoute.route('/getPosts/:id').get(async (req, res, next) => {
     try {
   
         const user = await User.findById(req.params.id);
@@ -55,13 +55,76 @@ userRoute.route('/getPostes/:id').get(async (req, res, next) => {
         return res.status(404).json({ error: 'user not found' });
       }
   
-      const postes = await Poste.find({ _id: { $in: user.postes } });
+      const posts = await Post.find({ _id: { $in: user.posts } });
   
-      res.json(postes);
+      res.json(posts);
     } catch (error) {
       next(error);
     }
   });
+
+// Get a single post
+userRoute.route('/getPost/:postId').get(async (req, res, next) => {
+    try {
+      const postId = req.params.postId;
+  
+      const post = await Post.findOne({ _id: postId });
+  
+      if (!post) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      res.json(post);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Update a post
+  userRoute.route('/updatePost/:postId').put(async (req, res, next) => {
+    try {
+      const postId = req.params.postId;
+      const updatedData = req.body;
+  
+      const post = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+  
+      if (!post) {
+        return res.status(404).json({ error: 'post not found' });
+      }
+  
+      res.json(post);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Delete a post
+  userRoute.route('/deletePost/:id/:postId').delete(async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const postId = req.params.postId;
+  
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { posts: postId } },
+        { new: true }
+      );
+  
+      if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+      }
+      
+      const post = await Post.findByIdAndDelete(postId);
+      if (!post) {
+        return res.status(404).json({ error: 'post not found' });
+      }
+  
+      res.json({ message: 'post deleted successfully' });
+    } catch (error) {
+      next(error);
+    }
+  });
+
 // Get user
 userRoute.route('/read/:id').get(async (req, res, next) => {
     try {

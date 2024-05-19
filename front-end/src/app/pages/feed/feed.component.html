@@ -85,7 +85,7 @@
                             <img [src]="imageUrl" alt="profile picture">
                         </div>
                         <input type="text" formControlName="content"
-                            placeholder="What's on your mind, Aashish ?" />&nbsp;&nbsp;&nbsp;
+                            placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
                         <button type="submit" class="button-18">Post</button>
                     </div>
                 </form>
@@ -105,8 +105,8 @@
                 </div>
             </div>
 
-            <div *ngIf="postesExist">
-                <div *ngFor="let post of postes" class="post">
+            <div *ngIf="postsExist">
+                <div *ngFor="let post of posts" class="post">
                     <div class="post-top">
                         <div class="dp">
                             <img [src]="imageUrl" alt="">
@@ -115,7 +115,14 @@
                             <p class="name">{{ Investor.name || Entreprenur.name}}</p>
                             <span class="time">12 hrs ago</span>
                         </div>
-                        <i class="fas fa-ellipsis-h"></i>
+                        <div class="dropdown">
+                            <div class="post-settings" style="margin-left: 405px;"><i class="fas fa-ellipsis-h"></i>
+                                <div class="dropdown-content">
+                                    <a class="custom-button text-center" (click)="updatePost(post._id)" data-bs-toggle="modal" data-bs-target="#edit-member">Update</a>
+                                    <a class="text-center" (click)="deletePost(post._id)">Delete</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="post-content">
@@ -270,8 +277,38 @@
                     </div>
                     <p class="name">Priyank Saksena</p>
                 </a>
-
             </div>
         </div>
     </div>
+</div>
+
+<!-- edit member -->
+<div class="modal fade custom-modal3" id="edit-member" tabindex="-1" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog custom-dialog3 ">
+  <div class="modal-content">
+    <form [formGroup]="editPost" (ngSubmit)="editPostSubmit()">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Post</h1>
+        <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body custom-body3">
+
+
+        <div class="row mb-4">
+          <div class="col-6">
+            <label for="content"></label>
+            <input formControlName="content" type="text" class="form-control custom-input"
+              placeholder="Post content">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>&nbsp; &nbsp; 
+        <button type="submit" class="btn btn-outline-warning" data-bs-dismiss="modal">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
 </div>
