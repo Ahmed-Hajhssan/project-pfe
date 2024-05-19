@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthModel } from '../../shared/auth-model';
 import { AuthService } from '../../shared/auth-service';
 import { environment } from '../../../environments/environment';
@@ -130,6 +130,8 @@ export class ProfileComponent implements OnInit {
     this.fetchQuestions();
     this.fetchPreviousRounds();
   }
+
+
 
   getControls() {
 
