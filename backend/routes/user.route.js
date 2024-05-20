@@ -23,7 +23,6 @@ app.use((req, res, next) => {
 })
 
 
-
 // Add Post
 userRoute.route('/addPost/:id').post(async (req, res, next) => {
     try {

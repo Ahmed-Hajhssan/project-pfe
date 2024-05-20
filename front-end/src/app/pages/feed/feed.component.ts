@@ -7,12 +7,13 @@ import { environment } from '../../../environments/environment';
 import { MatchMakingService } from '../../shared/match-making-service';
 import { InvestorService } from '../../shared/investor-service';
 import { InvestorModel } from '../../shared/investor-model';
+import {faChevronDown, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 
 interface Post {
   title: string;
   content: string;
-  file_path?: string;
+  file_path?: string[];
   visibility?: string;
   likes?: string;
   comments?: string[];
@@ -36,6 +37,11 @@ export class FeedComponent implements OnInit {
   id: any;
   role: any;
   selectedPosteId: string;
+  faChevronDown = faChevronDown;
+  isVisible = false;
+  faArrowUpFromBracket = faArrowUpFromBracket;
+  files: File[] = [];
+
 
   constructor(
     public authService: AuthService,
@@ -72,6 +78,19 @@ export class FeedComponent implements OnInit {
     this.initializeForm();
   }
 
+  
+  toggleVisibility() {
+    this.isVisible = !this.isVisible;
+  }
+	onSelect(event : any) {
+		console.log(event);
+		this.files.push(...event.addedFiles);
+	}
+
+	onRemove(event : any) {
+		console.log(event);
+		this.files.splice(this.files.indexOf(event), 1);
+	}
   fetchPosts() {
     this.postsExist = false;
     let id = this.actRoute.snapshot.paramMap.get('id');
