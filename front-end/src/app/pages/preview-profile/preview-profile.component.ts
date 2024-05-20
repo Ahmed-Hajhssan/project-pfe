@@ -233,12 +233,14 @@ export class PreviewProfileComponent implements OnInit {
   }
 
   fetchQuestions(): void {
-    if (this.currentUser && this.currentUser._id) {
+    if (true) {
       try {
-        this.authService.getQuestions(this.currentUser._id)
+        let id = this.actRoute.snapshot.paramMap.get('id');
+        this.authService.getQuestions(id)
           .subscribe(
             (questions: question[]) => {
               this.squestions = questions;
+              console.log(questions)
 
             },
 
