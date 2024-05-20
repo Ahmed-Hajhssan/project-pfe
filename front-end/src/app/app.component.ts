@@ -28,7 +28,8 @@ export class AppComponent implements OnInit {
         versionID: 'production'
       });
     };
-    this.renderer.appendChild(document.body, script);
+    if(typeof document !== 'undefined')
+      this.renderer.appendChild(document.body, script);
   }
   
   title = 'front-end';

@@ -90,125 +90,105 @@
                     </div>
                 </form>
                 <div class="post-bottom">
-                    <div class="action">
-                        <i class="fa fa-video"></i>
-                        <span>Live video</span>
-                    </div>
+
                     <div class="action">
                         <i class="fa fa-image"></i>
-                        <span>Photo/Video</span>
+                        <span>Photo</span>
                     </div>
                     <div class="action">
-                        <i class="fa fa-smile"></i>
-                        <span>Feeling/Activity</span>
+                        <i class="fa fa-video"></i>
+                        <span>Video</span>
                     </div>
                 </div>
             </div>
-
-            <div *ngIf="postsExist">
-                <div *ngFor="let post of posts" class="post">
-                    <div class="post-top">
-                        <div class="dp">
-                            <img [src]="imageUrl" alt="">
-                        </div>
-                        <div class="post-info">
-                            <p class="name">{{ Investor.name || Entreprenur.name}}</p>
-                            <span class="time">12 hrs ago</span>
-                        </div>
-                        <div class="dropdown">
-                            <div class="post-settings" style="margin-left: 405px;"><i class="fas fa-ellipsis-h"></i>
-                                <div class="dropdown-content">
-                                    <a class="custom-button text-center" (click)="updatePost(post._id)" data-bs-toggle="modal" data-bs-target="#edit-member">Update</a>
-                                    <a class="text-center" (click)="deletePost(post._id)">Delete</a>
+            <div class="container2">
+                <input type="radio" name="slider" id="home" checked>
+                <input type="radio" name="slider" id="blog">
+                <nav>
+                  <label for="home" class="home">Feed</label>
+                  <label for="blog" class="blog">Your posts</label>
+                  <div class="slider"></div>
+                </nav>
+                <section>
+                    <div class="content content-1">
+                        <div class="post">
+                            <div class="post-top">
+                                <div class="dp">
+                                    <img src="../../assets/images/dp.jpg" alt="">
+                                </div>
+                                <div class="post-info">
+                                    <p class="name">Priyank Saksena</p>
+                                    <span class="time">2 days ago</span>
+                                </div>
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+            
+                            <div class="post-content">
+                                Mountains are so cool
+                                <img src="../../assets/images/mountains.jpg" />
+                            </div>
+            
+                            <div class="post-bottom">
+                                <div class="action">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span>Like</span>
+                                </div>
+                                <div class="action">
+                                    <i class="far fa-comment"></i>
+                                    <span>Comment</span>
+                                </div>
+                                <div class="action">
+                                    <i class="fa fa-share"></i>
+                                    <span>Share</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="post-content">
-                        {{post.content}}
+                    <div class="content content-2">
+                        <div *ngIf="postsExist">
+                            <div *ngFor="let post of posts" class="post mb-4">
+                                <div class="post-top">
+                                    <div class="dp">
+                                        <img [src]="imageUrl" alt="">
+                                    </div>
+                                    <div class="post-info">
+                                        <p class="name">{{ Investor.name || Entreprenur.name}}</p>
+                                        <span class="time">12 hrs ago</span>
+                                    </div>
+                                    <div class="dropdown">
+                                        <div class="post-settings" style="margin-left: 405px;"><i class="fas fa-ellipsis-h"></i>
+                                            <div class="dropdown-content">
+                                                <a class="custom-button text-center" (click)="updatePost(post._id)" data-bs-toggle="modal" data-bs-target="#edit-member">Update</a>
+                                                <a class="text-center" (click)="deletePost(post._id)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="post-content">
+                                    {{post.content}}
+                                </div>
+            
+                                <div class="post-bottom">
+                                    <div class="action">
+                                        <i class="far fa-thumbs-up"></i>
+                                        <span>Like</span>
+                                    </div>
+                                    <div class="action">
+                                        <i class="far fa-comment"></i>
+                                        <span>Comment</span>
+                                    </div>
+                                    <div class="action">
+                                        <i class="fa fa-share"></i>
+                                        <span>Share</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="post-bottom">
-                        <div class="action">
-                            <i class="far fa-thumbs-up"></i>
-                            <span>Like</span>
-                        </div>
-                        <div class="action">
-                            <i class="far fa-comment"></i>
-                            <span>Comment</span>
-                        </div>
-                        <div class="action">
-                            <i class="fa fa-share"></i>
-                            <span>Share</span>
-                        </div>
-                    </div>
-                </div>
+                </section>
             </div>
 
-            <div class="post">
-                <div class="post-top">
-                    <div class="dp">
-                        <img src="../../assets/images/dp.jpg" alt="">
-                    </div>
-                    <div class="post-info">
-                        <p class="name">Priyank Saksena</p>
-                        <span class="time">2 days ago</span>
-                    </div>
-                    <i class="fas fa-ellipsis-h"></i>
-                </div>
-
-                <div class="post-content">
-                    Mountains are so cool
-                    <img src="../../assets/images/mountains.jpg" />
-                </div>
-
-                <div class="post-bottom">
-                    <div class="action">
-                        <i class="far fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </div>
-                    <div class="action">
-                        <i class="far fa-comment"></i>
-                        <span>Comment</span>
-                    </div>
-                    <div class="action">
-                        <i class="fa fa-share"></i>
-                        <span>Share</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="post">
-                <div class="post-top">
-                    <div class="dp">
-                        <img src="../../assets/images/dp.jpg" alt="">
-                    </div>
-                    <div class="post-info">
-                        <p class="name">Priyank Saksena</p>
-                        <span class="time">1 week ago</span>
-                    </div>
-                    <i class="fas fa-ellipsis-h"></i>
-                </div>
-                <div class="post-content">
-                    Happy birthday dear
-                    <img src="../../assets/images/girl_with_light.jpg" alt="Mountains">
-                </div>
-                <div class="post-bottom">
-                    <div class="action">
-                        <i class="far fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </div>
-                    <div class="action">
-                        <i class="far fa-comment"></i>
-                        <span>Comment</span>
-                    </div>
-                    <div class="action">
-                        <i class="fa fa-share"></i>
-                        <span>Share</span>
-                    </div>
-                </div>
-            </div>
 
             <!--<div class="post">
                   <div class="post-top">

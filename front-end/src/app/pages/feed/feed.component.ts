@@ -177,6 +177,8 @@ export class FeedComponent implements OnInit {
 
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
+    if( this.posteForm.value.content !=''){
+      console.log('aa', this.posteForm.value.content)
     this.authService.addPost(id, this.posteForm.value).subscribe({
       complete: () => {
         console.log('new poste added successfully !');
@@ -187,5 +189,5 @@ export class FeedComponent implements OnInit {
       }
     });
   }
-  
+}
 }
