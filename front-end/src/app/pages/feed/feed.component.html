@@ -86,7 +86,7 @@
                         </div>
                         <input type="text" formControlName="content"
                             placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
-                        <button type="submit" class="button-18">Post</button>
+                        <button type="submit" (click)="uploadFiles()" class="button-18">Post</button>
                     </div>
                 </form>
                 <div class="post-bottom justify-content-center">
@@ -102,10 +102,11 @@
                 </div>
                 <div class="justify-content-center post-dropzone mt-1">
                     <div *ngIf="isVisible" class="mt-3">
+
                         <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
                             <ngx-dropzone-label>
                                 <div>
-                                    <h2>My custom dropzone</h2>
+                                    <h2>Upload photos/videos</h2>
                                 </div>
                             </ngx-dropzone-label>
                             <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
@@ -113,6 +114,7 @@
                                 <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
                             </ngx-dropzone-image-preview>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -43,6 +43,7 @@ export class FeedComponent implements OnInit {
   isVisible = false;
   faArrowUpFromBracket = faArrowUpFromBracket;
   files: File[] = [];
+  postPath: any[] = [];
 
 
   constructor(
@@ -118,6 +119,25 @@ export class FeedComponent implements OnInit {
 		console.log(event);
 		this.files.splice(this.files.indexOf(event), 1);
 	}
+
+  uploadFiles() {
+    const formData = new FormData();
+  
+    for (let index = 0; index < this.files.length; index++) {
+      const element = this.files[index];
+      formData.append('files', element);
+    }
+  
+    this.authService.uploadFiles(formData)
+      .subscribe((response: any) => {
+        let otherDocument = response.map((file: any) => file.filename);
+        this.postPath = [...this.postPath, ...otherDocument];
+        console.log('ahmed.97', otherDocument);
+      }, (error: any) => {
+      });
+  }
+  
+
   fetchPosts() {
     this.postsExist = false;
     let id = this.actRoute.snapshot.paramMap.get('id');
@@ -242,11 +262,13 @@ export class FeedComponent implements OnInit {
 
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
-    if( this.posteForm.value.content !=''){
+    if( this.posteForm.value.content !='' || this.postPath.length != 0){
+      console.log('posts images',this.postPath)
       let content = this.posteForm.value.content;
       let name = this.Entreprenur.name?this.Entreprenur.name:this.Investor.name;
       let image = this.Entreprenur.image_profile?this.Entreprenur.image_profile:this.Investor.image_profile;
-    this.authService.addPost(id, {content:content,image:image,name:name}).subscribe({
+      let postPath = this.postPath;
+    this.authService.addPost(id, {content:content,image:image,name:name, file_path: postPath}).subscribe({
       complete: () => {
         console.log('new poste added successfully !');
         this.ngOnInit();
