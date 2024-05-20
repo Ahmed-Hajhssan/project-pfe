@@ -74,6 +74,16 @@ export class AuthService {
     return this.http.put<any>(url, PostData);
   }
 
+  like(postId: string, userId: any): Observable<any> {
+    const url = `${this.baseUrl}/like/${postId}/${userId}`;
+    return this.http.put<any>(url, {});
+  }
+
+  unlike(postId: string, userId: any): Observable<any> {
+    const url = `${this.baseUrl}/unlike/${postId}/${userId}`;
+    return this.http.put<any>(url, {});
+  }
+
   sendEmail(email: string) {
     const url = `${this.baseUrl}/send-email`;
     return this.http.post<any>(url, { email: email });

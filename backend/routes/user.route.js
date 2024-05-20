@@ -133,9 +133,34 @@ userRoute.route('/like/:postId/:userId').put(async (req, res, next) => {
         if (!post) {
             return res.status(404).json({ error: 'post not found' });
         }
-        
-        post.
+        if (post.likes)
+            post.likes.push(userId)
+        else
+            post.likes = [userId];
+        post.save();
+        res.json(post);
+    } catch (error) {
+        next(error);
+    }
+});
 
+// unlike
+userRoute.route('/unlike/:postId/:userId').put(async (req, res, next) => {
+    try {
+        const postId = req.params.postId;
+        const userId = req.params.userId;
+
+        const post = await Post.findOne({ _id: postId });
+
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+
+        const index = post.likes.indexOf(userId);
+        if (index !== -1) {
+            post.likes.splice(index, 1);
+        }
+        post.save()
         res.json(post);
     } catch (error) {
         next(error);

@@ -108,7 +108,8 @@
                                     <h2>My custom dropzone</h2>
                                 </div>
                             </ngx-dropzone-label>
-                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                                [file]="f" [removable]="true" (removed)="onRemove(f)">
                                 <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
                             </ngx-dropzone-image-preview>
                         </div>
@@ -142,9 +143,11 @@
                                 </div>
 
                                 <div class="post-bottom">
-                                    <div class="action">
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span>Like</span>
+                                    <div class="action" (click)="toggleLike(post)">
+                                        <i [ngClass]="'far fa-thumbs-up'"
+                                            [style.color]="isLiked(post) ? 'blue' : 'inherit'"></i>
+                                        <span [style.color]="isLiked(post) ? 'blue' : 'inherit'">Like
+                                            ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
                                         <i class="far fa-comment"></i>
@@ -186,9 +189,11 @@
                                 </div>
 
                                 <div class="post-bottom">
-                                    <div class="action">
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span>Like</span>
+                                    <div class="action" (click)="toggleLike(post)">
+                                        <i [ngClass]="'far fa-thumbs-up'"
+                                            [style.color]="isLiked(post) ? 'blue' : 'inherit'"></i>
+                                        <span [style.color]="isLiked(post) ? 'blue' : 'inherit'">Like
+                                            ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
                                         <i class="far fa-comment"></i>

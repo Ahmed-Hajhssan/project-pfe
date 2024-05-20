@@ -56,7 +56,8 @@ export class FeedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let id = this.actRoute.snapshot.paramMap.get('id');
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    let id = this.id;
     this.role = localStorage.getItem("role");
 
     this.matchMakingService.getUser(id).subscribe((res) => {
@@ -82,7 +83,29 @@ export class FeedComponent implements OnInit {
     this.initializeForm();
   }
 
-  
+  toggleLike(post:any) {
+    
+    if(this.isLiked(post)){
+      this.authService.unlike(post._id,this.id).subscribe(() => {
+        // Remove user ID from likes array
+        post.likes = post.likes.filter((userId: string) => userId !== this.id);
+      });
+    }
+    if(!this.isLiked(post)){
+      this.authService.like(post._id,this.id).subscribe(() => {
+        // Add user ID to likes array
+        post.likes.push(this.id);
+      });
+      console.log(this.isLiked(post));
+    }
+
+  }
+
+  isLiked(post:any):boolean{
+    return post.likes.includes(this.id)
+
+  }
+
   toggleVisibility() {
     this.isVisible = !this.isVisible;
   }
