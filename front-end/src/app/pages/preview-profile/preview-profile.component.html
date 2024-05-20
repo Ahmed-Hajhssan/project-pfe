@@ -342,23 +342,23 @@
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <h2 class="mb-2">Frequently asked questions</h2>
                 <hr class="text-gray">
-                  <div *ngFor="let question of squestions">
-                    <div class="text-gray mt-3"><b>Question :</b></div>
-                    <div class="d-flex">
+                <div *ngFor="let question of squestions">
+                  <div class="text-gray mt-3"><b>Question :</b></div>
+                  <div class="d-flex">
                     <div class="question">{{ question.Question }}</div>
                     <!-- link trigger collapse -->
-                    <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()" [attr.aria-expanded]="!basicCollapse.collapsed"
-                      aria-controls="collapseExample">
+                    <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()"
+                      [attr.aria-expanded]="!basicCollapse.collapsed" aria-controls="collapseExample">
                       <fa-icon [icon]="faChevronDown" *ngIf="question.Answer" class="answer-icon"></fa-icon>
                     </a>
                   </div>
-                    <!--Collapsed content-->
-                    <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
-                      <div class="text-gray"><b>Answer :</b></div>
-                      <div class="answer">{{ question.Answer }}</div>
-                    </div>
+                  <!--Collapsed content-->
+                  <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+                    <div class="text-gray"><b>Answer :</b></div>
+                    <div class="answer">{{ question.Answer }}</div>
                   </div>
-                
+                </div>
+
               </div>
             </div>
           </div>

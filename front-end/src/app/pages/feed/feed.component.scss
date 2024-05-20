@@ -166,7 +166,7 @@
   box-shadow: 1px solid #ddd;
   display:flex;
   justify-content: space-between;
-  padding:5px 150px 0 150px;
+  padding:5px 5px 0px 5px;
 }
 
 .post .post-bottom .action{
@@ -449,5 +449,13 @@ section .content .title{
 
 #blog:checked ~ section .content-2{
 	display: block;
+}
+.post-dropzone{
+  background-color: white;
+}
+.custom-dropzone {
+  width: 570px;
+	height: 250px;
+	border-radius: 5px;
 }
 
