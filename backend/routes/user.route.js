@@ -27,122 +27,148 @@ app.use((req, res, next) => {
 userRoute.route('/addPost/:id').post(async (req, res, next) => {
     try {
 
-      const post = await Post.create(req.body);
-      const user = await User.findById(req.params.id);
-  
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
+        const post = await Post.create(req.body);
+        const user = await User.findById(req.params.id);
 
-      user.posts.push(post._id);
-  
-      await user.save();
-  
-      res.json(post);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.posts.push(post._id);
+
+        await user.save();
+
+        res.json(post);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
+});
 
-// get all Posts
+// get all user's Posts
 userRoute.route('/getPosts/:id').get(async (req, res, next) => {
     try {
-  
-        const user = await User.findById(req.params.id);
-  
-      if (!user) {
-        return res.status(404).json({ error: 'user not found' });
-      }
-  
-      const posts = await Post.find({ _id: { $in: user.posts } });
-  
-      res.json(posts);
-    } catch (error) {
-      next(error);
-    }
-  });
 
-// get all Posts
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'user not found' });
+        }
+
+        const posts = await Post.find({ _id: { $in: user.posts } });
+
+        res.json(posts);
+    } catch (error) {
+        next(error);
+    }
+});
+
 userRoute.route('/getFriendsPosts/:id').get(async (req, res, next) => {
     try {
-  
         const user = await User.findById(req.params.id);
-  
-      if (!user) {
-        return res.status(404).json({ error: 'user not found' });
-      }
-      const friends = user.matchmakings_list;
-      
-  
-      const posts = await Post.find({ _id: { $in: user.posts } });
-  
-      res.json(posts);
+
+        if (!user) {
+            return res.status(404).json({ error: 'user not found' });
+        }
+
+        const friendsId = user.matchmakings_list;
+
+        // Fetch all friends concurrently
+        const friends = await Promise.all(friendsId.map(friendId => User.findById(friendId)));
+
+        // Fetch all posts concurrently
+        const posts = await Promise.all(friends.flatMap(friend =>
+            Post.find({ _id: { $in: friend.posts } })
+        ));
+
+        res.json(posts.flat());  // Flatten the array of arrays
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
+});
+
 
 // Get a single post
 userRoute.route('/getPost/:postId').get(async (req, res, next) => {
     try {
-      const postId = req.params.postId;
-  
-      const post = await Post.findOne({ _id: postId });
-  
-      if (!post) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-  
-      res.json(post);
-    } catch (error) {
-      next(error);
-    }
-  });
+        const postId = req.params.postId;
 
-  // Update a post
-  userRoute.route('/updatePost/:postId').put(async (req, res, next) => {
-    try {
-      const postId = req.params.postId;
-      const updatedData = req.body;
-  
-      const post = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
-  
-      if (!post) {
-        return res.status(404).json({ error: 'post not found' });
-      }
-  
-      res.json(post);
-    } catch (error) {
-      next(error);
-    }
-  });
+        const post = await Post.findOne({ _id: postId });
 
-  // Delete a post
-  userRoute.route('/deletePost/:id/:postId').delete(async (req, res, next) => {
-    try {
-      const userId = req.params.id;
-      const postId = req.params.postId;
-  
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { $pull: { posts: postId } },
-        { new: true }
-      );
-  
-      if (!user) {
-        return res.status(404).json({ error: 'user not found' });
-      }
-      
-      const post = await Post.findByIdAndDelete(postId);
-      if (!post) {
-        return res.status(404).json({ error: 'post not found' });
-      }
-  
-      res.json({ message: 'post deleted successfully' });
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        res.json(post);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
+});
+
+// Update a post
+userRoute.route('/updatePost/:postId').put(async (req, res, next) => {
+    try {
+        const postId = req.params.postId;
+        const updatedData = req.body;
+
+        const post = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+
+        res.json(post);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// like
+userRoute.route('/like/:postId/:userId').put(async (req, res, next) => {
+    try {
+        const postId = req.params.postId;
+        const userId = req.params.userId;
+
+        const post = await Post.findOne({ _id: postId });
+
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+        
+        post.
+
+        res.json(post);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+// Delete a post
+userRoute.route('/deletePost/:id/:postId').delete(async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const postId = req.params.postId;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { posts: postId } },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ error: 'user not found' });
+        }
+
+        const post = await Post.findByIdAndDelete(postId);
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+
+        res.json({ message: 'post deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
 
 // Get user
 userRoute.route('/read/:id').get(async (req, res, next) => {
@@ -157,33 +183,33 @@ userRoute.route('/read/:id').get(async (req, res, next) => {
 // Update user
 userRoute.route('/update/:id').put(async (req, res, next) => {
     try {
-      const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-  
-      // Wait for a short delay to ensure the update is completed
-      await new Promise(resolve => setTimeout(resolve, 1000));
-  
-      const user = await Investor.findById(updatedUser._id);
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  });
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
 
- // get all statuses
+        // Wait for a short delay to ensure the update is completed
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const user = await Investor.findById(updatedUser._id);
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// get all statuses
 userRoute.route('/getAllStatus').get(async (req, res, next) => {
     try {
-      const users = await User.find({active: "false"}); 
-  
-      if (!users) {
-        return res.status(404).json({ error: 'No users found' });
-      } 
-      const userIds = users.map(user => user._id);
-      res.json(userIds); 
+        const users = await User.find({ active: "false" });
+
+        if (!users) {
+            return res.status(404).json({ error: 'No users found' });
+        }
+        const userIds = users.map(user => user._id);
+        res.json(userIds);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
-  
+});
+
 
 // request
 userRoute.put('/request/:senderId/:receiverId', async (req, res, next) => {
@@ -316,7 +342,7 @@ userRoute.route('/getMatchmakings').get(async (req, res, next) => {
         const users = await User.find()
         let count = 0;
         users.forEach(user => {
-            if(user.matchmakings_list){
+            if (user.matchmakings_list) {
                 count += user.matchmakings_list.length;
             }
         })
@@ -328,7 +354,7 @@ userRoute.route('/getMatchmakings').get(async (req, res, next) => {
 });
 
 // count unread messages between two IDs
-userRoute.route('/unread/:senderId/:receiverId').get( async (req, res) => {
+userRoute.route('/unread/:senderId/:receiverId').get(async (req, res) => {
     const { senderId, receiverId } = req.params;
     try {
         const unreadCount = await Chat.countDocuments({ senderId: senderId, receiverId: receiverId, read: false });
@@ -339,7 +365,7 @@ userRoute.route('/unread/:senderId/:receiverId').get( async (req, res) => {
     }
 });
 
-userRoute.route('/markAsRead/:senderId/:receiverId').put( async (req, res) => {
+userRoute.route('/markAsRead/:senderId/:receiverId').put(async (req, res) => {
     const { senderId, receiverId } = req.params;
     try {
         // Update messages to mark them as read
@@ -515,7 +541,7 @@ userRoute.post('/sign-up', (req, res) => {
 // login user
 userRoute.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email, active: true }); 
+        const user = await User.findOne({ email: req.body.email, active: true });
 
         if (!user) {
             return res.status(401).json({ message: 'User not found' });

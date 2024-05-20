@@ -54,6 +54,11 @@ export class AuthService {
     return this.http.get(url);
   }
 
+  getAllPosts(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/getFriendsPosts/${userId}`;
+    return this.http.get(url);
+  }
+
   getPost(PostId: string): Observable<any> {
     const url = `${this.baseUrl}/getPost/${PostId}`;
     return this.http.get<any>(url);

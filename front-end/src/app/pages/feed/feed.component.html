@@ -127,35 +127,35 @@
                 </nav>
                 <section>
                     <div class="content content-1">
-                        <div class="post">
-                            <div class="post-top">
-                                <div class="dp">
-                                    <img src="../../assets/images/dp.jpg" alt="">
+                        <div *ngIf="AllpostsExist">
+                            <div *ngFor="let post of Allposts" class="post mb-4">
+                                <div class="post-top">
+                                    <div class="dp">
+                                        <img [src]="baseUrl + '/api/uploads/' + post.image" alt="">
+                                    </div>
+                                    <div class="post-info">
+                                        <p class="name">{{post.name}}</p>
+                                        <span class="time">12 hrs ago</span>
+                                    </div>
                                 </div>
-                                <div class="post-info">
-                                    <p class="name">Priyank Saksena</p>
-                                    <span class="time">2 days ago</span>
-                                </div>
-                                <i class="fas fa-ellipsis-h"></i>
-                            </div>
 
-                            <div class="post-content">
-                                Mountains are so cool
-                                <img src="../../assets/images/mountains.jpg" />
-                            </div>
+                                <div class="post-content">
+                                    {{post.content}}
+                                </div>
 
-                            <div class="post-bottom">
-                                <div class="action">
-                                    <i class="far fa-thumbs-up"></i>
-                                    <span>Like</span>
-                                </div>
-                                <div class="action">
-                                    <i class="far fa-comment"></i>
-                                    <span>Comment</span>
-                                </div>
-                                <div class="action">
-                                    <i class="fa fa-share"></i>
-                                    <span>Share</span>
+                                <div class="post-bottom">
+                                    <div class="action">
+                                        <i class="far fa-thumbs-up"></i>
+                                        <span>Like</span>
+                                    </div>
+                                    <div class="action">
+                                        <i class="far fa-comment"></i>
+                                        <span>Comment</span>
+                                    </div>
+                                    <div class="action">
+                                        <i class="fa fa-share"></i>
+                                        <span>Share</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
