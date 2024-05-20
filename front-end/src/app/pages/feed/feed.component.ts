@@ -26,14 +26,16 @@ interface Post {
 })
 export class FeedComponent implements OnInit {
 
-  private baseUrl = environment.domain;
+  baseUrl = environment.domain;
   posteForm: FormGroup;
   editPost: FormGroup;
   Entreprenur: AuthModel = {};
   Investor: InvestorModel = {};
   imageUrl: string;
   postsExist: boolean;
+  AllpostsExist: boolean;
   posts: any[] = [];
+  Allposts: any[] = [];
   id: any;
   role: any;
   selectedPosteId: string;
@@ -65,6 +67,7 @@ export class FeedComponent implements OnInit {
         this.Entreprenur = res;
         this.fetchImage();
         this.fetchPosts();
+        this.fetchAllPosts();
 
       });
     } else if (this.role == "investor") {
@@ -72,6 +75,7 @@ export class FeedComponent implements OnInit {
         this.Investor = res;
         this.fetchImage();
         this.fetchPosts();
+        this.fetchAllPosts();
 
       });
     }
@@ -102,6 +106,25 @@ export class FeedComponent implements OnInit {
         this.sortPostesByIndexDesc();
         if (this.posts.length > 0) {
           this.postsExist = true;
+        }
+      },
+      (error) => {
+        console.log('Error retrieving members:', error);
+      }
+    );
+  }
+
+  fetchAllPosts() {
+    this.postsExist = false;
+    let id = this.actRoute.snapshot.paramMap.get('id')||"";
+
+    this.authService.getAllPosts(id).subscribe(
+      (posts: Post[]) => {
+        this.Allposts = posts;
+        console.log(this.Allposts);
+        this.sortPostesByIndexDesc();
+        if (this.Allposts.length > 0) {
+          this.AllpostsExist = true;
         }
       },
       (error) => {
