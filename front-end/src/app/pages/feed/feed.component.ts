@@ -197,8 +197,10 @@ export class FeedComponent implements OnInit {
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
     if( this.posteForm.value.content !=''){
-      console.log('aa', this.posteForm.value.content)
-    this.authService.addPost(id, this.posteForm.value).subscribe({
+      let content = this.posteForm.value.content;
+      let name = this.Entreprenur.name?this.Entreprenur.name:this.Investor.name;
+      let image = this.Entreprenur.image_profile?this.Entreprenur.image_profile:this.Investor.image_profile;
+    this.authService.addPost(id, {content:content,image:image,name:name}).subscribe({
       complete: () => {
         console.log('new poste added successfully !');
         this.ngOnInit();

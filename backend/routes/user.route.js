@@ -62,6 +62,26 @@ userRoute.route('/getPosts/:id').get(async (req, res, next) => {
     }
   });
 
+// get all Posts
+userRoute.route('/getFriendsPosts/:id').get(async (req, res, next) => {
+    try {
+  
+        const user = await User.findById(req.params.id);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+      }
+      const friends = user.matchmakings_list;
+      
+  
+      const posts = await Post.find({ _id: { $in: user.posts } });
+  
+      res.json(posts);
+    } catch (error) {
+      next(error);
+    }
+  });
+
 // Get a single post
 userRoute.route('/getPost/:postId').get(async (req, res, next) => {
     try {
