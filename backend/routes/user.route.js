@@ -45,7 +45,7 @@ userRoute.route('/addPost/:id').post(async (req, res, next) => {
     }
   });
 
-// get all Posts
+// get all user's Posts
 userRoute.route('/getPosts/:id').get(async (req, res, next) => {
     try {
   
@@ -73,7 +73,7 @@ userRoute.route('/getFriendsPosts/:id').get(async (req, res, next) => {
         return res.status(404).json({ error: 'user not found' });
       }
       const friends = user.matchmakings_list;
-      
+
   
       const posts = await Post.find({ _id: { $in: user.posts } });
   
