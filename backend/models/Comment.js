@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 let Comment = new mongoose.Schema({
+  userId: { type: String, required: false},
   image: { type: String, required: false},
   name: { type: String, required: false},
   content: { type: String, required: false },

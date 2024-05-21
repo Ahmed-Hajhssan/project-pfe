@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="post-info">
                                         <p class="name">{{post.name}}</p>
-                                        <span class="time">12 hrs ago</span>
+                                        <span class="time">{{post.date  | date: 'medium'}}</span>
                                     </div>
                                 </div>
 
@@ -198,11 +198,11 @@
                                                     <img [src]="baseUrl + '/api/uploads/' + comment.image"
                                                         alt="profile picture">
                                                 </div>
-                                                <div class="col-2 margin-right">{{comment.name}}
-                                                </div>
                                                 <div class="col-6">
                                                     <div class="content-container">
-                                                        <div class="line-limit">{{ comment.content }}</div>
+                                                        <div class="margin-right font-weight-bold">{{comment.name}} :
+                                                        </div>
+                                                        <div class="line-limit margin-left">{{ comment.content }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="custom-date col-3"> {{comment.date | date}}</div>
@@ -224,7 +224,7 @@
                                     </div>
                                     <div class="post-info">
                                         <p class="name">{{ Investor.name || Entreprenur.name}}</p>
-                                        <span class="time">12 hrs ago</span>
+                                        <span class="time">{{post.date | date: 'medium'}} </span>
                                     </div>
                                     <div class="dropdown">
                                         <div class="post-settings" style="margin-left: 405px;"><i
@@ -295,15 +295,16 @@
                                                     <img [src]="baseUrl + '/api/uploads/' + comment.image"
                                                         alt="profile picture">
                                                 </div>
-                                                <div class="col-2 margin-right">{{comment.name}}
-                                                </div>
+                                                
                                                 <div class="col-6">
                                                     <div class="content-container">
-                                                        <div class="line-limit">{{ comment.content }}</div>
+                                                        <div class=" margin-right ">{{comment.name}} :
+                                                        </div>
+                                                        <div class="line-limit ml-1">{{ comment.content }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="custom-date col-3"> {{comment.date | date}}</div>
-                                                <button (click)="deleteComment(post._id, comment._id)" type="button"
+                                                <button *ngIf="comment.userId==id" (click)="deleteComment(post._id, comment._id)" type="button"
                                                     class="btn-close custom-small-btn"></button>
                                             </div>
                                         </div>

@@ -7,6 +7,7 @@ let Post = new mongoose.Schema({
   file_path: [{ type: String, required: false }],
   likes: [{ type: String, required: false }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], 
+  date: { type: Date, required: false , default: Date.now},
 })
 
 module.exports = mongoose.model('Post', Post)

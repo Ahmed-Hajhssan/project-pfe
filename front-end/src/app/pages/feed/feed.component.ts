@@ -103,10 +103,12 @@ export class FeedComponent implements OnInit {
       let name = this.Entreprenur.name ? this.Entreprenur.name : this.Investor.name;
       let image = this.Entreprenur.image_profile ? this.Entreprenur.image_profile : this.Investor.image_profile;
       let date = this.currentDate;
-      this.authService.addComment(postid, { content: content, image: image, name: name, date: date }).subscribe({
+      let id = this.id;
+      this.authService.addComment(postid, { content: content, image: image, name: name, date: date, id: id }).subscribe({
         complete: () => {
           console.log('new poste added successfully !');
-          this.ngOnInit();
+          this.Comments.push({ content: content, image: image, name: name, date: date, id: id });
+          this.commentForm.reset();
         },
         error: (e) => {
           console.log(e);
@@ -209,7 +211,7 @@ export class FeedComponent implements OnInit {
     uploadFiles(): Promise < void> {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
-
+        if(this.files.length>0){
         for (let index = 0; index < this.files.length; index++) {
           const element = this.files[index];
           formData.append('files', element);
@@ -225,7 +227,9 @@ export class FeedComponent implements OnInit {
             console.error('Error uploading files:', error);
             reject(error);
           }
-        );
+        );}else{
+          resolve();
+        }
       });
     }
 
@@ -237,8 +241,7 @@ export class FeedComponent implements OnInit {
 
       this.authService.getposts(id).subscribe(
         (posts: Post[]) => {
-          this.posts = posts;
-          this.sortPostesByIndexDesc();
+          this.posts = posts.reverse();
           if (this.posts.length > 0) {
             this.postsExist = true;
           }
@@ -255,9 +258,8 @@ export class FeedComponent implements OnInit {
 
       this.authService.getAllPosts(id).subscribe(
         (posts: Post[]) => {
-          this.Allposts = posts;
+          this.Allposts = posts.reverse();
           console.log(this.Allposts);
-          this.sortPostesByIndexDesc();
           if (this.Allposts.length > 0) {
             this.AllpostsExist = true;
           }
@@ -268,9 +270,6 @@ export class FeedComponent implements OnInit {
       );
     }
 
-    sortPostesByIndexDesc() {
-      this.posts.reverse();
-    }
 
     deletePost(postId: any) {
       if (window.confirm('Are you sure?')) {
@@ -360,6 +359,7 @@ export class FeedComponent implements OnInit {
     let id = this.actRoute.snapshot.paramMap.get('id');
     if (this.posteForm.value.content !== '') {
       this.uploadFiles().then(() => {
+        let date = Date;
         let content = this.posteForm.value.content;
         let name = this.Entreprenur.name ? this.Entreprenur.name : this.Investor.name;
         let image = this.Entreprenur.image_profile ? this.Entreprenur.image_profile : this.Investor.image_profile;
@@ -367,7 +367,7 @@ export class FeedComponent implements OnInit {
 
         console.log('Post path:', postPath);
 
-        this.authService.addPost(id, { content, image, name, file_path: postPath }).subscribe({
+        this.authService.addPost(id, { content, image, name, file_path: postPath, date: date }).subscribe({
           complete: () => {
             console.log('New post added successfully!');
             this.ngOnInit();
