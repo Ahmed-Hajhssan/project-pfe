@@ -9,9 +9,11 @@ const fs = require('fs');
 let Chat = require('../models/Chat');
 let User = require('../models/User');
 let Post = require('../models/Post');
+let Comment = require('../models/Comment');
 let Entrepreneur = require('../models/Entrepreneur');
 let Investor = require('../models/Investor');
 const UserToken = require('../models/UserToken');
+
 
 
 
@@ -22,6 +24,73 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 })
+
+
+// Add Comment
+userRoute.route('/addComment/:postId').post(async (req, res, next) => {
+    try {
+
+        const comment = await Comment.create(req.body);
+        const post = await Post.findById(req.params.postId);
+
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+
+        post.comments.push(comment._id);
+        await post.save();
+
+        res.json(comment);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Get all comments
+userRoute.route('/getComments/:id').get(async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.id);
+  
+      if (!post) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      const comments = await Comment.find({ _id: { $in: post.comments } });
+  
+      res.json(comments);
+      
+    } catch (error) {
+      next(error);
+    }
+  });
+
+// Delete a comment
+userRoute.route('/deleteComment/:postId/:commentId').delete(async (req, res, next) => {
+    try {
+
+        const postId = req.params.postId;
+        const commentId = req.params.commentId;
+
+        const post = await Post.findByIdAndUpdate(
+            postId,
+            { $pull: { comments: commentId } },
+            { new: true }
+        );
+
+        if (!post) {
+            return res.status(404).json({ error: 'post not found' });
+        }
+
+        const comment = await Comment.findByIdAndDelete(commentId);
+        if (!comment) {
+            return res.status(404).json({ error: 'comment not found' });
+        }
+
+        res.json({ message: 'comment deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 // Add Post

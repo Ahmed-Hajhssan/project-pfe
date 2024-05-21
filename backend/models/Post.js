@@ -6,7 +6,7 @@ let Post = new mongoose.Schema({
   content: { type: String, required: false },
   file_path: [{ type: String, required: false }],
   likes: [{ type: String, required: false }],
-  Comments: [{ type: String, required: false }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], 
 })
 
 module.exports = mongoose.model('Post', Post)

@@ -480,3 +480,69 @@ section .content .title{
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(154, 153, 153);
 }
+.enlarged-image {
+  width: 90%; 
+  height: auto;
+}
+
+.scrollable-carousel {
+  max-height: 300px; /* Set a fixed height as needed */
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.enlarged-image {
+  width: 100%; /* Adjust the width as needed */
+  height: auto;
+  margin-bottom: 10px;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.margin-right{
+  margin-left: 10px;
+}
+
+.text-gray{
+  color: gray;
+  font-weight: bold;
+}
+
+.line-limit {
+  max-width: 450px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.content-container {
+  border-radius: 10px;
+  background-color: #eee; 
+  padding-left: 10px;
+  padding-right: 10px; 
+  margin-right: 15px;
+}
+
+.custom-date{
+  color: gray;
+  margin-right: -50px;
+  font-size: 11px;
+}
+
+
+.friend .dp {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+}
+.friend .dp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+

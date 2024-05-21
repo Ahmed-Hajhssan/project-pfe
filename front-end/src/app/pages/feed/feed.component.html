@@ -164,11 +164,13 @@
                                             ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
-                                        <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()"
-                                        [attr.aria-expanded]="!basicCollapse.collapsed" aria-controls="collapseExample">
-                                        <i class="far fa-comment"></i>
-                                        <span>Comment</span>
-                                      </a>
+                                        <a class="d-flex justify-content-end questions-margin"
+                                            (click)="basicCollapse.toggle()"
+                                            [attr.aria-expanded]="!basicCollapse.collapsed"
+                                            aria-controls="collapseExample">
+                                            <i class="far fa-comment"></i>
+                                            <span (click)="fetchComments(post._id)">Comment</span>
+                                        </a>
                                     </div>
                                     <div class="action">
                                         <i class="fa fa-share"></i>
@@ -177,17 +179,37 @@
                                 </div>
                                 <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
                                     <div class="mt-3">
-
-                                        <div class="post-top">
-                                            <div class="dp">
-                                                <img [src]="imageUrl" alt="profile picture">
+                                        <form [formGroup]="commentForm" (ngSubmit)="addComment(post._id)">
+                                            <div class="post-top">
+                                                <div class="dp">
+                                                    <img [src]="imageUrl" alt="profile picture">
+                                                </div>
+                                                <input type="text" formControlName="comment"
+                                                    placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
+                                                <button type="submit" class="button-18">Add</button>
                                             </div>
-                                            <input type="text" formControlName="content"
-                                                placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
-                                            <button type="submit" (click)="uploadFiles()"
-                                                class="button-18">Post</button>
+                                        </form>
+                                    </div>
+                                    <div class="text-gray mt-2">Comments :</div>
+                                    <div *ngFor="let comment of Comments">
+                                        <div class="comments">
+                                            <div class="post-top row">
+                                                <div class="dp ">
+                                                    <img [src]="baseUrl + '/api/uploads/' + comment.image"
+                                                        alt="profile picture">
+                                                </div>
+                                                <div class="col-2 margin-right">{{comment.name}}
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="content-container">
+                                                        <div class="line-limit">{{ comment.content }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="custom-date col-3"> {{comment.date | date}}</div>
+                                                <button (click)="deleteComment(post._id, comment._id)" type="button"
+                                                    class="btn-close custom-small-btn"></button>
+                                            </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -238,13 +260,53 @@
                                             ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
+                                        <a class="d-flex justify-content-end questions-margin"
+                                        (click)="basicCollapse.toggle()"
+                                        [attr.aria-expanded]="!basicCollapse.collapsed"
+                                        aria-controls="collapseExample">
                                         <i class="far fa-comment"></i>
-                                        <span>Comment</span>
+                                        <span (click)="fetchComments(post._id)">Comment</span>
+                                    </a>
                                     </div>
 
                                     <div class="action">
                                         <i class="fa fa-share"></i>
                                         <span>Share</span>
+                                    </div>
+                                </div>
+                                <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+                                    <div class="mt-3">
+                                        <form [formGroup]="commentForm" (ngSubmit)="addComment(post._id)">
+                                            <div class="post-top">
+                                                <div class="dp">
+                                                    <img [src]="imageUrl" alt="profile picture">
+                                                </div>
+                                                <input type="text" formControlName="comment"
+                                                    placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
+                                                <button type="submit" class="button-18">Add</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="text-gray mt-2">Comments :</div>
+                                    <div *ngFor="let comment of Comments">
+                                        <div class="comments">
+                                            <div class="post-top row">
+                                                <div class="dp ">
+                                                    <img [src]="baseUrl + '/api/uploads/' + comment.image"
+                                                        alt="profile picture">
+                                                </div>
+                                                <div class="col-2 margin-right">{{comment.name}}
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="content-container">
+                                                        <div class="line-limit">{{ comment.content }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="custom-date col-3"> {{comment.date | date}}</div>
+                                                <button (click)="deleteComment(post._id, comment._id)" type="button"
+                                                    class="btn-close custom-small-btn"></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -310,12 +372,14 @@
                 <h4>Network</h4>
                 <a class='friend' [href]="profileUrl+friend._id" *ngFor="let friend of friendList">
                     <div class="dp">
-                        <img *ngIf="friend.image_profile" [src]="'http://localhost:4000/api/uploads/' + friend.image_profile" alt="avatar">
-                        <img *ngIf="!friend.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp" alt="avatar">
+                        <img *ngIf="friend.image_profile"
+                            [src]="'http://localhost:4000/api/uploads/' + friend.image_profile" alt="avatar">
+                        <img *ngIf="!friend.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp"
+                            alt="avatar">
                     </div>
                     <p class="name">{{friend.name}}</p>
                 </a>
-                
+
             </div>
         </div>
     </div>

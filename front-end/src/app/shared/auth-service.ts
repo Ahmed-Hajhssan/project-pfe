@@ -44,6 +44,20 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  addComment(postId: any, commentData: any): Observable<any> {
+    const url = `${this.baseUrl}/addComment/${postId}`;
+    return this.http.post(url, commentData);
+  }
+  getComments(postId: string): Observable<any> {
+    const url = `${this.baseUrl}/getComments/${postId}`;
+    return this.http.get(url);
+  }
+
+  deleteComment(postId: string, commentId: string): Observable<any> {
+    const url = `${this.baseUrl}/deleteComment/${postId}/${commentId}`;
+    return this.http.delete(url);
+  }
+
   addPost(userId: any, postData: any): Observable<any> {
     const url = `${this.baseUrl}/addPost/${userId}`;
     return this.http.post(url, postData);
