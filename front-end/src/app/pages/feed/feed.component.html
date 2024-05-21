@@ -157,9 +157,11 @@
                                 </div>
 
                                 <div class="post-bottom">
-                                    <div class="action">
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span>Like</span>
+                                    <div class="action" (click)="toggleLike(post)">
+                                        <i [ngClass]="'far fa-thumbs-up'"
+                                            [style.color]="isLiked(post) ? 'blue' : 'inherit'"></i>
+                                        <span [style.color]="isLiked(post) ? 'blue' : 'inherit'">Like
+                                            ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
                                         <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()"
@@ -229,9 +231,11 @@
                                 </div>
 
                                 <div class="post-bottom">
-                                    <div class="action">
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span>Like</span>
+                                    <div class="action" (click)="toggleLike(post)">
+                                        <i [ngClass]="'far fa-thumbs-up'"
+                                            [style.color]="isLiked(post) ? 'blue' : 'inherit'"></i>
+                                        <span [style.color]="isLiked(post) ? 'blue' : 'inherit'">Like
+                                            ({{post.likes.length}})</span>
                                     </div>
                                     <div class="action">
                                         <i class="far fa-comment"></i>
@@ -303,20 +307,15 @@
             </div>
 
             <div class="friends-section">
-                <h4>Friends</h4>
-                <a class='friend' href="#">
+                <h4>Network</h4>
+                <a class='friend' [href]="profileUrl+friend._id" *ngFor="let friend of friendList">
                     <div class="dp">
-                        <img src="../../assets/images/girl.jpg" alt="">
+                        <img *ngIf="friend.image_profile" [src]="'http://localhost:4000/api/uploads/' + friend.image_profile" alt="avatar">
+                        <img *ngIf="!friend.image_profile" src="assets/images/3da39-no-user-image-icon-27.webp" alt="avatar">
                     </div>
-                    <p class="name">Henry Mosely</p>
+                    <p class="name">{{friend.name}}</p>
                 </a>
-
-                <a class='friend' href="#">
-                    <div class="dp">
-                        <img src="../../assets/images/dp.jpg" alt="">
-                    </div>
-                    <p class="name">Priyank Saksena</p>
-                </a>
+                
             </div>
         </div>
     </div>

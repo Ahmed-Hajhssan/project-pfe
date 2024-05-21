@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 import { MatchMakingService } from '../../shared/match-making-service';
 import { InvestorService } from '../../shared/investor-service';
 import { InvestorModel } from '../../shared/investor-model';
-import {faChevronDown, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 
 interface Post {
@@ -45,7 +45,8 @@ export class FeedComponent implements OnInit {
   faArrowUpFromBracket = faArrowUpFromBracket;
   files: File[] = [];
   postPath: string[] = [];
-
+  friendList: any[] = [];
+  profileUrl:string;
 
   constructor(
     public authService: AuthService,
@@ -58,7 +59,8 @@ export class FeedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let id = this.actRoute.snapshot.paramMap.get('id');
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    let id = this.id;
     this.role = localStorage.getItem("role");
 
     this.matchMakingService.getUser(id).subscribe((res) => {
@@ -70,6 +72,7 @@ export class FeedComponent implements OnInit {
         this.fetchImage();
         this.fetchPosts();
         this.fetchAllPosts();
+        this.getFriendList()
 
       });
     } else if (this.role == "investor") {
@@ -78,51 +81,48 @@ export class FeedComponent implements OnInit {
         this.fetchImage();
         this.fetchPosts();
         this.fetchAllPosts();
+        this.getFriendList();
 
       });
     }
     this.initializeForm();
   }
 
-  slideConfig = {
-    slidesToShow: 3, 
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1
-        }
-      }
-    ]
-  };
-  
+  toggleLike(post: any) {
+
+    if (this.isLiked(post)) {
+      this.authService.unlike(post._id, this.id).subscribe(() => {
+        // Remove user ID from likes array
+        post.likes = post.likes.filter((userId: string) => userId !== this.id);
+      });
+    }
+    if (!this.isLiked(post)) {
+      this.authService.like(post._id, this.id).subscribe(() => {
+        // Add user ID to likes array
+        post.likes.push(this.id);
+      });
+      console.log(this.isLiked(post));
+    }
+
+  }
+
+  isLiked(post: any): boolean {
+    return post.likes.includes(this.id)
+
+  }
+
   toggleVisibility() {
     this.isVisible = !this.isVisible;
   }
-
-  commentsVisibility() {
-    this.commentsVisible = !this.commentsVisible;
+  onSelect(event: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
   }
-  
-	onSelect(event : any) {
-		console.log(event);
-		this.files.push(...event.addedFiles);
-	}
 
-	onRemove(event : any) {
-		console.log(event);
-		this.files.splice(this.files.indexOf(event), 1);
-	}
+  onRemove(event: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
 
   uploadFiles(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -137,17 +137,16 @@ export class FeedComponent implements OnInit {
         (response: any) => {
           this.postPath = response.map((file: any) => file.filename);
           console.log('Uploaded files:', this.postPath);
-          resolve(); // Resolve the promise once the upload is complete
+          resolve(); 
         },
         (error: any) => {
           console.error('Error uploading files:', error);
-          reject(error); // Reject the promise if there is an error
+          reject(error); 
         }
       );
     });
   }
-  
-  
+
 
   fetchPosts() {
     this.postsExist = false;
@@ -170,7 +169,7 @@ export class FeedComponent implements OnInit {
 
   fetchAllPosts() {
     this.postsExist = false;
-    let id = this.actRoute.snapshot.paramMap.get('id')||"";
+    let id = this.actRoute.snapshot.paramMap.get('id') || "";
 
     this.authService.getAllPosts(id).subscribe(
       (posts: Post[]) => {
@@ -297,5 +296,46 @@ export class FeedComponent implements OnInit {
         console.error('Error uploading files:', error);
       });
     }
+  }
+
+
+  getFriendList() {
+    this.profileUrl = this.Entreprenur._id?"preview-profile-investor/":"preview-profile-entrepreneur/";
+    let friendList: any[] = [];
+    this.matchMakingService.getUser(this.id).subscribe((res) => {
+      let friendListIds = res.matchmakings_list;
+      if (this.role === "investor") {
+        for (let id of friendListIds) {
+          this.authService.getUser(id).subscribe(
+            (user: any) => {
+              friendList.push(user);
+            },
+            (error: any) => {
+              console.log(`Failed to retrieve user with ID ${id}`, error);
+            }
+          );
+        }
+        this.friendList = friendList;
+        console.log('entrepreneurs list', this.friendList)
+      } else {
+        for (let id of friendListIds) {
+          this.investorService.getUser(id).subscribe(
+            (user: any) => {
+              friendList.push(user);
+            },
+            (error: any) => {
+              console.log(`Failed to retrieve user with ID ${id}`, error);
+            }
+          );
+        }
+        this.friendList = friendList;
+        console.log('investors list', this.friendList)
+
+
+      }
+
+
+    })
+
   }
 }
