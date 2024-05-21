@@ -191,7 +191,8 @@
 
 .right-panel .pages-section,
 .right-panel .friends-section{
-  margin:10rem 0px;
+  max-height: 650px;
+  overflow-y: auto;
 }
 
 .right-panel .pages-section h4,
@@ -460,3 +461,22 @@ section .content .title{
 	border-radius: 5px;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(194, 186, 186);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(154, 153, 153);
+}

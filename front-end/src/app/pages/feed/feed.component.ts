@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 import { MatchMakingService } from '../../shared/match-making-service';
 import { InvestorService } from '../../shared/investor-service';
 import { InvestorModel } from '../../shared/investor-model';
-import {faChevronDown, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 
 interface Post {
@@ -44,7 +44,8 @@ export class FeedComponent implements OnInit {
   faArrowUpFromBracket = faArrowUpFromBracket;
   files: File[] = [];
   postPath: any[] = [];
-
+  friendList: any[] = [];
+  profileUrl:string;
 
   constructor(
     public authService: AuthService,
@@ -70,6 +71,7 @@ export class FeedComponent implements OnInit {
         this.fetchImage();
         this.fetchPosts();
         this.fetchAllPosts();
+        this.getFriendList()
 
       });
     } else if (this.role == "investor") {
@@ -78,22 +80,23 @@ export class FeedComponent implements OnInit {
         this.fetchImage();
         this.fetchPosts();
         this.fetchAllPosts();
+        this.getFriendList();
 
       });
     }
     this.initializeForm();
   }
 
-  toggleLike(post:any) {
-    
-    if(this.isLiked(post)){
-      this.authService.unlike(post._id,this.id).subscribe(() => {
+  toggleLike(post: any) {
+
+    if (this.isLiked(post)) {
+      this.authService.unlike(post._id, this.id).subscribe(() => {
         // Remove user ID from likes array
         post.likes = post.likes.filter((userId: string) => userId !== this.id);
       });
     }
-    if(!this.isLiked(post)){
-      this.authService.like(post._id,this.id).subscribe(() => {
+    if (!this.isLiked(post)) {
+      this.authService.like(post._id, this.id).subscribe(() => {
         // Add user ID to likes array
         post.likes.push(this.id);
       });
@@ -102,7 +105,7 @@ export class FeedComponent implements OnInit {
 
   }
 
-  isLiked(post:any):boolean{
+  isLiked(post: any): boolean {
     return post.likes.includes(this.id)
 
   }
@@ -110,24 +113,24 @@ export class FeedComponent implements OnInit {
   toggleVisibility() {
     this.isVisible = !this.isVisible;
   }
-	onSelect(event : any) {
-		console.log(event);
-		this.files.push(...event.addedFiles);
-	}
+  onSelect(event: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+  }
 
-	onRemove(event : any) {
-		console.log(event);
-		this.files.splice(this.files.indexOf(event), 1);
-	}
+  onRemove(event: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
 
   uploadFiles() {
     const formData = new FormData();
-  
+
     for (let index = 0; index < this.files.length; index++) {
       const element = this.files[index];
       formData.append('files', element);
     }
-  
+
     this.authService.uploadFiles(formData)
       .subscribe((response: any) => {
         let otherDocument = response.map((file: any) => file.filename);
@@ -136,7 +139,7 @@ export class FeedComponent implements OnInit {
       }, (error: any) => {
       });
   }
-  
+
 
   fetchPosts() {
     this.postsExist = false;
@@ -159,7 +162,7 @@ export class FeedComponent implements OnInit {
 
   fetchAllPosts() {
     this.postsExist = false;
-    let id = this.actRoute.snapshot.paramMap.get('id')||"";
+    let id = this.actRoute.snapshot.paramMap.get('id') || "";
 
     this.authService.getAllPosts(id).subscribe(
       (posts: Post[]) => {
@@ -262,21 +265,62 @@ export class FeedComponent implements OnInit {
 
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
-    if( this.posteForm.value.content !='' || this.postPath.length != 0){
-      console.log('posts images',this.postPath)
+    if (this.posteForm.value.content != '' || this.postPath.length != 0) {
+      console.log('posts images', this.postPath)
       let content = this.posteForm.value.content;
-      let name = this.Entreprenur.name?this.Entreprenur.name:this.Investor.name;
-      let image = this.Entreprenur.image_profile?this.Entreprenur.image_profile:this.Investor.image_profile;
+      let name = this.Entreprenur.name ? this.Entreprenur.name : this.Investor.name;
+      let image = this.Entreprenur.image_profile ? this.Entreprenur.image_profile : this.Investor.image_profile;
       let postPath = this.postPath;
-    this.authService.addPost(id, {content:content,image:image,name:name, file_path: postPath}).subscribe({
-      complete: () => {
-        console.log('new poste added successfully !');
-        this.ngOnInit();
-      },
-      error: (e) => {
-        console.log(e);
-      }
-    });
+      this.authService.addPost(id, { content: content, image: image, name: name, file_path: postPath }).subscribe({
+        complete: () => {
+          console.log('new poste added successfully !');
+          this.ngOnInit();
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    }
   }
-}
+
+
+  getFriendList() {
+    this.profileUrl = this.Entreprenur._id?"preview-profile-investor/":"preview-profile-entrepreneur/";
+    let friendList: any[] = [];
+    this.matchMakingService.getUser(this.id).subscribe((res) => {
+      let friendListIds = res.matchmakings_list;
+      if (this.role === "investor") {
+        for (let id of friendListIds) {
+          this.authService.getUser(id).subscribe(
+            (user: any) => {
+              friendList.push(user);
+            },
+            (error: any) => {
+              console.log(`Failed to retrieve user with ID ${id}`, error);
+            }
+          );
+        }
+        this.friendList = friendList;
+        console.log('entrepreneurs list', this.friendList)
+      } else {
+        for (let id of friendListIds) {
+          this.investorService.getUser(id).subscribe(
+            (user: any) => {
+              friendList.push(user);
+            },
+            (error: any) => {
+              console.log(`Failed to retrieve user with ID ${id}`, error);
+            }
+          );
+        }
+        this.friendList = friendList;
+        console.log('investors list', this.friendList)
+
+
+      }
+
+
+    })
+
+  }
 }
