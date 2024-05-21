@@ -109,7 +109,8 @@
                                     <h2>Upload photos/videos</h2>
                                 </div>
                             </ngx-dropzone-label>
-                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                                [file]="f" [removable]="true" (removed)="onRemove(f)">
                                 <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
                             </ngx-dropzone-image-preview>
                         </div>
@@ -131,7 +132,9 @@
                             <div *ngFor="let post of Allposts" class="post mb-4">
                                 <div class="post-top">
                                     <div class="dp">
-                                        <img [src]="baseUrl + '/api/uploads/' + post.image" alt="">
+                                        <img *ngIf="post.image" [src]="baseUrl + '/api/uploads/' + post.image" alt="">
+                                        <img *ngIf="!post.image" src="assets/images/3da39-no-user-image-icon-27.webp"
+                                            alt="">
                                     </div>
                                     <div class="post-info">
                                         <p class="name">{{post.name}}</p>
@@ -141,6 +144,16 @@
 
                                 <div class="post-content">
                                     {{post.content}}
+                                    <div class="mb-2"></div>
+                                    <ngx-slick-carousel class="carousel text-center" #slickModal="slick-carousel"
+                                        [config]="slideConfig">
+                                        <div [ngClass]="{'scrollable-carousel': post.file_path.length > 1}">
+                                            <div *ngFor="let imagePath of post.file_path">
+                                                <img [src]="baseUrl + '/api/uploads/' + imagePath"
+                                                    class="enlarged-image mb-2">
+                                            </div>
+                                        </div>
+                                    </ngx-slick-carousel>
                                 </div>
 
                                 <div class="post-bottom">
@@ -149,12 +162,30 @@
                                         <span>Like</span>
                                     </div>
                                     <div class="action">
+                                        <a class="d-flex justify-content-end questions-margin" (click)="basicCollapse.toggle()"
+                                        [attr.aria-expanded]="!basicCollapse.collapsed" aria-controls="collapseExample">
                                         <i class="far fa-comment"></i>
                                         <span>Comment</span>
+                                      </a>
                                     </div>
                                     <div class="action">
                                         <i class="fa fa-share"></i>
                                         <span>Share</span>
+                                    </div>
+                                </div>
+                                <div id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+                                    <div class="mt-3">
+
+                                        <div class="post-top">
+                                            <div class="dp">
+                                                <img [src]="imageUrl" alt="profile picture">
+                                            </div>
+                                            <input type="text" formControlName="content"
+                                                placeholder="What's on your mind ?" />&nbsp;&nbsp;&nbsp;
+                                            <button type="submit" (click)="uploadFiles()"
+                                                class="button-18">Post</button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -185,6 +216,16 @@
 
                                 <div class="post-content">
                                     {{post.content}}
+                                    <div class="mb-2"></div>
+                                    <ngx-slick-carousel class="carousel text-center" #slickModal="slick-carousel"
+                                        [config]="slideConfig">
+                                        <div [ngClass]="{'scrollable-carousel': post.file_path.length > 1}">
+                                            <div *ngFor="let imagePath of post.file_path">
+                                                <img [src]="baseUrl + '/api/uploads/' + imagePath"
+                                                    class="enlarged-image mb-2">
+                                            </div>
+                                        </div>
+                                    </ngx-slick-carousel>
                                 </div>
 
                                 <div class="post-bottom">
@@ -196,6 +237,7 @@
                                         <i class="far fa-comment"></i>
                                         <span>Comment</span>
                                     </div>
+
                                     <div class="action">
                                         <i class="fa fa-share"></i>
                                         <span>Share</span>

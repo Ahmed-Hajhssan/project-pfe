@@ -4,6 +4,7 @@ const userRoute = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 let Chat = require('../models/Chat');
 let User = require('../models/User');
@@ -133,10 +134,10 @@ userRoute.route('/like/:postId/:userId').put(async (req, res, next) => {
         if (!post) {
             return res.status(404).json({ error: 'post not found' });
         }
-        
+
         post.
 
-        res.json(post);
+            res.json(post);
     } catch (error) {
         next(error);
     }

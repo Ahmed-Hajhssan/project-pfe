@@ -41,9 +41,10 @@ export class FeedComponent implements OnInit {
   selectedPosteId: string;
   faChevronDown = faChevronDown;
   isVisible = false;
+  commentsVisible = false;
   faArrowUpFromBracket = faArrowUpFromBracket;
   files: File[] = [];
-  postPath: any[] = [];
+  postPath: string[] = [];
 
 
   constructor(
@@ -83,10 +84,36 @@ export class FeedComponent implements OnInit {
     this.initializeForm();
   }
 
+  slideConfig = {
+    slidesToShow: 3, 
+    slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1
+        }
+      }
+    ]
+  };
   
   toggleVisibility() {
     this.isVisible = !this.isVisible;
   }
+
+  commentsVisibility() {
+    this.commentsVisible = !this.commentsVisible;
+  }
+  
 	onSelect(event : any) {
 		console.log(event);
 		this.files.push(...event.addedFiles);
@@ -97,22 +124,29 @@ export class FeedComponent implements OnInit {
 		this.files.splice(this.files.indexOf(event), 1);
 	}
 
-  uploadFiles() {
-    const formData = new FormData();
+  uploadFiles(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
   
-    for (let index = 0; index < this.files.length; index++) {
-      const element = this.files[index];
-      formData.append('files', element);
-    }
+      for (let index = 0; index < this.files.length; index++) {
+        const element = this.files[index];
+        formData.append('files', element);
+      }
   
-    this.authService.uploadFiles(formData)
-      .subscribe((response: any) => {
-        let otherDocument = response.map((file: any) => file.filename);
-        this.postPath = [...this.postPath, ...otherDocument];
-        console.log('ahmed.97', otherDocument);
-      }, (error: any) => {
-      });
+      this.authService.uploadFiles(formData).subscribe(
+        (response: any) => {
+          this.postPath = response.map((file: any) => file.filename);
+          console.log('Uploaded files:', this.postPath);
+          resolve(); // Resolve the promise once the upload is complete
+        },
+        (error: any) => {
+          console.error('Error uploading files:', error);
+          reject(error); // Reject the promise if there is an error
+        }
+      );
+    });
   }
+  
   
 
   fetchPosts() {
@@ -239,21 +273,29 @@ export class FeedComponent implements OnInit {
 
   onSubmit() {
     let id = this.actRoute.snapshot.paramMap.get('id');
-    if( this.posteForm.value.content !='' || this.postPath.length != 0){
-      console.log('posts images',this.postPath)
-      let content = this.posteForm.value.content;
-      let name = this.Entreprenur.name?this.Entreprenur.name:this.Investor.name;
-      let image = this.Entreprenur.image_profile?this.Entreprenur.image_profile:this.Investor.image_profile;
-      let postPath = this.postPath;
-    this.authService.addPost(id, {content:content,image:image,name:name, file_path: postPath}).subscribe({
-      complete: () => {
-        console.log('new poste added successfully !');
-        this.ngOnInit();
-      },
-      error: (e) => {
-        console.log(e);
-      }
-    });
+    if (this.posteForm.value.content !== '') {
+      this.uploadFiles().then(() => {
+        let content = this.posteForm.value.content;
+        let name = this.Entreprenur.name ? this.Entreprenur.name : this.Investor.name;
+        let image = this.Entreprenur.image_profile ? this.Entreprenur.image_profile : this.Investor.image_profile;
+        let postPath = this.postPath; 
+  
+        console.log('Post path:', postPath);
+  
+        this.authService.addPost(id, { content, image, name, file_path: postPath }).subscribe({
+          complete: () => {
+            console.log('New post added successfully!');
+            this.ngOnInit();
+            this.posteForm.reset();
+            this.isVisible = false;
+          },
+          error: (e) => {
+            console.error('Error adding post:', e);
+          }
+        });
+      }).catch((error) => {
+        console.error('Error uploading files:', error);
+      });
+    }
   }
-}
 }

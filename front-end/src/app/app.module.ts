@@ -11,6 +11,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgImageSliderModule } from 'ng-image-slider';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -85,6 +87,8 @@ import { FeedComponent } from './pages/feed/feed.component';
     MatButtonModule,
     NgbDropdownModule,
     NgbModule,
+    NgImageSliderModule,
+    SlickCarouselModule
   ],
   providers: [
     provideClientHydration(),
